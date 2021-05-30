@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import "antd/dist/antd.css";
-import { PageHeader, Dropdown, Button, Tag, Menu, Avatar, Tooltip } from "antd";
+import { PageHeader, Dropdown, Button, Tag, Menu, Avatar, Tooltip, message } from "antd";
 import { EllipsisOutlined, UserOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import jQuery from "jquery";
 
@@ -61,7 +61,9 @@ function Navbar() {
       dispatch({
         type: 'LOGGED_OUT'
       });
-      // history.push("/");
+      message.success('Log out successful!', 3.55);
+      history.push("/");
+      localStorage.removeItem('ever_logged_in');
     })
   }
 
@@ -70,7 +72,10 @@ function Navbar() {
     if (authenticated) {
       return (
         <div style={{ position: "relative", top: 5 }}>
-          [{state.user.username}] <Link to='/accounts/profile'>Settings</Link> • <span onClick={post_logout} style={{ marginLeft: 0 }}>Log out</span>
+          [{state.user.username}] <Link to='/' className="link-text-color">Home
+            </Link> • <Link to='/accounts/profile' className="link-text-color">Settings
+            </Link> • <span onClick={post_logout} style={{ marginLeft: 0, color: "rgba(0, 0, 0, .85) !important" }}>
+            Log out</span>
         </div>
       )
     } else {
@@ -90,12 +95,12 @@ function Navbar() {
   }
 
   function addTag(shrink) {
-    return !shrink && <Tag color="green">Running</Tag>
+    return !shrink && <Tag color="green" style={{ position: "relative", top: 1 }}>Running</Tag>
   }
 
   return (
     <PageHeader
-      title={<Link to="/" style={{ color: "#262626" }}>NT Stats Tracker</Link>}
+      title="NT Stats Tracker"
       tags={ addTag(shrinkTag) }
       extra={ extras(state.user.authenticated, shrinkNavbar) }
       className="navbar-1"

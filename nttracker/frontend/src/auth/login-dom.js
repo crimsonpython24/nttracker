@@ -1,12 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import "antd/dist/antd.css";
-import { Form, Input, Button, Checkbox, Tooltip } from 'antd';
+import { Form, Input, Button, Checkbox, Tooltip, message } from 'antd';
 import jQuery from "jquery";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import { useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 
 import { NTTrackerContext } from "../nttracker/context.js";
 import './login-dom.css';
@@ -73,6 +73,15 @@ function Login() {
     trigger('password');
   }
 
+  const [loadings, setloadings] = useState(false);
+
+  function changeloading() {  
+    setloadings(true);
+    setTimeout(() => {
+      setloadings(false);
+    }, 6000);
+  }
+
   // add regex validation later
   useEffect(() => {
     register("username", {
@@ -103,7 +112,9 @@ function Login() {
         dispatch({
           type: 'LOGGED_IN', userdata,
         });
-        history.push("/");
+        changeloading();
+        message.success('Log in successful!', 3.55);
+        setTimeout(() => {history.push("/");}, 2130);
       }
     })
     // .catch((json) => setNoNameError(JSON.stringify(json)));
@@ -129,7 +140,9 @@ function Login() {
     })
   }
 
+
   if (state.user.is_authenticated) {
+    message.info('Already authenticated, smarty', 3.55);
     history.push("/accounts/profile");
   } else {
     return (
@@ -153,7 +166,7 @@ function Login() {
             </Tooltip>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" className="login-form-button">
+            <Button type="primary" htmlType="submit" className="login-form-button" loading={loadings}>
               Log in
             </Button>
           </Form.Item>

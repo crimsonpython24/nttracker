@@ -2,3 +2,8 @@
     outline: 1px solid #EBEDF0 !important;
     margin-bottom: 25px;
 }
+
+
+.link-text-color {
+    color: rgba(0, 0, 0, .85) !important;
+}
