@@ -35,6 +35,12 @@ def ajax_login(request):
             return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
 
 
+def ajax_logout(request):
+    if request.is_ajax():
+        logout(request)
+        return JsonResponse({'logout': True})
+
+
 def test_state(request):
     csrf_token = get_token(request)
     user_id = os.environ.get('TESTUSER_ID')
@@ -50,3 +56,22 @@ def test_state(request):
 
     return JsonResponse({'user': user, 'csrftoken': csrf_token})
 
+
+@ensure_csrf_cookie
+def init_state(request):
+    user = None
+    csrf_token = get_token(request)
+    if request.user and request.user.is_anonymous == False:
+        userid = request.user.id
+
+        if userid is not None:
+            user = UserSerializer(instance=User.objects.get(id=userid)).data
+            user['authenticated'] = True
+            remove = ['password']  # rest are all necessary?
+            for entry in remove:
+                user.pop(entry, None)
+    
+    if user:
+        return JsonResponse({'user': user, 'csrftoken': csrf_token})
+    else:
+        return JsonResponse({'user': {'username': 'guest'}, 'csrftoken': csrf_token})

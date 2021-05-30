@@ -9,7 +9,7 @@ import NTTracker from './nttracker/dom';
 import "./index.css";
 
 
-let development = true;                               // use true while testing in 3000
+let development = false;                               // use true while testing in 3000
 let url = !development ? "initstate" : "teststate";   // use TESTUSER_ID=1 when running with teststate
 
 

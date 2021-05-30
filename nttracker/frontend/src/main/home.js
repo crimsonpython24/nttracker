@@ -8,9 +8,6 @@ import { NTTrackerContext } from '../nttracker/context';
 function Home() {
   const [state, dispatch] = useContext(NTTrackerContext);
 
-  if (!state.user.authenticated) {
-    return <Redirect to={'/welcome'} />
-  }
   return (
     <>
       <h1>Nothing here yet...</h1>
