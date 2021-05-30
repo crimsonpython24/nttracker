@@ -6,7 +6,7 @@ import { Redirect } from "react-router-dom";
 import { NTTrackerContext } from '../nttracker/context';
 
 function Home() {
-  const [state, dispatch] = useContext(VmunContext);
+  const [state, dispatch] = useContext(NTTrackerContext);
 
   if (!state.user.authenticated) {
     return <Redirect to={'/welcome'} />

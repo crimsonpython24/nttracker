@@ -19,13 +19,12 @@ fetch(`http://127.0.0.1:8000/accounts/${url}`)
     (data) => {
       const initialState = {
         user: data.user,
-        conferences: data.conferences,
       };
       const App = () => {
         return (
           <NTTrackerContextProvider initState={initialState}>
             <BrowserRouter>
-              <Vmun/>
+              <NTTracker/>
             </BrowserRouter>
           </NTTrackerContextProvider>
         )

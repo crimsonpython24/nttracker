@@ -56,7 +56,7 @@ function Login() {
   const [state, dispatch] = useContext(NTTrackerContext);
   const history = useHistory();
 
-  const { register, trigger, errors, setError, handleSubmit, clearErrors , setValue } = useForm();
+  const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue } = useForm();
 
   // fix clearerrors: should not both be elimitnated (e.g. blank input)
   const handleUsernameChange = (e) => {

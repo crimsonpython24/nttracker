@@ -3,11 +3,12 @@ import React, { useContext } from 'react';
 import { Switch, Route } from "react-router-dom";
 
 import Home from "../../src/main/home";
-import { NTTrackerContextProvider } from './context';
+import Login from "../../src/auth/login-dom";
+import { NTTrackerContext } from './context';
 
 
 const NTTracker = () => {
-  const [state, dispatch] = useContext(VmunContext);
+  const [state, dispatch] = useContext(NTTrackerContext);
   return (
     <>
       <Switch>

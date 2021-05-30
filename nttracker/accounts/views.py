@@ -1,7 +1,14 @@
+import os
 import json
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
+from django.forms.models import model_to_dict
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
+
+from accounts.models import User
+from .serializers import UserSerializer
 
 
 def ajax_login(request):
@@ -26,3 +33,20 @@ def ajax_login(request):
         except:
             # also work on the error messages
             return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
+
+
+def test_state(request):
+    csrf_token = get_token(request)
+    user_id = os.environ.get('TESTUSER_ID')
+
+    if user_id is None:
+        return JsonResponse({'user': {'username': 'guest_8000', 'id': -1, "authenticated": False}})
+
+    user = UserSerializer(instance=User.objects.get(id=user_id)).data
+    user['authenticated'] = True
+    for entry in ['password']:
+        user.pop(entry, None) 
+        print(entry)
+
+    return JsonResponse({'user': user, 'csrftoken': csrf_token})
+

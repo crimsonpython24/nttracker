@@ -52,19 +52,6 @@ const nttrackerReducer = (state, action) => {
       console.log('stateuser', ret)
       return ret;
     }
-    case 'CREATED_CONFERENCE': {
-      let {conferences, ...etc} = state;
-      let {type, conference} = action;
-      console.log('this is some text', action);
-      let ret = {
-        ...etc,
-        conferences: [
-          ...conferences,
-          conference,
-        ]
-      }
-      return ret;
-    }
     default:
       return state;
   }
