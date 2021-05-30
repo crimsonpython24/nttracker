@@ -8,11 +8,20 @@ import { NTTrackerContext } from '../nttracker/context';
 function Home() {
   const [state, dispatch] = useContext(NTTrackerContext);
 
-  return (
-    <>
-      <h1>Nothing here yet...</h1>
-    </>
-  )
+  if (state.user.authenticated) {
+    return (
+      <div style={{ marginLeft: 30 }}>
+        <h1>Teams here</h1>
+      </div>
+    )
+  } else {
+    return (
+      <div style={{ marginLeft: 30 }}>
+        <h1>You shouldn't be here...</h1>
+        <h3>Had your clan moderator give you the wrong link? Anyways, nothing for you to see before the snake awakens</h3>
+      </div>
+    )
+  }
 }
 
 export default Home;

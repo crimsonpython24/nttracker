@@ -13,7 +13,6 @@ const initialState = {
 
 
 const nttrackerReducer = (state, action) => {
-  console.log('context.js', state);
   switch (action.type) {
     case 'LOGGED_IN': {
       let {user, ...etc} = state;
