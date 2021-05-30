@@ -1,0 +1,13 @@
+```bash
+$ git config --global gpg.program "C:\Program Files (x86)\GnuPG\bin\gpg.exe"
+
+$ gpg --list-secret-keys --keyid-format LONG
+  sec   rsa4096/1234567890ABCDEF 2021-05-30 [SC] [expires: 2022-05-30]
+        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  uid                 [ultimate] Warren Wang (Key #2) <warrenyjwang@gmail.com>
+  ssb   rsa4096/ABCDEFGHIJKLMNOP 2021-05-30 [E] [expires: 2022-05-30]
+
+$ git config --global user.signingkey 1234567890ABCDEF
+
+$ git config --global commit.gpgsign true
+```

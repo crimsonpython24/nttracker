@@ -235,3 +235,6 @@ dist
 
 # save space
 package-lock.json
+
+# settings configuration file
+settings_cfg.py
