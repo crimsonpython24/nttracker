@@ -20,8 +20,8 @@ function Profile() {
   const onSubmit = values => {post_profile(values);}
   const [state, dispatch] = useContext(NTTrackerContext);
   const history = useHistory();
-  const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue } = useForm();
   const formLayout = "vertical";
+  const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue } = useForm();
   let has_auth;
 
   const username_text = (
@@ -116,14 +116,13 @@ function Profile() {
             message: userdata.errors[key],
           });
         })
-        trigger("username");
-        trigger("password");
+        trigger("current_password");
+        trigger("new_password");
+        trigger("confirm_password");
       } else {
         history.push("/");
       }
     })
-
-    console.log({"username": state.user.username, "current_password": data.current_password, "new_password": data.new_password, "confirm_password": data.confirm_password})
   }
 
   let curPwdProps = {
@@ -158,7 +157,7 @@ function Profile() {
         <Col xs={1} sm={3} md={5} lg={6} xl={7}></Col>
         <Col xs={22} sm={18} md={14} lg={12} xl={10}>
           <Card>
-            <Form layout={formLayout} >
+            <Form layout={formLayout}>
               <Form.Item label={username_text}>
                 <Input placeholder={state.user.username} disabled={true} className="profile-input-box"/>
               </Form.Item>
