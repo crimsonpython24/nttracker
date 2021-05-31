@@ -112,7 +112,7 @@ function Profile() {
     register("new_password", {
       required: "The new password is required.",
       validate: {
-        passwordEqual: value => (value === getValues().cfm_password) || '',
+        passwordEqual: value => (value === getValues().confirm_password) || '',
       }
     });
     register("confirm_password", {
@@ -123,9 +123,14 @@ function Profile() {
     });
   }, [register])
 
+  function handleNotifClick(key) {
+    post_logout();
+    notification.close(key);
+  }
+
   const key = `open${Date.now()}`;
   const btn = (
-    <Button outline size="small" onClick={() => post_logout()}>
+    <Button outline size="small" onClick={() => handleNotifClick(key)}>
       Log me out now
     </Button>
   );
@@ -183,7 +188,6 @@ function Profile() {
   let newPwdProps = {
     ...(errors.new_password && {
       validateStatus: "warning",
-      hasFeedback: true,
       help: errors.new_password.message,
     })
   }
@@ -191,7 +195,6 @@ function Profile() {
   let cfmPwdProps = {
     ...(errors.confirm_password && {
       validateStatus: "warning",
-      hasFeedback: true,
       help: errors.confirm_password.message,
     })
   }
