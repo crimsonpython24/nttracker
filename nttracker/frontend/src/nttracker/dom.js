@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import { CSSTransition, TransitionGroup } from "react-transition-group"
@@ -25,7 +25,7 @@ const Progress = ({ isAnimating }) => {
 
 
 const NTTracker = () => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
@@ -41,7 +41,7 @@ const NTTracker = () => {
                   key={location.key}
                   onEnter={() => {setIsLoading(true)}}
                   onEntered={() => {setIsLoading(false)}}
-                  timeout={350}
+                  timeout={450}
                   in={true}
                 >
                   <Switch location={location}>

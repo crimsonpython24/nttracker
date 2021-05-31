@@ -56,7 +56,7 @@ function Profile() {
         <>
           <Space direction="vertical" size={0}>
             <Text>This action cannot be reverted!</Text>
-            <Text type="secondary">Your data will be lost but your events will remain.</Text>
+            <Text type="secondary">Your data will be lost but created events will remain.</Text>
             <Input.Password
               placeholder="Type the password to continue..."
               className="confirm-delete-password-box"

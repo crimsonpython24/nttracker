@@ -21,15 +21,11 @@ function Login() {
   const handleUsernameChange = (e) => {
     clearErrors();
     setValue("username", e.target.value);
-    trigger('username');
-    trigger('password');
   }
 
   const handlePasswordChange = (e) => {
     clearErrors();
     setValue("password", e.target.value);
-    trigger('username');
-    trigger('password');
   }
 
   const [loadings, setloadings] = useState(false);
@@ -39,6 +35,10 @@ function Login() {
     setTimeout(() => {
       setloadings(false);
     }, 6000);
+  }
+
+  function handleRememberChange(e) {
+    localStorage.setItem("remember_user", e.target.checked);
   }
 
   // add regex validation later
@@ -67,6 +67,8 @@ function Login() {
             message: userdata.errors[key],
           });
         })
+        trigger('username');
+        trigger('password');
       } else {
         dispatch({
           type: 'LOGGED_IN', userdata,
@@ -118,9 +120,11 @@ function Login() {
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
+                <Tooltip placement="left" title="Don't check if you want to be logged out on browser close.">
+                  <Checkbox onChange={handleRememberChange}>Remember me</Checkbox>
+                </Tooltip>
               </Form.Item>
-              <Tooltip placement="right" trigger="click" title="DM snaakie on Discord, not putting my email here">
+              <Tooltip placement="right" title="Please contact the site owner for more information.">
                 <span className="login-form-forgot">Forgot password?</span>
               </Tooltip>
             </Form.Item>

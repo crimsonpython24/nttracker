@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 
 import "antd/dist/antd.css";
 
-import { BrowserRouter } from "react-router-dom";
-
 import NTTrackerContextProvider from './nttracker/context';
 import NTTracker from './nttracker/dom';
 import "./index.css";
