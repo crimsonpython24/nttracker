@@ -2,63 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 
 import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox, Tooltip, message } from 'antd';
-import jQuery from "jquery";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import { useHistory } from "react-router-dom";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { NTTrackerContext } from "../nttracker/context.js";
+import fetchData from "../common/utilities.js";
 import './login-dom.css';
-
-
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    let cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      let cookie = jQuery.trim(cookies[i]);
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
-
-function fetchData(url, met, data=null) {
-  return fetch(url, {
-    method: met,
-    credentials: 'include',
-    headers: {
-      "Accept": "application/json",
-      'X-Requested-With': 'XMLHttpRequest',
-      "X-CSRFToken": getCookie("csrftoken")
-    },
-    body: JSON.stringify(data)
-  }).then((response) => {
-    if (response.status === 400) {
-      return response.json()
-      .then((json) => {
-        return Promise.reject(json);
-      })
-    } else {
-      return response.json();
-    }
-  });
-}
 
 
 function Login() {
   const onSubmit = values => {post_login(values);}
   const [state, dispatch] = useContext(NTTrackerContext);
   const history = useHistory();
-
   const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue } = useForm();
 
-  // fix clearerrors: should not both be elimitnated (e.g. blank input)
   const handleUsernameChange = (e) => {
     clearErrors();
     setValue("username", e.target.value);
@@ -140,7 +99,6 @@ function Login() {
     })
   }
 
-
   if (state.user.is_authenticated) {
     message.info('Already authenticated, smarty', 3.55);
     history.push("/accounts/profile");
@@ -175,5 +133,6 @@ function Login() {
     )
   }
 }
+
 
 export default Login;

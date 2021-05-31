@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 
+
 export const NTTrackerContext = React.createContext([{}]);
 
 
@@ -67,5 +68,6 @@ const NTTrackerContextProvider = props => {
     </NTTrackerContext.Provider>
   );
 };
+
 
 export default NTTrackerContextProvider;
