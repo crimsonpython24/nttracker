@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import React, { useContext } from "react";
 
 import "antd/dist/antd.css";
 import './profile-dom.css';
-import { message, Form, Input, Button, Tooltip, Divider, Typography, Space, Modal, Card, Row, Col, Progress } from "antd";
+import { message, Form, Input, Button, Divider, Typography, Space, Modal, Card, Row, Col } from "antd";
 import { QuestionCircleOutlined, ExclamationCircleOutlined, EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-
 import { useHistory } from "react-router-dom";
-
 import { NTTrackerContext } from "../nttracker/context.js";
+
 
 const { Text, Paragraph } = Typography;
 const { confirm } = Modal;
+
 
 function Profile() {
   const [state, dispatch] = useContext(NTTrackerContext);
@@ -23,20 +22,18 @@ function Profile() {
   const username_text = (
     <Paragraph editable=
       {{ editing: false,
-         icon: <QuestionCircleOutlined style={{ color: "rgba(0, 0, 0, 0.85)"}} />,
+         icon: <QuestionCircleOutlined className="help-icon" />,
          tooltip: "Changing username is disabled for security reasons. Please contact the site owner."
-      }} 
-      style={{ paddingBottom: 0, marginBottom: -5 }}>Username
+      }} className="label-paragraph">Username
     </Paragraph>
   )
 
   const current_password_text = (
     <Paragraph editable=
       {{ editing: false,
-         icon: <QuestionCircleOutlined style={{ color: "rgba(0, 0, 0, 0.85)"}} />,
+         icon: <QuestionCircleOutlined className="help-icon" />,
          tooltip: "We need to verify your identity before proceeding."
-      }} 
-      style={{ paddingBottom: 0, marginBottom: -5 }}>Username
+      }} className="label-paragraph">Current Password
     </Paragraph>
   )
 
@@ -62,7 +59,7 @@ function Profile() {
             <Text type="secondary">Your data will be lost but your events will remain.</Text>
             <Input.Password
               placeholder="Type the password to continue..."
-              style={{ marginTop: 20 }}
+              className="confirm-delete-password-box"
               iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
             />
           </Space>
@@ -86,19 +83,19 @@ function Profile() {
           <Card>
             <Form layout={formLayout} form={form}>
               <Form.Item label={username_text}>
-                <Input placeholder={state.user.username} disabled={true} style={{ maxWidth: 560 }}/>
+                <Input placeholder={state.user.username} disabled={true} className="profile-input-box"/>
               </Form.Item>
             </Form>
             <Divider/>
             <Form layout={formLayout} form={form}>
               <Form.Item label={current_password_text}>
-                <Input style={{ maxWidth: 560 }}/>
+                <Input className="profile-input-box"/>
               </Form.Item>
               <Form.Item label="New Password">
-                <Input style={{ maxWidth: 560 }}/>
+                <Input className="profile-input-box"/>
               </Form.Item>
               <Form.Item label="Confirm Password">
-                <Input style={{ maxWidth: 560 }}/>
+                <Input className="profile-input-box"/>
               </Form.Item>
               <Form.Item >
                 <Button>Change Password</Button>
@@ -107,7 +104,7 @@ function Profile() {
             <Divider/>
             <Form layout={formLayout} form={form}>
               <Form.Item label={
-                <Space direction="vertical" size={0} style={{ marginBottom: 10 }}>
+                <Space direction="vertical" size={0} className="dialog-space">
                   <Text>Delete Account</Text>
                   <Text type="secondary">Permanently removes your account from the database (cannot be undone!)</Text>
                   </Space>

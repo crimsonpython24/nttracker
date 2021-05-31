@@ -3,7 +3,22 @@
     margin-bottom: 25px;
 }
 
-
 .link-text-color {
     color: rgba(0, 0, 0, .85) !important;
+}
+
+.authenticated-links {
+    position: relative;
+    top: 5px;
+}
+
+.link-post-logout {
+    margin-left: 0px;
+    color: rgba(0, 0, 0, 0.85) !important
+}
+
+.info-no-login {
+    font-size: 17px;
+    vertical-align: middle;
+    margin-right: 15px;
 }

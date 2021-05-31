@@ -1,16 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from "react";
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { useNProgress } from '@tanem/react-nprogress'
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { CSSTransition, TransitionGroup } from "react-transition-group"
+import { useNProgress } from "@tanem/react-nprogress"
 
 import Home from "../../src/main/home";
 import Login from "../../src/auth/login-dom";
 import Navbar from "../../src/common/navbar";
 import Profile from "../../src/auth/profile-dom";
-import Bar from './bar';
-import Container from './container';
-import { NTTrackerContext } from './context';
+import Bar from "./bar";
+import Container from "./container";
 import "./dom.css";
 
 

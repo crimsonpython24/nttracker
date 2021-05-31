@@ -5,9 +5,9 @@ import { PageHeader, Button, Tag, Tooltip, message } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
 import { Link, useHistory } from "react-router-dom";
-import { useMediaQuery } from 'react-responsive'
+import { useMediaQuery } from "react-responsive"
 
-import { NTTrackerContext } from '../nttracker/context.js';
+import { NTTrackerContext } from "../nttracker/context.js";
 import fetchData from "../common/utilities.js";
 import "./navbar.css";
 
@@ -34,10 +34,10 @@ function Navbar() {
     if (shrink) return null;
     if (authenticated) {
       return (
-        <div style={{ position: "relative", top: 5 }}>
+        <div className="authenticated-links">
           [{state.user.username}] <Link to='/' className="link-text-color">Home
             </Link> • <Link to='/accounts/profile' className="link-text-color">Settings
-            </Link> • <span onClick={post_logout} style={{ marginLeft: 0, color: "rgba(0, 0, 0, .85) !important" }}>
+            </Link> • <span onClick={post_logout} className="link-post-logout">
             Log out</span>
         </div>
       )
@@ -47,9 +47,7 @@ function Navbar() {
           <Tooltip placement="bottomRight" 
             title={"Sign-up is limited for team admins; however, you could still\
                     view stats without authentication"}>
-            <InfoCircleOutlined 
-              style={{ fontSize: 17, verticalAlign: "middle", marginRight: 15 }}
-            />
+            <InfoCircleOutlined className="info-no-login"/>
           </Tooltip>
           <Link to="/accounts/login" key="login"><Button type="primary">Log in</Button></Link>
         </>

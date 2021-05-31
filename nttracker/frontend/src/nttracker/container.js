@@ -1,4 +1,5 @@
-import React from 'react'
+import React from "react";
+
 
 const Container = ({ animationDuration, children, isFinished }) => (
   <div
@@ -11,5 +12,6 @@ const Container = ({ animationDuration, children, isFinished }) => (
     {children}
   </div>
 )
+
 
 export default Container

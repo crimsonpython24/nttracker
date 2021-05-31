@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import "antd/dist/antd.css";
-import { Form, Input, Button, Checkbox, Tooltip, message, Card } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Checkbox, Tooltip, message, Card } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { NTTrackerContext } from "../nttracker/context.js";
 import fetchData from "../common/utilities.js";
-import './login-dom.css';
+import "./login-dom.css";
 
 
 function Login() {
@@ -71,8 +71,8 @@ function Login() {
         dispatch({
           type: 'LOGGED_IN', userdata,
         });
-        changeloading();
-        message.success('Log in successful!', 3.55);
+        changeloading();  
+        setTimeout(() => {message.success('Log in successful!', 3.55);}, 2130);
         setTimeout(() => {history.push("/");}, 2130);
       }
     })
@@ -105,7 +105,7 @@ function Login() {
   } else {
     return (
       <div>
-        <Card style={{ marginLeft: "auto", marginRight: "auto", maxWidth: "380px", marginTop: 100, padding: "10px" }}>
+        <Card className="home-card">
           <Form name="normal_login" className="login-form" initialValues={{ remember: true }}
             onFinish={handleSubmit(onSubmit)} requiredMark={false}>
             <Form.Item name="Username" {...usernameProps}>

@@ -1,0 +1,20 @@
+.help-icon {
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.label-paragraph {
+    padding-bottom: 0px;
+    margin-bottom: -5px;
+}
+
+.confirm-delete-password-box {
+    margin-top: 20px;
+}
+
+.profile-input-box {
+    max-width: 560px;
+}
+
+.dialog-space {
+    margin-bottom: 10px;
+}
