@@ -84,6 +84,7 @@ function Login() {
   let usernameProps = {
     ...(errors.username && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors.username.message,
     }),
     ...(errors.inv_credentials && {validateStatus: "error", hasFeedback: true,})
@@ -92,6 +93,7 @@ function Login() {
   let passwordProps = {
     ...(errors.password && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors.password.message,
     }),
     ...(errors.inv_credentials && {

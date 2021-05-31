@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 
 import "antd/dist/antd.css";
-import { message, Form, Input, Button, Divider, Typography, Space, Modal, Card, Row, Col } from "antd";
+import { message, Form, Input, Button, Divider, Typography, Space, Modal, Card, Row, Col, notification } from "antd";
 import { QuestionCircleOutlined, ExclamationCircleOutlined, EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 import { useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ function Profile() {
   const [state, dispatch] = useContext(NTTrackerContext);
   const history = useHistory();
   const formLayout = "vertical";
-  const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue } = useForm();
+  const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue, getValues } = useForm();
   let has_auth;
 
   const username_text = (
@@ -95,11 +95,53 @@ function Profile() {
     });
   }
 
+  function post_logout() {
+    fetchData("http://127.0.0.1:8000/accounts/ajaxlogout", 'POST', {})
+    .then((json) => {
+      dispatch({
+        type: 'LOGGED_OUT'
+      });
+      message.success('Log out successful!', 3.55);
+      history.push("/");
+      localStorage.removeItem('ever_logged_in');
+    })
+  }
+
   useEffect(() => {
     register("current_password", {required: "The current password is required."});
-    register("new_password", {required: "The new password is required."});
-    register("confirm_password", {required: "The confirmation password is required."});
+    register("new_password", {
+      required: "The new password is required.",
+      validate: {
+        passwordEqual: value => (value === getValues().cfm_password) || '',
+      }
+    });
+    register("confirm_password", {
+      required: "The confirmation password is required.",
+      validate: {
+        passwordEqual: value => (value === getValues().new_password) || 'Passwords do not match!',
+      }
+    });
   }, [register])
+
+  const key = `open${Date.now()}`;
+  const btn = (
+    <Button outline size="small" onClick={() => post_logout()}>
+      Log me out now
+    </Button>
+  );
+
+  const openNotification = placement => {
+    notification.success({
+      message: 'Change Password Successful!',
+      description:
+        'Please log out to see the changes, and reload the site if necessary. You can continue using the site without disruptions.\
+         Click the X on the top right corner to log out later.',
+      placement,
+      btn,
+      key,
+      duration: 10,
+    });
+  };
 
   function post_profile(data) {
     fetchData("http://127.0.0.1:8000/accounts/ajaxprofile", "POST", {
@@ -120,7 +162,7 @@ function Profile() {
         trigger("new_password");
         trigger("confirm_password");
       } else {
-        history.push("/");
+        openNotification('topRight')
       }
     })
   }
@@ -128,6 +170,7 @@ function Profile() {
   let curPwdProps = {
     ...(errors.current_password && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors.current_password.message,
     }),
     ...(errors.inv_credentials && {
@@ -140,6 +183,7 @@ function Profile() {
   let newPwdProps = {
     ...(errors.new_password && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors.new_password.message,
     })
   }
@@ -147,6 +191,7 @@ function Profile() {
   let cfmPwdProps = {
     ...(errors.confirm_password && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors.confirm_password.message,
     })
   }
@@ -165,13 +210,13 @@ function Profile() {
             <Divider/>
             <Form layout={formLayout} onFinish={handleSubmit(onSubmit)}>
               <Form.Item label={current_password_text} {...curPwdProps}>
-                <Input className="profile-input-box" name="current_password" onChange={handleCurPwdChange}/>
+                <Input.Password className="profile-input-box" name="current_password" onChange={handleCurPwdChange}/>
               </Form.Item>
               <Form.Item label="New Password" {...newPwdProps}>
-                <Input className="profile-input-box" name="new_password" onChange={handleNewPwdChange}/>
+                <Input.Password className="profile-input-box" name="new_password" onChange={handleNewPwdChange}/>
               </Form.Item>
               <Form.Item label="Confirm Password" {...cfmPwdProps}>
-                <Input className="profile-input-box" name="confirm_password" onChange={handleCfmPwdChange}/>
+                <Input.Password className="profile-input-box" name="confirm_password" onChange={handleCfmPwdChange}/>
               </Form.Item>
               <Form.Item >
                 <Button type="primary" htmlType="submit">Change Password</Button>

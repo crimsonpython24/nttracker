@@ -18,3 +18,10 @@
 .dialog-space {
     margin-bottom: 10px;
 }
+
+@media all and (min-width: 1465px) {
+    .ant-form-item-children-icon{
+        margin-left: 0px;
+        left: 527px;
+    }
+}
