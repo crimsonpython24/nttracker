@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import "antd/dist/antd.css";
-import { PageHeader, Button, Tag, Tooltip, message } from "antd";
+import { PageHeader, Button, Tooltip, message } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
 import { Link, useHistory } from "react-router-dom";
@@ -15,7 +15,6 @@ import "./navbar.css";
 function Navbar() {
   const [state, dispatch] = useContext(NTTrackerContext);
   const shrinkNavbar = useMediaQuery({ query: '(max-width: 533px)' })
-  const shrinkTag = useMediaQuery({ query: '(max-width: 374px)' })
   const history = useHistory();
 
   function post_logout() {
@@ -55,14 +54,9 @@ function Navbar() {
     }
   }
 
-  function addTag(shrink) {
-    return !shrink && <Tag color="green" style={{ position: "relative", top: 1 }}>Running</Tag>
-  }
-
   return (
     <PageHeader
       title={<Link to="/" style={{ color: "#262626" }}>NT Stats Tracker</Link>}
-      tags={ addTag(shrinkTag) }
       extra={ extras(state.user.authenticated, shrinkNavbar) }
       className="navbar-1"
     ></PageHeader>

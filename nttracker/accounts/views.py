@@ -15,6 +15,7 @@ def ajax_login(request):
     if request.is_ajax():
         try:
             post_data = json.load(request)
+            print(post_data.username, post_data.password)
             username = post_data['username']
             password = post_data['password']
             user = authenticate(request, username=username, password=password)
@@ -31,7 +32,35 @@ def ajax_login(request):
             return JsonResponse(userdata)
         # be more specific on exception
         except:
+            print(request)
             # also work on the error messages
+            return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
+
+
+def ajax_profile(request):
+    if request.is_ajax():
+        try:
+            post_data = json.load(request)
+            print(post_data.username, post_data.current_password)
+            username = post_data['username']
+            current = post_data['current_password']
+            new = post_data['new_password']
+            confirm = post_data['confirm_password']
+            user = authenticate(request, username=username, password=current)
+
+            if user is not None:
+                user.set_password(new_password)
+
+            # pick appropriate data here (for user)
+            userdata = {
+                'authenticated': user is not None,
+                'username': user.username,
+                'email': user.email,
+            }
+            return JsonResponse(userdata)
+        # be more specific on exception
+        except:
+            print(str(request))            # also work on the error messages
             return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
 
 

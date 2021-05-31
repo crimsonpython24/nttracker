@@ -58,7 +58,7 @@ function Login() {
   }, [register])
 
   function post_login(data) {
-    fetchData("http://127.0.0.1:8000/accounts/ajaxlogin", 'POST', {'username': data.username, 'password': data.password})
+    fetchData("http://127.0.0.1:8000/accounts/ajaxlogin", "POST", {"username": data.username, "password": data.password})
     .then((userdata) => {
       if (userdata.errors) {
         Object.keys(userdata.errors).forEach(key => {
@@ -67,14 +67,14 @@ function Login() {
             message: userdata.errors[key],
           });
         })
-        trigger('username');
-        trigger('password');
+        trigger("username");
+        trigger("password");
       } else {
         dispatch({
-          type: 'LOGGED_IN', userdata,
+          type: "LOGGED_IN", userdata,
         });
         changeloading();  
-        setTimeout(() => {message.success('Log in successful!', 3.55);}, 2130);
+        setTimeout(() => {message.success("Log in successful!", 3.55);}, 2130);
         setTimeout(() => {history.push("/");}, 2130);
       }
     })
@@ -83,26 +83,26 @@ function Login() {
 
   let usernameProps = {
     ...(errors.username && {
-      validateStatus: 'warning',
+      validateStatus: "warning",
       help: errors.username.message,
     }),
-    ...(errors.inv_credentials && {validateStatus: 'error', hasFeedback: true,})
+    ...(errors.inv_credentials && {validateStatus: "error", hasFeedback: true,})
   }
 
   let passwordProps = {
     ...(errors.password && {
-      validateStatus: 'warning',
+      validateStatus: "warning",
       help: errors.password.message,
     }),
     ...(errors.inv_credentials && {
-      validateStatus: 'error',
+      validateStatus: "error",
       hasFeedback: true,
-      help: 'Invalid credentials provided',
+      help: "Invalid credentials provided",
     })
   }
 
   if (state.user.is_authenticated) {
-    message.info('Already authenticated, smarty', 3.55);
+    message.info("Already authenticated, smarty", 3.55);
     history.push("/accounts/profile");
   } else {
     return (
