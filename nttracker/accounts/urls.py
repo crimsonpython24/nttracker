@@ -8,6 +8,7 @@ from frontend import views as f_views
 urlpatterns = [
     path('ajaxlogin', views.ajax_login, name='ajaxlogin'),
     path('ajaxlogout', views.ajax_logout, name='ajaxlogout'),
+    path('ajaxprofile', views.ajax_profile, name='ajaxprofile'),
     path('teststate', views.test_state, name='teststate'),
     path('initstate', views.init_state, name='initstate'),
     

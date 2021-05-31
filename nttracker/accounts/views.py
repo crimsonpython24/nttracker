@@ -14,7 +14,7 @@ from .serializers import UserSerializer
 def ajax_login(request):
     if request.is_ajax():
         try:
-            post_data = json.load(request)
+            post_data = json.loads(request.body)
             username = post_data['username']
             password = post_data['password']
             user = authenticate(request, username=username, password=password)
@@ -32,6 +32,30 @@ def ajax_login(request):
         # be more specific on exception
         except:
             # also work on the error messages
+            return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
+
+
+def ajax_profile(request):
+    if request.is_ajax():
+        try:
+            post_data = json.loads(request.body)
+            username = post_data['username']
+            current = post_data['current_password']
+            new = post_data['new_password']
+            confirm = post_data['confirm_password']
+            user = authenticate(request, username=username, password=current)
+
+            if user is not None:
+                user.set_password(new)
+                user.save()
+
+            userdata = {
+                'authenticated': user is not None,
+                'username': user.username,
+                'email': user.email,
+            }
+            return JsonResponse(userdata)
+        except:
             return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
 
 
