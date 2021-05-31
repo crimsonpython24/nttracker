@@ -24,9 +24,7 @@ fetch(`http://127.0.0.1:8000/accounts/${url}`)
       const App = () => {
         return (
           <NTTrackerContextProvider initState={initialState}>
-            <BrowserRouter>
-              <NTTracker/>
-            </BrowserRouter>
+            <NTTracker/>
           </NTTrackerContextProvider>
         )
       };

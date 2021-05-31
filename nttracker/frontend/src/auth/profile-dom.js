@@ -4,13 +4,13 @@ import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import './profile-dom.css';
 import { message, Form, Input, Button, Tooltip, Divider, Typography, Space, Modal, Card, Row, Col, Progress } from "antd";
-import { WarningOutlined, ExclamationCircleOutlined, EyeInvisibleOutlined, EyeTwoTone, LoadingOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, ExclamationCircleOutlined, EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 import { useHistory } from "react-router-dom";
 
 import { NTTrackerContext } from "../nttracker/context.js";
 
-const { Text, Link } = Typography;
+const { Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
 function Profile() {
@@ -20,8 +20,30 @@ function Profile() {
   const formLayout = 'vertical';
   let has_auth;
 
-  if (state.user.authenticated)
+  const username_text = (
+    <Paragraph editable=
+      {{ editing: false,
+         icon: <QuestionCircleOutlined style={{ color: "rgba(0, 0, 0, 0.85)"}} />,
+         tooltip: "Changing username is disabled for security reasons. Please contact the site owner."
+      }} 
+      style={{ paddingBottom: 0, marginBottom: -5 }}>Username
+    </Paragraph>
+  )
+
+  const current_password_text = (
+    <Paragraph editable=
+      {{ editing: false,
+         icon: <QuestionCircleOutlined style={{ color: "rgba(0, 0, 0, 0.85)"}} />,
+         tooltip: "We need to verify your identity before proceeding."
+      }} 
+      style={{ paddingBottom: 0, marginBottom: -5 }}>Username
+    </Paragraph>
+  )
+
+  if (state.user.authenticated) {
     localStorage.setItem('ever_logged_in', true);
+  }
+
   has_auth = localStorage.getItem('ever_logged_in');
 
   if (!has_auth) {
@@ -36,10 +58,10 @@ function Profile() {
       content: (
         <>
           <Space direction="vertical" size={0}>
-            <Text>This action cannot be reverted! All your data will be lost but the events you've created will remain.</Text>
-            <Text type="secondary">Click "cancel" or press ESC to quit operation. Enter your password to proceed.</Text>
+            <Text>This action cannot be reverted!</Text>
+            <Text type="secondary">Your data will be lost but your events will remain.</Text>
             <Input.Password
-              placeholder="Type password to continue..."
+              placeholder="Type the password to continue..."
               style={{ marginTop: 20 }}
               iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
             />
@@ -63,23 +85,13 @@ function Profile() {
         <Col xs={22} sm={18} md={14} lg={12} xl={10}>
           <Card>
             <Form layout={formLayout} form={form}>
-              <Form.Item label="Username">
-                <Input placeholder={state.user.username} disabled={true} style={{ maxWidth: 560 }}
-                suffix = {
-                  <Tooltip placement="rightTop"
-                    title={"Changing username is disabled for security reasons.\
-                            Please contact the site owner."}>
-                      <WarningOutlined 
-                      style={{ fontSize: 17, verticalAlign: "middle", marginRight: 15 }}
-                    />
-                  </Tooltip>
-                  }
-                />
+              <Form.Item label={username_text}>
+                <Input placeholder={state.user.username} disabled={true} style={{ maxWidth: 560 }}/>
               </Form.Item>
             </Form>
             <Divider/>
             <Form layout={formLayout} form={form}>
-              <Form.Item label="Current Password">
+              <Form.Item label={current_password_text}>
                 <Input style={{ maxWidth: 560 }}/>
               </Form.Item>
               <Form.Item label="New Password">
