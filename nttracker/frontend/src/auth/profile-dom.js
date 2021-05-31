@@ -102,8 +102,12 @@ function Profile() {
   }, [register])
 
   function post_profile(data) {
-    fetchData("http://127.0.0.1:8000/accounts/ajaxprofile", "POST",
-    {"username": state.user.username, "current_password": data.current_password, "new_password": data.new_password, "confirm_password": data.confirm_password})
+    fetchData("http://127.0.0.1:8000/accounts/ajaxprofile", "POST", {
+      "username": state.user.username,
+      "current_password": data.current_password,
+      "new_password": data.new_password,
+      "confirm_password": data.confirm_password
+    })
     .then((userdata) => {
       if (userdata.errors) {
         Object.keys(userdata.errors).forEach(key => {
