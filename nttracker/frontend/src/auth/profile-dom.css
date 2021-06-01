@@ -18,3 +18,18 @@
 .dialog-space {
     margin-bottom: 10px;
 }
+
+.deletionModal {
+  max-width: 416px !important;
+}
+
+.password-form {
+  margin-top: -10px;
+  margin-bottom: -25px;
+}
+
+.password-form-input {
+  margin-top: 20px;
+}
+
+  

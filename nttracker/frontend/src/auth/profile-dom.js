@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import "antd/dist/antd.css";
 import { message, Form, Input, Button, Divider, Typography, Space, Modal, Card, Row, Col, notification } from "antd";
@@ -16,6 +16,50 @@ const { Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
 
+const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemProps }) => {
+  const [form] = Form.useForm();
+  return (
+    <Modal
+      visible={visible}
+      title="Confirm deleting account?"
+      className="deletionModal"
+      okText="Proceed"
+      cancelText="Cancel"
+      onCancel={onCancel}
+      okButtonProps={{ danger: true, outline: "true" }}
+      onOk={() => {
+        form
+          .validateFields()
+          .then((values) => {
+            form.resetFields();
+            onCreate(values);
+          })
+          .catch((info) => {
+            console.log("Validate Failed:", info);
+          });
+      }}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        name="form_in_modal"
+        className="password-form"
+      >
+        <Space direction="vertical" size={0} className="dialog-space">
+          <Text>This action cannot be reverted!</Text>
+          <Text type="secondary">
+            Your data will be lost but your events will remain.
+          </Text>
+        </Space>
+        <Form.Item name="password" className="password-form-input" {...itemProps}>
+          <Input.Password placeholder="Type your password to continue" name="deactivate_confirmation" onChange={onPwdChange} />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+
 function Profile() {
   const onSubmit = values => {post_profile(values);}
   const onSubmit1 = values => {post_deactivate(values);}
@@ -24,8 +68,19 @@ function Profile() {
   const history = useHistory();
   const formLayout = "vertical";
   const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue, getValues } = useForm();
+  const {
+    register: register2,
+    trigger: trigger2,
+    formState: { errors: errors2 },
+    setError: setError2,
+    handleSubmit: handleSubmit2,
+    clearErrors: clearErrors2,
+    setValue: setValue2,
+    getValues: getValues2 
+  } = useForm();
   let has_auth;
-
+  
+  const [visible, setVisible] = useState(false);
   const username_text = (
     <Paragraph editable=
       {{ editing: false,
@@ -60,8 +115,8 @@ function Profile() {
   }
 
   const handleDeacConfChange = (e) => {
-    clearErrors();
-    setValue("deactivate_confirmation", e.target.value);
+    clearErrors2();
+    setValue2("deactivate_confirmation", e.target.value);
   }
 
 
@@ -77,34 +132,7 @@ function Profile() {
     })
     history.push("/accounts/login");
   }
-
-  function showPromiseConfirm() {
-    confirm({
-      title: "Confirm deleting account?",
-      icon: <ExclamationCircleOutlined />,
-      content: (
-        <>
-          <Space direction="vertical" size={0}>
-            <Text>This action cannot be reverted!</Text>
-            <Text type="secondary">Your data will be lost but created events will remain.</Text>
-            <Input.Password
-              placeholder="Type the password to continue..."
-              className="confirm-delete-password-box"
-              iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-            />
-          </Space>
-        </>
-      ),
-      centered: true,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-        }).catch(() => console.log("Nothing here yet"));
-      },
-      onCancel() {},
-    });
-  }
-
+  
   function post_logout() {
     fetchData("http://127.0.0.1:8000/accounts/ajaxlogout", 'POST', {})
     .then((json) => {
@@ -133,10 +161,13 @@ function Profile() {
         passwordEqual: value => (value === getValues().new_password) || 'Passwords do not match!',
       }
     });
-    // register("deactivate_confirmation", {
-    //   required: "The confirmation password is required.",
-    // });
   }, [register])
+
+  useEffect(() => {
+    register2("deactivate_confirmation", {
+      required: "The confirmation password is required.",
+    });
+  }, [register2])
 
   function handleNotifClick(key) {
     post_logout();
@@ -189,6 +220,7 @@ function Profile() {
   }
 
   function post_deactivate(data) {
+    console.log('aqui')
     fetchData("http://127.0.0.1:8000/accounts/ajaxdeactivate", "POST", {
       "username": state.user.username,
       "password": data.current_password
@@ -196,12 +228,12 @@ function Profile() {
     .then((userdata) => {
       if (userdata.del_error) {
         Object.keys(userdata.del_error).forEach(key => {
-          setError(key, {
+          setError2(key, {
             type: "manual",
-            message: userdata.errors[key],
+            message: userdata.del_error[key],
           });
         })
-        trigger("deactivate_confirmation");
+        trigger2("deactivate_confirmation");
       } else {
         history.push('/')
       }
@@ -234,14 +266,12 @@ function Profile() {
   }
 
   let deacPwdProps = {
-    ...(errors.deactivate_confirmation && {
+    ...(errors2.deactivate_confirmation && {
       validateStatus: "warning",
-      hasFeedback: true,
-      help: errors.deactivate_confirmation.message,
+      help: errors2.deactivate_confirmation.message,
     }),
-    ...(errors.inv_del_credentials && {
+    ...(errors2.inv_del_credentials && {
       validateStatus: "error",
-      hasFeedback: true,
       help: "Invalid credentials provided",
     })
   }
@@ -273,16 +303,20 @@ function Profile() {
               </Form.Item>
             </Form>
             <Divider/>
-            <Form layout={formLayout}>
-              <Form.Item label={
-                <Space direction="vertical" size={0} className="dialog-space">
-                  <Text>Delete Account</Text>
-                  <Text type="secondary">Permanently removes your account from the database (cannot be undone!)</Text>
-                  </Space>
-                }>
-                <Button danger onClick={showPromiseConfirm}>Delete Account</Button>
-              </Form.Item>
-            </Form>
+            <div>
+              <Space direction="vertical" size={0} className="dialog-space">
+                <Text>Delete Account</Text>
+                <Text type="secondary">Permanently removes your account from the database (cannot be undone!)</Text>
+              </Space>
+              <Button danger onClick={() => {setVisible(true);}}>Delete Account</Button>
+              <CollectionCreateForm
+                visible={visible}
+                onCreate={handleSubmit2(onSubmit1)}
+                onCancel={() => {setVisible(false);}}
+                onPwdChange={handleDeacConfChange}
+                itemProps={deacPwdProps}
+              />
+            </div>
           </Card>
         </Col>
       </Row>
