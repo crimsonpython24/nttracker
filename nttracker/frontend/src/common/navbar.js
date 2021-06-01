@@ -23,7 +23,9 @@ function Navbar() {
       dispatch({
         type: 'LOGGED_OUT'
       });
-      message.success('Log out successful!', 3.55);
+      message.success({
+        content: "Logged out successfully!", duration: 3.55, onClick: () => {message.destroy();}
+      })
       history.push("/");
       localStorage.removeItem('ever_logged_in');
     })

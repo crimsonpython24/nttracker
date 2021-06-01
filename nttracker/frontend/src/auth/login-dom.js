@@ -74,7 +74,9 @@ function Login() {
           type: "LOGGED_IN", userdata,
         });
         changeloading();  
-        setTimeout(() => {message.success("Log in successful!", 3.55);}, 2130);
+        setTimeout(() => {message.success({
+          content: "Logged in successfully!", duration: 3.55, onClick: () => {message.destroy();}
+        });}, 2130);
         setTimeout(() => {history.push("/");}, 2130);
       }
     })
@@ -104,7 +106,9 @@ function Login() {
   }
 
   if (state.user.is_authenticated) {
-    message.info("Already authenticated, smarty", 3.55);
+    message.success({
+      content: "Already authenticated, smarty", duration: 3.55, onClick: () => {message.destroy();}
+    })
     history.push("/accounts/profile");
   } else {
     return (

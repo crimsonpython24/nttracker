@@ -18,7 +18,9 @@ const { confirm } = Modal;
 
 function Profile() {
   const onSubmit = values => {post_profile(values);}
+  const onSubmit1 = values => {post_deactivate(values);}
   const [state, dispatch] = useContext(NTTrackerContext);
+  const [form] = Form.useForm();
   const history = useHistory();
   const formLayout = "vertical";
   const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue, getValues } = useForm();
@@ -57,6 +59,12 @@ function Profile() {
     setValue("confirm_password", e.target.value);
   }
 
+  const handleDeacConfChange = (e) => {
+    clearErrors();
+    setValue("deactivate_confirmation", e.target.value);
+  }
+
+
   if (state.user.authenticated) {
     localStorage.setItem("ever_logged_in", true);
   }
@@ -64,7 +72,9 @@ function Profile() {
   has_auth = localStorage.getItem("ever_logged_in");
 
   if (!has_auth) {
-    message.warning("Please log in to edit account", 5.35);
+    message.warning({
+      content: "Please log in to edit account", duration: 5.35, onClick: () => {message.destroy();}
+    })
     history.push("/accounts/login");
   }
 
@@ -101,7 +111,9 @@ function Profile() {
       dispatch({
         type: 'LOGGED_OUT'
       });
-      message.success('Log out successful!', 3.55);
+      message.success({
+        content: "Logged out successfully!", duration: 3.55, onClick: () => {message.destroy();}
+      })
       history.push("/");
       localStorage.removeItem('ever_logged_in');
     })
@@ -121,6 +133,9 @@ function Profile() {
         passwordEqual: value => (value === getValues().new_password) || 'Passwords do not match!',
       }
     });
+    // register("deactivate_confirmation", {
+    //   required: "The confirmation password is required.",
+    // });
   }, [register])
 
   function handleNotifClick(key) {
@@ -137,14 +152,14 @@ function Profile() {
 
   const openNotification = placement => {
     notification.success({
-      message: 'Change Password Successful!',
+      message: 'Password Changed Successfully!',
       description:
         'Please log out to see the changes, and reload the site if necessary. You can continue using the site without disruptions.\
          Click the X on the top right corner to log out later.',
       placement,
       btn,
       key,
-      duration: 10,
+      duration: 0,
     });
   };
 
@@ -167,7 +182,28 @@ function Profile() {
         trigger("new_password");
         trigger("confirm_password");
       } else {
-        openNotification('topRight')
+        form.resetFields();
+        openNotification('topRight');
+      }
+    })
+  }
+
+  function post_deactivate(data) {
+    fetchData("http://127.0.0.1:8000/accounts/ajaxdeactivate", "POST", {
+      "username": state.user.username,
+      "password": data.current_password
+    })
+    .then((userdata) => {
+      if (userdata.del_error) {
+        Object.keys(userdata.del_error).forEach(key => {
+          setError(key, {
+            type: "manual",
+            message: userdata.errors[key],
+          });
+        })
+        trigger("deactivate_confirmation");
+      } else {
+        history.push('/')
       }
     })
   }
@@ -175,12 +211,10 @@ function Profile() {
   let curPwdProps = {
     ...(errors.current_password && {
       validateStatus: "warning",
-      hasFeedback: true,
       help: errors.current_password.message,
     }),
     ...(errors.inv_credentials && {
       validateStatus: "error",
-      hasFeedback: true,
       help: "Invalid credentials provided",
     })
   }
@@ -198,6 +232,19 @@ function Profile() {
       help: errors.confirm_password.message,
     })
   }
+
+  let deacPwdProps = {
+    ...(errors.deactivate_confirmation && {
+      validateStatus: "warning",
+      hasFeedback: true,
+      help: errors.deactivate_confirmation.message,
+    }),
+    ...(errors.inv_del_credentials && {
+      validateStatus: "error",
+      hasFeedback: true,
+      help: "Invalid credentials provided",
+    })
+  }
   
   return (
     <div>
@@ -211,18 +258,18 @@ function Profile() {
               </Form.Item>
             </Form>
             <Divider/>
-            <Form layout={formLayout} onFinish={handleSubmit(onSubmit)}>
-              <Form.Item label={current_password_text} {...curPwdProps}>
+            <Form layout={formLayout} form={form} onFinish={handleSubmit(onSubmit)}>
+              <Form.Item name="Current Password" label={current_password_text} {...curPwdProps}>
                 <Input.Password className="profile-input-box" name="current_password" onChange={handleCurPwdChange}/>
               </Form.Item>
-              <Form.Item label="New Password" {...newPwdProps}>
+              <Form.Item name="New Password" label="New Password" {...newPwdProps}>
                 <Input.Password className="profile-input-box" name="new_password" onChange={handleNewPwdChange}/>
               </Form.Item>
-              <Form.Item label="Confirm Password" {...cfmPwdProps}>
+              <Form.Item name="Confirm Password" label="Confirm Password" {...cfmPwdProps}>
                 <Input.Password className="profile-input-box" name="confirm_password" onChange={handleCfmPwdChange}/>
               </Form.Item>
-              <Form.Item >
-                <Button type="primary" htmlType="submit">Change Password</Button>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" id={form}>Change Password</Button>
               </Form.Item>
             </Form>
             <Divider/>
