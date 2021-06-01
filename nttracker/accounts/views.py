@@ -22,18 +22,20 @@ def ajax_login(request):
             if user is not None:
                 login(request, user)
 
-            # pick appropriate data here (for user)
-            userdata = {
-                'authenticated': user is not None,
-                'username': user.username,
-                'email': user.email,
-            }
-            return JsonResponse(userdata)
-        # be more specific on exception
+                # pick appropriate data here (for user)
+                userdata = {
+                    'authenticated': user is not None,
+                    'username': user.username,
+                    'email': user.email,
+                }
+                return JsonResponse(userdata)
+
+            else:
+                return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
+        
         except:
-            print(request)
             # also work on the error messages
-            return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
+            return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Something went wrong...'}})
 
 
 def ajax_profile(request):
@@ -50,14 +52,35 @@ def ajax_profile(request):
                 user.set_password(new)
                 user.save()
 
-            userdata = {
-                'authenticated': user is not None,
-                'username': user.username,
-                'email': user.email,
-            }
-            return JsonResponse(userdata)
+                userdata = {
+                    'authenticated': user is not None,
+                    'username': user.username,
+                    'email': user.email,
+                }
+                return JsonResponse(userdata)
+            else:
+                return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
+
         except:
-            return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
+            return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Something went wrong...'}})
+
+
+def ajax_deactivate(request):
+    if request.is_ajax():
+        try:
+            post_data = json.loads(request.body)
+            username = post_data['username']
+            password = post_data['password']
+            user = authenticate(request, username=username, password=password)
+            
+            if user is not None:
+                user.delete()
+                return JsonResponse({'authenticated': False})
+            else:
+                return JsonResponse({'authenticated': False, 'del_error': {'inv_del_credentials': 'Invalid credentials provided'}})
+
+        except:
+            return JsonResponse({'authenticated': False, 'del_error': {'inv_del_credentials': 'Something went wrong...'}})
 
 
 def ajax_logout(request):

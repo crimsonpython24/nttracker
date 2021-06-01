@@ -16,7 +16,7 @@ const { Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
 
-const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemProps }) => {
+const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemProps, formName }) => {
   const [form] = Form.useForm();
   return (
     <Modal
@@ -31,6 +31,7 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemPr
         form
           .validateFields()
           .then((values) => {
+            console.log("Received values of form: ", values);
             form.resetFields();
             onCreate(values);
           })
@@ -40,7 +41,7 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemPr
       }}
     >
       <Form
-        form={form}
+        form={formName}
         layout="vertical"
         name="form_in_modal"
         className="password-form"
@@ -65,6 +66,7 @@ function Profile() {
   const onSubmit1 = values => {post_deactivate(values);}
   const [state, dispatch] = useContext(NTTrackerContext);
   const [form] = Form.useForm();
+  const [form2] = Form.useForm();
   const history = useHistory();
   const formLayout = "vertical";
   const { register, trigger, formState: { errors }, setError, handleSubmit, clearErrors , setValue, getValues } = useForm();
@@ -128,7 +130,7 @@ function Profile() {
 
   if (!has_auth) {
     message.warning({
-      content: "Please log in to edit account", duration: 5.35, onClick: () => {message.destroy();}
+      content: "Please log in to edit your account", duration: 5.35, onClick: () => {message.destroy();}
     })
     history.push("/accounts/login");
   }
@@ -220,10 +222,9 @@ function Profile() {
   }
 
   function post_deactivate(data) {
-    console.log('aqui')
     fetchData("http://127.0.0.1:8000/accounts/ajaxdeactivate", "POST", {
       "username": state.user.username,
-      "password": data.current_password
+      "password": data.deactivate_confirmation
     })
     .then((userdata) => {
       if (userdata.del_error) {
@@ -235,6 +236,9 @@ function Profile() {
         })
         trigger2("deactivate_confirmation");
       } else {
+        dispatch({
+          type: 'LOGGED_OUT'
+        });
         history.push('/')
       }
     })
@@ -308,11 +312,13 @@ function Profile() {
                 <Text>Delete Account</Text>
                 <Text type="secondary">Permanently removes your account from the database (cannot be undone!)</Text>
               </Space>
+              <br/>
               <Button danger onClick={() => {setVisible(true);}}>Delete Account</Button>
               <CollectionCreateForm
                 visible={visible}
                 onCreate={handleSubmit2(onSubmit1)}
-                onCancel={() => {setVisible(false);}}
+                formName={form2}
+                onCancel={() => {setVisible(false); clearErrors2(); form2.resetFields()}}
                 onPwdChange={handleDeacConfChange}
                 itemProps={deacPwdProps}
               />
