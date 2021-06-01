@@ -34,7 +34,7 @@ function Login() {
     setloadings(true);
     setTimeout(() => {
       setloadings(false);
-    }, 6000);
+    }, 1630);
   }
 
   function handleRememberChange(e) {
@@ -70,17 +70,16 @@ function Login() {
         trigger("username");
         trigger("password");
       } else {
-        dispatch({
-          type: "LOGGED_IN", userdata,
-        });
         changeloading();  
-        setTimeout(() => {message.success({
-          content: "Logged in successfully!", duration: 3.55, onClick: () => {message.destroy();}
-        });}, 2130);
+        setTimeout(() => {
+          dispatch({type: "LOGGED_IN", userdata,});
+          message.success({
+            content: "Logged in successfully!", duration: 3.55, onClick: () => {message.destroy();}
+          });
+        }, 1630);
         setTimeout(() => {history.push("/");}, 2130);
       }
     })
-    // .catch((json) => setNoNameError(JSON.stringify(json)));
   }
 
   let usernameProps = {

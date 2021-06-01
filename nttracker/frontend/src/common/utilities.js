@@ -18,8 +18,6 @@ function getCookie(name) {
 
 
 function fetchData(url, met, data=null) {
-  console.log(data);
-  console.log(JSON.stringify(data));
   return fetch(url, {
     method: met,
     credentials: 'include',

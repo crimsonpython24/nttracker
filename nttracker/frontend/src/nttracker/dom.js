@@ -7,6 +7,7 @@ import { useNProgress } from "@tanem/react-nprogress"
 import Home from "../../src/main/home";
 import Login from "../../src/auth/login-dom";
 import Navbar from "../../src/common/navbar";
+import Footer from "../../src/common/footer";
 import Profile from "../../src/auth/profile-dom";
 import Bar from "./bar";
 import Container from "./container";
@@ -35,7 +36,7 @@ const NTTracker = () => {
             <>
               <Progress isAnimating={isLoading} key={location.key} />
               <Navbar/>
-              <TransitionGroup>
+              <TransitionGroup className="body-dom">
                 <CSSTransition
                   classNames="fade"
                   key={location.key}
@@ -51,6 +52,7 @@ const NTTracker = () => {
                   </Switch>
                 </CSSTransition>
               </TransitionGroup>
+              <Footer/>
             </>
           )}
         />

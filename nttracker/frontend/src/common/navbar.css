@@ -1,6 +1,11 @@
 .navbar-1 {
     outline: 1px solid #EBEDF0 !important;
     margin-bottom: 25px;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 1;
+    background-color: white;
 }
 
 .link-text-color {
@@ -21,4 +26,12 @@
     font-size: 17px;
     vertical-align: middle;
     margin-right: 15px;
+}
+
+.no-left-margin-navbar {
+    margin-left: 0px !important;
+}
+
+.less-right-mrg-navbar {
+    margin-right: -3px;
 }

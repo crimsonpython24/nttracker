@@ -41,7 +41,6 @@ const nttrackerReducer = (state, action) => {
     case 'UPDATED_PROFILE': {
       let {user, ...etc} = state;
       let {type, ...attrs} = action;
-      console.log('this is some text', action);
       let ret = {
         ...etc,
         user: {
@@ -49,7 +48,6 @@ const nttrackerReducer = (state, action) => {
           ...attrs,
         }
       }
-      console.log('stateuser', ret)
       return ret;
     }
     default:

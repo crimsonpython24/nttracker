@@ -13,7 +13,6 @@ import "./profile-dom.css";
 
 
 const { Text, Paragraph } = Typography;
-const { confirm } = Modal;
 
 
 const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemProps, formName }) => {
@@ -24,6 +23,7 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemPr
       title="Confirm deleting account?"
       className="deletionModal"
       okText="Proceed"
+      centered
       cancelText="Cancel"
       onCancel={onCancel}
       okButtonProps={{ danger: true, outline: "true" }}
@@ -31,12 +31,10 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemPr
         form
           .validateFields()
           .then((values) => {
-            console.log("Received values of form: ", values);
             form.resetFields();
             onCreate(values);
           })
           .catch((info) => {
-            console.log("Validate Failed:", info);
           });
       }}
     >
@@ -187,7 +185,8 @@ function Profile() {
     notification.success({
       message: 'Password Changed Successfully!',
       description:
-        'Please log out to see the changes, and reload the site if necessary. You can continue using the site without disruptions.\
+        'Please log out to see the changes, and reload the site if necessary. \
+        You can continue using the site without disruptions.\
          Click the X on the top right corner to log out later.',
       placement,
       btn,
@@ -239,7 +238,18 @@ function Profile() {
         dispatch({
           type: 'LOGGED_OUT'
         });
-        history.push('/')
+        setVisible(false);
+        const key = 'deactivate_acc';
+        message.loading({ content: 'Deactivating account...', key });
+        setTimeout(() => {
+          message.success({
+            content: "Account deactivated successfully!",
+            duration: 3.55,
+            onClick: () => {message.destroy();},
+            key
+          });
+        }, 1630);
+        setTimeout(() => {history.push("/");}, 2130);
       }
     })
   }
@@ -247,10 +257,12 @@ function Profile() {
   let curPwdProps = {
     ...(errors.current_password && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors.current_password.message,
     }),
     ...(errors.inv_credentials && {
       validateStatus: "error",
+      hasFeedback: true,
       help: "Invalid credentials provided",
     })
   }
@@ -258,6 +270,7 @@ function Profile() {
   let newPwdProps = {
     ...(errors.new_password && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors.new_password.message,
     })
   }
@@ -265,6 +278,7 @@ function Profile() {
   let cfmPwdProps = {
     ...(errors.confirm_password && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors.confirm_password.message,
     })
   }
@@ -272,10 +286,12 @@ function Profile() {
   let deacPwdProps = {
     ...(errors2.deactivate_confirmation && {
       validateStatus: "warning",
+      hasFeedback: true,
       help: errors2.deactivate_confirmation.message,
     }),
     ...(errors2.inv_del_credentials && {
       validateStatus: "error",
+      hasFeedback: true,
       help: "Invalid credentials provided",
     })
   }
@@ -285,7 +301,7 @@ function Profile() {
       <Row>
         <Col xs={1} sm={3} md={5} lg={6} xl={7}></Col>
         <Col xs={22} sm={18} md={14} lg={12} xl={10}>
-          <Card>
+          <Card className="profile-card-1">
             <Form layout={formLayout}>
               <Form.Item label={username_text}>
                 <Input placeholder={state.user.username} disabled={true} className="profile-input-box"/>
