@@ -1,5 +1,5 @@
+import enUS from 'antd/lib/calendar/locale/en_US';
 import React, { useReducer } from 'react';
-
 
 export const NTTrackerContext = React.createContext([{}]);
 
@@ -9,6 +9,9 @@ const initialState = {
     username: "",
     authenticated: false,
     email: "",
+  },
+  site: {
+    locale: enUS,
   }
 };
 
@@ -16,18 +19,21 @@ const initialState = {
 const nttrackerReducer = (state, action) => {
   switch (action.type) {
     case 'LOGGED_IN': {
-      let {user, ...etc} = state;
+      let {user, site, ...etc} = state;
       let {userdata} = action;
       return {
         ...etc,
         user: {
           ...user,
           ...userdata,
+        },
+        site: {
+          ...site
         }
       }
     }
     case 'LOGGED_OUT': {
-      let {user, ...etc} = state;
+      let {user, site, ...etc} = state;
       return {
         ...etc,
         user: {
@@ -35,20 +41,24 @@ const nttrackerReducer = (state, action) => {
           username: "",
           authenticated: false,
           email: "",
+        },
+        site: {
+          ...site
         }
       }
     }
-    case 'UPDATED_PROFILE': {
-      let {user, ...etc} = state;
-      let {type, ...attrs} = action;
-      let ret = {
+    case 'SWITCHED_LOCALE': {
+      let {user, site, ...etc} = state;
+      let {locale} = action;
+      return {
         ...etc,
         user: {
           ...user,
-          ...attrs,
+        },
+        site: {
+          locale: locale
         }
       }
-      return ret;
     }
     default:
       return state;

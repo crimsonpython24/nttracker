@@ -1,8 +1,12 @@
 import React, { useContext } from "react";
 
 import "antd/dist/antd.css";
-import { PageHeader, Button, Tooltip, message, Dropdown, Menu } from "antd";
+import { PageHeader, Button, Tooltip, message, Dropdown, Menu, ConfigProvider } from "antd";
 import { InfoCircleOutlined, DownOutlined, GlobalOutlined } from "@ant-design/icons";
+
+import enUS from 'antd/lib/locale/en_US';
+import zhTW from 'antd/lib/locale/zh_TW';
+import esES from 'antd/lib/locale/es_ES';
 
 import { Link, useHistory } from "react-router-dom";
 import { useMediaQuery } from "react-responsive"
@@ -10,6 +14,7 @@ import { useMediaQuery } from "react-responsive"
 import { NTTrackerContext } from "../nttracker/context.js";
 import fetchData from "../common/utilities.js";
 import "./navbar.css";
+
 
 
 function Navbar() {
@@ -36,19 +41,25 @@ function Navbar() {
     console.log('click', e);
   }
 
+  function changeLocale(locale) {
+    dispatch({
+      type: "SWITCHED_LOCALE", locale
+    });
+  }
+
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">English (US)</Menu.Item>
-      <Menu.Item key="2">中文（繁體）</Menu.Item>
-      <Menu.Item key="3">Español (ES)</Menu.Item>
+      <Menu.Item key="1" onClick={() => changeLocale(enUS)}>English (US)</Menu.Item>
+      <Menu.Item key="2" onClick={() => changeLocale(zhTW)}>中文（繁體）</Menu.Item>
+      <Menu.Item key="3" onClick={() => changeLocale(esES)}>Español (ES)</Menu.Item>
     </Menu>
   );
 
   function Localedropdown() {
     return (
       <Dropdown overlay={menu} placement="bottomRight" trigger={['click']}>
-        <Button className="no-left-margin-navbar">
-          <GlobalOutlined className="less-right-mrg-navbar"/> <DownOutlined />
+        <Button className="no-margin-navbar">
+          <GlobalOutlined className="less-right-mrg-navbar"/>
         </Button>
       </Dropdown>
     )
@@ -58,15 +69,15 @@ function Navbar() {
     // if (shrink) return null;
     if (authenticated) {
       return (
-        <>
-          <Localedropdown/>
-          <div className="authenticated-links">
+        <div>
+          <Localedropdown style={{ display: "inline-block" }}/>
+          <div className="authenticated-links" style={{ display: "inline-block", position: "relative", top: -1, marginLeft: 10 }}>
             [{state.user.username}] <Link to='/' className="link-text-color">Home
               </Link> • <Link to='/accounts/profile' className="link-text-color">Settings
               </Link> • <span onClick={post_logout} className="link-post-logout">
               Log out</span>
           </div>
-        </>
+        </div>
       )
     } else {
       return (
@@ -84,11 +95,13 @@ function Navbar() {
   }
 
   return (
-    <PageHeader
-      title={<Link to="/" style={{ color: "#262626" }}>NT Stats Tracker</Link>}
-      extra={ extras(state.user.authenticated, shrinkNavbar) }
-      className="navbar-1"
-    ></PageHeader>
+    <>
+      <PageHeader
+        title={<Link to="/" style={{ color: "#262626" }}>NT Stats Tracker</Link>}
+        extra={ extras(state.user.authenticated, shrinkNavbar) }
+        className="navbar-1"
+      ></PageHeader>
+    </>
   )
 }
 

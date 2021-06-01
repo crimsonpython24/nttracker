@@ -7,6 +7,8 @@ import NTTrackerContextProvider from './nttracker/context';
 import NTTracker from './nttracker/dom';
 import "./index.css";
 
+import enUS from "antd/lib/calendar/locale/en_US";
+
 
 let development = false;                               // use true while testing in 3000
 let url = !development ? "initstate" : "teststate";   // use TESTUSER_ID=1 when running with teststate
@@ -18,6 +20,9 @@ fetch(`http://127.0.0.1:8000/accounts/${url}`)
     (data) => {
       const initialState = {
         user: data.user,
+        site: {
+          locale: enUS,
+        }
       };
       const App = () => {
         return (
