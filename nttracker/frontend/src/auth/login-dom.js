@@ -74,7 +74,7 @@ function Login() {
         setTimeout(() => {
           dispatch({type: "LOGGED_IN", userdata,});
           message.success({
-            content: "Logged in successfully!", duration: 3.55, onClick: () => {message.destroy();}
+            key: "login1", content: "Logged in successfully!", duration: 3.55, onClick: () => {message.destroy("login1");}
           });
         }, 1630);
         setTimeout(() => {history.push("/");}, 2130);
@@ -106,7 +106,7 @@ function Login() {
 
   if (state.user.is_authenticated) {
     message.success({
-      content: "Already authenticated, smarty", duration: 3.55, onClick: () => {message.destroy();}
+      key: "login2", content: "Already authenticated, smarty", duration: 3.55, onClick: () => {message.destroy("login2");}
     })
     history.push("/accounts/profile");
   } else {

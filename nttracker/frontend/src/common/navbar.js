@@ -29,38 +29,39 @@ function Navbar() {
         type: 'LOGGED_OUT'
       });
       message.success({
-        content: "Logged out successfully!", duration: 3.55, onClick: () => {message.destroy();}
+        key: "profile3", content: "Logged out successfully!", duration: 3.55, onClick: () => {message.destroy("profile3");}
       })
       history.push("/");
       localStorage.removeItem('ever_logged_in');
     })
   }
-  
-  function handleMenuClick(e) {
-    message.info('Click on menu item.');
-    console.log('click', e);
-  }
 
-  function changeLocale(locale) {
+  function changeLocale(locale, name) {
     dispatch({
       type: "SWITCHED_LOCALE", locale
     });
+    message.info({
+      key: "profile4", content: ("Changed locale to " + name), duration: 3.55, onClick: () => {message.destroy("profile4");}
+    })
   }
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1" onClick={() => changeLocale(enUS)}>English (US)</Menu.Item>
-      <Menu.Item key="2" onClick={() => changeLocale(zhTW)}>中文（繁體）</Menu.Item>
-      <Menu.Item key="3" onClick={() => changeLocale(esES)}>Español (ES)</Menu.Item>
+    <Menu>
+      <Menu.Item key="1" onClick={() => changeLocale(enUS, "English (US)")}>English (US)</Menu.Item>
+      <Menu.Item key="2" onClick={() => changeLocale(zhTW, "中文（繁體）")}>中文（繁體）</Menu.Item>
+      <Menu.Item key="3" onClick={() => changeLocale(esES, "Español (ES)")}>Español (ES)</Menu.Item>
     </Menu>
   );
 
   function Localedropdown() {
     return (
       <Dropdown overlay={menu} placement="bottomRight" trigger={['click']}>
-        <Button className="no-margin-navbar">
-          <GlobalOutlined className="less-right-mrg-navbar"/>
-        </Button>
+        <Tooltip placement="leftTop" 
+            title={"Change locale (doesn't change the language, only the format of interfaces)"}>
+            <Button className="no-left-margin-navbar">
+              <GlobalOutlined className="no-mrg-navbar"/>
+            </Button>
+          </Tooltip>
       </Dropdown>
     )
   }
@@ -71,7 +72,7 @@ function Navbar() {
       return (
         <div>
           <Localedropdown style={{ display: "inline-block" }}/>
-          <div className="authenticated-links" style={{ display: "inline-block", position: "relative", top: -1, marginLeft: 10 }}>
+          <div className="authenticated-links item-no-select" style={{ display: "inline-block", position: "relative", top: -1, marginLeft: 10 }}>
             [{state.user.username}] <Link to='/' className="link-text-color">Home
               </Link> • <Link to='/accounts/profile' className="link-text-color">Settings
               </Link> • <span onClick={post_logout} className="link-post-logout">

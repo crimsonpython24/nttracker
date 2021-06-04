@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 
 import "antd/dist/antd.css";
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Result, Button, Typography, Space } from 'antd';
 
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom"
 import { CSSTransition, TransitionGroup } from "react-transition-group"
 import { useNProgress } from "@tanem/react-nprogress"
 
@@ -18,6 +18,9 @@ import "./dom.css";
 import { NTTrackerContext } from "../nttracker/context.js";
 
 
+const { Text } = Typography;
+
+
 const Progress = ({ isAnimating }) => {
   const { animationDuration, isFinished, progress } = useNProgress({isAnimating});
 
@@ -25,6 +28,28 @@ const Progress = ({ isAnimating }) => {
     <Container animationDuration={animationDuration} isFinished={isFinished}>
       <Bar animationDuration={animationDuration} progress={progress} />
     </Container>
+  )
+}
+
+
+function NoMatch() {
+  const pathname = (
+    <Space direction="horizontal">
+      <Text type="secondary">Sorry,</Text>
+      <Text type="secondary" mark>{window.location.pathname}</Text>
+      <Text type="secondary">does not exist.</Text>
+    </Space>
+  );
+  return (
+    <>
+      <Result
+        className="item-no-select item-no-drag"
+        status="404"
+        title="404"
+        subTitle={pathname}
+        extra={<Link to="/" key="back-home"><Button type="primary">Back Home</Button></Link>}
+      />,
+    </>
   )
 }
 
@@ -53,8 +78,9 @@ const NTTracker = () => {
                   >
                     <Switch location={location}>
                       <Route exact path="/"><Home/></Route>
-                      <Route path="/accounts/login"><Login/></Route>
-                      <Route path="/accounts/profile"><Profile/></Route>
+                      <Route exact path="/accounts/login"><Login/></Route>
+                      <Route exact path="/accounts/profile"><Profile/></Route>
+                      <Route exact path="*" component={NoMatch} />
                     </Switch>
                   </CSSTransition>
                 </TransitionGroup>

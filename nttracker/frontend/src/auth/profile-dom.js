@@ -128,7 +128,7 @@ function Profile() {
 
   if (!has_auth) {
     message.warning({
-      content: "Please log in to edit your account", duration: 5.35, onClick: () => {message.destroy();}
+      key: "profile1", content: "Please log in to edit your account", duration: 5.35, onClick: () => {message.destroy("profile1");}
     })
     history.push("/accounts/login");
   }
@@ -140,7 +140,7 @@ function Profile() {
         type: 'LOGGED_OUT'
       });
       message.success({
-        content: "Logged out successfully!", duration: 3.55, onClick: () => {message.destroy();}
+        key: "profile2", content: "Logged out successfully!", duration: 3.55, onClick: () => {message.destroy("profile2");}
       })
       history.push("/");
       localStorage.removeItem('ever_logged_in');
@@ -245,7 +245,7 @@ function Profile() {
           message.success({
             content: "Account deactivated successfully!",
             duration: 3.55,
-            onClick: () => {message.destroy();},
+            onClick: () => {message.destroy(key);},
             key
           });
         }, 1630);
