@@ -6,7 +6,6 @@ import { InfoCircleOutlined, DownOutlined, GlobalOutlined } from "@ant-design/ic
 
 import enUS from 'antd/lib/locale/en_US';
 import zhTW from 'antd/lib/locale/zh_TW';
-import esES from 'antd/lib/locale/es_ES';
 
 import { Link, useHistory } from "react-router-dom";
 import { useMediaQuery } from "react-responsive"
@@ -49,7 +48,6 @@ function Navbar() {
     <Menu>
       <Menu.Item key="1" onClick={() => changeLocale(enUS, "English (US)")}>English (US)</Menu.Item>
       <Menu.Item key="2" onClick={() => changeLocale(zhTW, "中文（繁體）")}>中文（繁體）</Menu.Item>
-      <Menu.Item key="3" onClick={() => changeLocale(esES, "Español (ES)")}>Español (ES)</Menu.Item>
     </Menu>
   );
 

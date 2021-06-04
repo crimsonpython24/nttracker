@@ -47,7 +47,14 @@ function NoMatch() {
         status="404"
         title="404"
         subTitle={pathname}
-        extra={<Link to="/" key="back-home"><Button type="primary">Back Home</Button></Link>}
+        extra={
+          <>
+            <Link to="/" key="back-home">
+              <Button type="primary">Back Home</Button>
+            </Link>
+            <a href="https://www.nitrotype.com"><Button type="outlined">Get me outta here</Button></a>
+          </>  
+        }
       />,
     </>
   )
