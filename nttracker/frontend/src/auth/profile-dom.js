@@ -126,10 +126,20 @@ function Profile() {
 
   has_auth = localStorage.getItem("ever_logged_in");
 
+  const profile1_message = () => {
+    const info = message.warning({
+      key: "profile1", content: "Please log in to edit account!", duration: 5.35, onClick: () => {info("profile1");}
+    });
+  };
+
+  const profile2_message = () => {
+    const info = message.info({
+      key: "profile2", content: "Logged out!", duration: 3.55, onClick: () => {info("profile2");}
+    });
+  };
+
   if (!has_auth) {
-    message.warning({
-      key: "profile1", content: "Please log in to edit your account", duration: 5.35, onClick: () => {message.destroy("profile1");}
-    })
+    profile1_message();
     history.push("/accounts/login");
   }
   
@@ -139,9 +149,7 @@ function Profile() {
       dispatch({
         type: 'LOGGED_OUT'
       });
-      message.success({
-        key: "profile2", content: "Logged out successfully!", duration: 3.55, onClick: () => {message.destroy("profile2");}
-      })
+      profile2_message();
       history.push("/");
       localStorage.removeItem('ever_logged_in');
     })
@@ -220,6 +228,12 @@ function Profile() {
     })
   }
 
+  const profile3_message = () => {
+    const info = message.success({
+      key: "profile3", content: "Account deactivated successfully!", duration: 3.55, onClick: () => {info("profile3");}
+    });
+  };
+
   function post_deactivate(data) {
     fetchData("http://127.0.0.1:8000/accounts/ajaxdeactivate", "POST", {
       "username": state.user.username,
@@ -241,14 +255,7 @@ function Profile() {
         setVisible(false);
         const key = 'deactivate_acc';
         message.loading({ content: 'Deactivating account...', key });
-        setTimeout(() => {
-          message.success({
-            content: "Account deactivated successfully!",
-            duration: 3.55,
-            onClick: () => {message.destroy(key);},
-            key
-          });
-        }, 1630);
+        setTimeout(() => {profile3_message();}, 1630);
         setTimeout(() => {history.push("/");}, 2130);
       }
     })

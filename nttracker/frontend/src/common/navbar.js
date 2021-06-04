@@ -21,15 +21,24 @@ function Navbar() {
   const shrinkNavbar = useMediaQuery({ query: '(max-width: 533px)' })
   const history = useHistory();
 
+  const navbar1_message = () => {
+    const info = message.info({
+      key: "navbar1", content: "Logged out!", duration: 3.55, onClick: () => {info("navbar1");}
+    });
+  };
+  const navbar2_message = (content) => {
+    const info = message.info({
+      key: "navbar2", content: ("Changed locale to " + content), duration: 3.55, onClick: () => {info("navbar2");}
+    });
+  };
+
   function post_logout() {
     fetchData("http://127.0.0.1:8000/accounts/ajaxlogout", 'POST', {})
     .then((json) => {
       dispatch({
         type: 'LOGGED_OUT'
       });
-      message.success({
-        key: "profile3", content: "Logged out successfully!", duration: 3.55, onClick: () => {message.destroy("profile3");}
-      })
+      navbar1_message();
       history.push("/");
       localStorage.removeItem('ever_logged_in');
     })
@@ -39,9 +48,7 @@ function Navbar() {
     dispatch({
       type: "SWITCHED_LOCALE", locale
     });
-    message.info({
-      key: "profile4", content: ("Changed locale to " + name), duration: 3.55, onClick: () => {message.destroy("profile4");}
-    })
+    navbar2_message(name);
   }
 
   const menu = (

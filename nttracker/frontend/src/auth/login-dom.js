@@ -29,9 +29,11 @@ function Login() {
   }
 
   const [loadings, setloadings] = useState(false);
+  const [disabledLoading, setDisabledLoading] = useState(false);
 
-  function changeloading() {  
+  function changeloading() {
     setloadings(true);
+    setDisabledLoading(true);
     setTimeout(() => {
       setloadings(false);
     }, 1630);
@@ -57,6 +59,12 @@ function Login() {
     register("password", {required: "The password is required."});
   }, [register])
 
+  const login1_message = () => {
+    const info = message.success({
+      key: "login1", content: "Logged in successfully!", duration: 3.55, onClick: () => {info("login1");}
+    });
+  };
+
   function post_login(data) {
     fetchData("http://127.0.0.1:8000/accounts/ajaxlogin", "POST", {"username": data.username, "password": data.password})
     .then((userdata) => {
@@ -73,9 +81,7 @@ function Login() {
         changeloading();  
         setTimeout(() => {
           dispatch({type: "LOGGED_IN", userdata,});
-          message.success({
-            key: "login1", content: "Logged in successfully!", duration: 3.55, onClick: () => {message.destroy("login1");}
-          });
+          login1_message();
         }, 1630);
         setTimeout(() => {history.push("/");}, 2130);
       }
@@ -104,10 +110,14 @@ function Login() {
     })
   }
 
+  const login2_message = () => {
+    const info = message.info({
+      key: "login2", content: "Already authenticated, smarty", duration: 3.55, onClick: () => {info("login2");}
+    });
+  };
+
   if (state.user.is_authenticated) {
-    message.success({
-      key: "login2", content: "Already authenticated, smarty", duration: 3.55, onClick: () => {message.destroy("login2");}
-    })
+    login2_message();
     history.push("/accounts/profile");
   } else {
     return (
@@ -115,11 +125,11 @@ function Login() {
         <Card className="home-card">
           <Form name="normal_login" className="login-form" initialValues={{ remember: true }}
             onFinish={handleSubmit(onSubmit)} requiredMark={false}>
-            <Form.Item name="Username" {...usernameProps}>
+            <Form.Item name="Username" {...usernameProps} disabled={disabledLoading}>
               <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username"
                 name="username" onChange={handleUsernameChange}/>
             </Form.Item>
-            <Form.Item name="Password" {...passwordProps}>
+            <Form.Item name="Password" {...passwordProps} disabled={disabledLoading}>
               <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password"
                 name="password" onChange={handlePasswordChange} />
             </Form.Item>
