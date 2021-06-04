@@ -159,6 +159,7 @@ CORS_ORIGIN_REGEX_WHITELIST = ['http://127.0.0.1:3000', 'http://localhost:3000',
 # Celery Configuration Options
 CELERY_TIMEZONE = "Asia/Taipei"
 CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 
 # celery setting.
 CELERY_CACHE_BACKEND = 'default'
@@ -170,6 +171,3 @@ CACHES = {
         'LOCATION': 'my_cache_table',
     }
 }
-
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
