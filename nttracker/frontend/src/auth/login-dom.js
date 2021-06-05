@@ -127,16 +127,16 @@ function Login() {
             onFinish={handleSubmit(onSubmit)} requiredMark={false}>
             <Form.Item name="Username" {...usernameProps} disabled={disabledLoading}>
               <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username"
-                name="username" onChange={handleUsernameChange}/>
+                name="username" onChange={handleUsernameChange} disabled={disabledLoading}/>
             </Form.Item>
             <Form.Item name="Password" {...passwordProps} disabled={disabledLoading}>
               <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password"
-                name="password" onChange={handlePasswordChange} />
+                name="password" onChange={handlePasswordChange} disabled={disabledLoading}/>
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
                 <Tooltip placement="left" title="Don't check if you want to be logged out on browser close.">
-                  <Checkbox onChange={handleRememberChange}>Remember me</Checkbox>
+                  <Checkbox onChange={handleRememberChange} disabled={disabledLoading}>Remember me</Checkbox>
                 </Tooltip>
               </Form.Item>
               <Tooltip placement="right" title="Please contact the site owner for more information.">

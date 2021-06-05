@@ -34,8 +34,6 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemPr
             form.resetFields();
             onCreate(values);
           })
-          .catch((info) => {
-          });
       }}
     >
       <Form
@@ -182,11 +180,22 @@ function Profile() {
     notification.close(key);
   }
 
+  function handleNotifClickRemind(key) {
+    localStorage.setItem('no_remind_change_pwd', true);
+    notification.close(key);
+  }
+
   const key = `open${Date.now()}`;
   const btn = (
-    <Button outline size="small" onClick={() => handleNotifClick(key)}>
-      Log me out now
-    </Button>
+    <Space direction="horizontal">
+      <Button outline size="small" onClick={() => handleNotifClick(key)}>
+        Log out
+      </Button>
+      <Button outline size="small" onClick={() => handleNotifClickRemind(key)}>
+        Don't remind again
+      </Button>
+    </Space>
+    
   );
 
   const openNotification = placement => {
@@ -202,6 +211,18 @@ function Profile() {
       duration: 0,
     });
   };
+
+  const [loadings, setloadings] = useState(false);
+  const [disabledLoading, setDisabledLoading] = useState(false);
+
+  function changeloading() {
+    setloadings(true);
+    setDisabledLoading(true);
+    setTimeout(() => {
+      setDisabledLoading(false);
+      setloadings(false);
+    }, 1630);
+  }
 
   function post_profile(data) {
     fetchData("http://127.0.0.1:8000/accounts/ajaxprofile", "POST", {
@@ -222,15 +243,29 @@ function Profile() {
         trigger("new_password");
         trigger("confirm_password");
       } else {
-        form.resetFields();
-        openNotification('topRight');
+        changeloading();
+        setTimeout(() => {
+          form.resetFields();
+          console.log(localStorage.getItem('no_remind_change_pwd'));
+          if (JSON.parse(localStorage.getItem('no_remind_change_pwd')) !== true) {
+            openNotification('topRight');
+          } else {
+            profile4_message();
+          }
+        }, 1630);
       }
     })
   }
 
-  const profile3_message = () => {
+  const profile3_message = (key) => {
     const info = message.success({
-      key: "profile3", content: "Account deactivated successfully!", duration: 3.55, onClick: () => {info("profile3");}
+      key: key, content: "Account deactivated successfully!", duration: 3.55, onClick: () => {info(key);}
+    });
+  };
+
+  const profile4_message = () => {
+    const info = message.success({
+      key: "profile4", content: "Password changed successfully!", duration: 3.55, onClick: () => {info("profile4");}
     });
   };
 
@@ -255,7 +290,7 @@ function Profile() {
         setVisible(false);
         const key = 'deactivate_acc';
         message.loading({ content: 'Deactivating account...', key });
-        setTimeout(() => {profile3_message();}, 1630);
+        setTimeout(() => {profile3_message(key);}, 1630);
         setTimeout(() => {history.push("/");}, 2130);
       }
     })
@@ -317,16 +352,16 @@ function Profile() {
             <Divider/>
             <Form layout={formLayout} form={form} onFinish={handleSubmit(onSubmit)}>
               <Form.Item name="Current Password" label={current_password_text} {...curPwdProps}>
-                <Input.Password className="profile-input-box" name="current_password" onChange={handleCurPwdChange}/>
+                <Input.Password className="profile-input-box" name="current_password" onChange={handleCurPwdChange} disabled={disabledLoading}/>
               </Form.Item>
               <Form.Item name="New Password" label="New Password" {...newPwdProps}>
-                <Input.Password className="profile-input-box" name="new_password" onChange={handleNewPwdChange}/>
+                <Input.Password className="profile-input-box" name="new_password" onChange={handleNewPwdChange} disabled={disabledLoading}/>
               </Form.Item>
               <Form.Item name="Confirm Password" label="Confirm Password" {...cfmPwdProps}>
-                <Input.Password className="profile-input-box" name="confirm_password" onChange={handleCfmPwdChange}/>
+                <Input.Password className="profile-input-box" name="confirm_password" onChange={handleCfmPwdChange} disabled={disabledLoading}/>
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" id={form}>Change Password</Button>
+                <Button type="primary" htmlType="submit" id={form} loading={loadings}>Change Password</Button>
               </Form.Item>
             </Form>
             <Divider/>
