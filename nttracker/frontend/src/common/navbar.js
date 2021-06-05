@@ -23,12 +23,12 @@ function Navbar() {
 
   const navbar1_message = () => {
     const info = message.info({
-      key: "navbar1", content: "Logged out!", duration: 3.55, onClick: () => {info("navbar1");}
+      key: "navbar1", content: "Logged out!", duration: 3.55, onClick: () => {info("navbar1");}, className: "item-no-select",
     });
   };
   const navbar2_message = (content) => {
     const info = message.info({
-      key: "navbar2", content: ("Changed locale to " + content), duration: 3.55, onClick: () => {info("navbar2");}
+      key: "navbar2", content: ("Changed locale to " + content), duration: 3.55, onClick: () => {info("navbar2");}, className: "item-no-select",
     });
   };
 

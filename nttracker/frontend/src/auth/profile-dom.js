@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import "antd/dist/antd.css";
 import { message, Form, Input, Button, Divider, Typography, Space, Modal, Card, Row, Col, notification } from "antd";
-import { QuestionCircleOutlined, ExclamationCircleOutlined, EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
@@ -26,7 +26,7 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemPr
       centered
       cancelText="Cancel"
       onCancel={onCancel}
-      okButtonProps={{ danger: true, outline: "true" }}
+      okButtonProps={{ danger: true, outline: toString(true) }}
       onOk={() => {
         form
           .validateFields()
@@ -35,6 +35,7 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel, onPwdChange, itemPr
             onCreate(values);
           })
       }}
+      forceRender
     >
       <Form
         form={formName}
@@ -126,13 +127,13 @@ function Profile() {
 
   const profile1_message = () => {
     const info = message.warning({
-      key: "profile1", content: "Please log in to edit account!", duration: 5.35, onClick: () => {info("profile1");}
+      key: "profile1", content: "Please log in to edit account!", duration: 5.35, onClick: () => {info("profile1");}, className: "item-no-select",
     });
   };
 
   const profile2_message = () => {
     const info = message.info({
-      key: "profile2", content: "Logged out!", duration: 3.55, onClick: () => {info("profile2");}
+      key: "profile2", content: "Logged out!", duration: 3.55, onClick: () => {info("profile2");}, className: "item-no-select",
     });
   };
 
@@ -181,7 +182,7 @@ function Profile() {
   }
 
   function handleNotifClickRemind(key) {
-    localStorage.setItem('no_remind_change_pwd', true);
+    localStorage.setItem(('no_remind_change_pwd' + state.user.id), true);
     notification.close(key);
   }
 
@@ -246,8 +247,8 @@ function Profile() {
         changeloading();
         setTimeout(() => {
           form.resetFields();
-          console.log(localStorage.getItem('no_remind_change_pwd'));
-          if (JSON.parse(localStorage.getItem('no_remind_change_pwd')) !== true) {
+          console.log(localStorage.getItem(('no_remind_change_pwd' + state.user.id)));
+          if (JSON.parse(localStorage.getItem(('no_remind_change_pwd' + state.user.id))) !== true) {
             openNotification('topRight');
           } else {
             profile4_message();
@@ -259,13 +260,13 @@ function Profile() {
 
   const profile3_message = (key) => {
     const info = message.success({
-      key: key, content: "Account deactivated successfully!", duration: 3.55, onClick: () => {info(key);}
+      key: key, content: "Account deactivated successfully!", duration: 3.55, onClick: () => {info(key);}, className: "item-no-select",
     });
   };
 
   const profile4_message = () => {
     const info = message.success({
-      key: "profile4", content: "Password changed successfully!", duration: 3.55, onClick: () => {info("profile4");}
+      key: "profile4", content: "Password changed successfully!", duration: 3.55, onClick: () => {info("profile4");}, className: "item-no-select",
     });
   };
 
@@ -289,7 +290,7 @@ function Profile() {
         });
         setVisible(false);
         const key = 'deactivate_acc';
-        message.loading({ content: 'Deactivating account...', key });
+        message.loading({ content: 'Deactivating account...', key, className: "item-no-select", });
         setTimeout(() => {profile3_message(key);}, 1630);
         setTimeout(() => {history.push("/");}, 2130);
       }
@@ -379,6 +380,7 @@ function Profile() {
                 onCancel={() => {setVisible(false); clearErrors2(); form2.resetFields()}}
                 onPwdChange={handleDeacConfChange}
                 itemProps={deacPwdProps}
+                forceRender
               />
             </div>
           </Card>

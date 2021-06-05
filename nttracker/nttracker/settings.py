@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'data.apps.DataConfig',
     'rest_framework',
     'corsheaders',
-    'django_celery_results',
-    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -155,11 +153,3 @@ LOGOUT_REDIRECT_URL = '/'
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000', 'http://localhost:3000',] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
 CORS_ORIGIN_REGEX_WHITELIST = ['http://127.0.0.1:3000', 'http://localhost:3000',]
-
-# django setting.
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'my_cache_table',
-    }
-}

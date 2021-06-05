@@ -61,7 +61,7 @@ function Login() {
 
   const login1_message = () => {
     const info = message.success({
-      key: "login1", content: "Logged in successfully!", duration: 3.55, onClick: () => {info("login1");}
+      key: "login1", content: "Logged in successfully!", duration: 3.55, onClick: () => {info("login1");}, className: "item-no-select",
     });
   };
 
@@ -112,7 +112,7 @@ function Login() {
 
   const login2_message = () => {
     const info = message.info({
-      key: "login2", content: "Already authenticated, smarty", duration: 3.55, onClick: () => {info("login2");}
+      key: "login2", content: "Already authenticated, smarty", duration: 3.55, onClick: () => {info("login2");}, className: "item-no-select",
     });
   };
 
