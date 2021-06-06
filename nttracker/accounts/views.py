@@ -122,4 +122,4 @@ def init_state(request):
     if user:
         return JsonResponse({'user': user, 'csrftoken': csrf_token})
     else:
-        return JsonResponse({'user': {'username': 'guest'}, 'csrftoken': csrf_token})
+        return JsonResponse({'user': {'username': 'guest', 'authenticated': False}, 'csrftoken': csrf_token})
