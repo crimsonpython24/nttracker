@@ -20,7 +20,8 @@ class Racer(models.Model):
 
 
 class RaceData(models.Model):
-    team_id = models.IntegerField(primary_key=True)
+    timestamp = UnixDateTimeField(primary_key=True)
+    team_id = models.IntegerField()
     tag = models.CharField(max_length=10)
     name = models.CharField(max_length=100)
     members = models.ForeignKey(Racer, on_delete=models.CASCADE)

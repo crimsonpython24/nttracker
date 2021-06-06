@@ -31,7 +31,12 @@ function Login() {
   const [loadings, setloadings] = useState(false);
   const [disabledLoading, setDisabledLoading] = useState(false);
 
+  let usernameref = React.useRef(null);
+  let passwordref = React.useRef(null);
+
   function changeloading() {
+    usernameref.current.blur();
+    passwordref.current.blur();
     setloadings(true);
     setDisabledLoading(true);
     setTimeout(() => {
@@ -126,11 +131,11 @@ function Login() {
           <Form name="normal_login" className="login-form" initialValues={{ remember: true }}
             onFinish={handleSubmit(onSubmit)} requiredMark={false}>
             <Form.Item name="Username" {...usernameProps} disabled={disabledLoading}>
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username"
+              <Input ref={usernameref} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" 
                 name="username" onChange={handleUsernameChange} disabled={disabledLoading}/>
             </Form.Item>
             <Form.Item name="Password" {...passwordProps} disabled={disabledLoading}>
-              <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password"
+              <Input.Password ref={passwordref} prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password"
                 name="password" onChange={handlePasswordChange} disabled={disabledLoading}/>
             </Form.Item>
             <Form.Item>

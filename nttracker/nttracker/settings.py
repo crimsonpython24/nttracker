@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'frontend.apps.FrontendConfig',
     'data.apps.DataConfig',
-    'events.apps.EventsConfig',
     'rest_framework',
     'corsheaders',
     'huey.contrib.djhuey',

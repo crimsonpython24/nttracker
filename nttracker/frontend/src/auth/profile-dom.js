@@ -216,7 +216,14 @@ function Profile() {
   const [loadings, setloadings] = useState(false);
   const [disabledLoading, setDisabledLoading] = useState(false);
 
+  let curpassref = React.useRef(null);
+  let newpassref = React.useRef(null);
+  let cfmpassref = React.useRef(null);
+
   function changeloading() {
+    curpassref.current.blur();
+    newpassref.current.blur();
+    cfmpassref.current.blur();
     setloadings(true);
     setDisabledLoading(true);
     setTimeout(() => {
@@ -247,7 +254,6 @@ function Profile() {
         changeloading();
         setTimeout(() => {
           form.resetFields();
-          console.log(localStorage.getItem(('no_remind_change_pwd' + state.user.id)));
           if (JSON.parse(localStorage.getItem(('no_remind_change_pwd' + state.user.id))) !== true) {
             openNotification('topRight');
           } else {
@@ -353,13 +359,13 @@ function Profile() {
             <Divider/>
             <Form layout={formLayout} form={form} onFinish={handleSubmit(onSubmit)}>
               <Form.Item name="Current Password" label={current_password_text} {...curPwdProps}>
-                <Input.Password className="profile-input-box" name="current_password" onChange={handleCurPwdChange} disabled={disabledLoading}/>
+                <Input.Password ref={curpassref} className="profile-input-box" name="current_password" onChange={handleCurPwdChange} disabled={disabledLoading}/>
               </Form.Item>
               <Form.Item name="New Password" label="New Password" {...newPwdProps}>
-                <Input.Password className="profile-input-box" name="new_password" onChange={handleNewPwdChange} disabled={disabledLoading}/>
+                <Input.Password ref={newpassref} className="profile-input-box" name="new_password" onChange={handleNewPwdChange} disabled={disabledLoading}/>
               </Form.Item>
               <Form.Item name="Confirm Password" label="Confirm Password" {...cfmPwdProps}>
-                <Input.Password className="profile-input-box" name="confirm_password" onChange={handleCfmPwdChange} disabled={disabledLoading}/>
+                <Input.Password ref={cfmpassref} className="profile-input-box" name="confirm_password" onChange={handleCfmPwdChange} disabled={disabledLoading}/>
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit" id={form} loading={loadings}>Change Password</Button>
