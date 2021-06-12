@@ -15,12 +15,15 @@ let url = !development ? "initstate" : "teststate";   // use TESTUSER_ID=1 when 
 
 
 Promise.all([
-  fetch(("http://127.0.0.1:8000/accounts/" + url)),
+  fetch(("http://127.0.0.1:8000/accounts/initstate")),
   fetch("http://127.0.0.1:8000/data/racedata_json/"),
   fetch("http://127.0.0.1:8000/data/racerlog_json/"),
   fetch("http://127.0.0.1:8000/data/racerdata_json/"),
   fetch("http://127.0.0.1:8000/data/teamdata_json/"),
   ])
+  .then((([usr, rcdata, rclog, rcrdata, tdata]) => Promise.all(
+    [usr.json(), rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
+  )))
   .then(([usr, rcdata, rclog, rcrdata, tdata]) => {
     const initialState = {
       user: usr,

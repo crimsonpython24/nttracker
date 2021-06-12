@@ -15,11 +15,13 @@ import fetchData from "../common/utilities.js";
 import "./navbar.css";
 
 
-
 function Navbar() {
   const [state, dispatch] = useContext(NTTrackerContext);
   const shrinkNavbar = useMediaQuery({ query: '(max-width: 533px)' })
   const history = useHistory();
+
+  console.log('state', state);
+  console.log('state', state.user.user.authenticated);
 
   const navbar1_message = () => {
     const info = message.info({
@@ -104,7 +106,7 @@ function Navbar() {
     <>
       <PageHeader
         title={<Link to="/" style={{ color: "#262626" }}>NT Stats Tracker</Link>}
-        extra={ extras(state.user.authenticated, shrinkNavbar) }
+        extra={ extras(state.user.user.authenticated, shrinkNavbar) }
         className="navbar-1"
       ></PageHeader>
     </>

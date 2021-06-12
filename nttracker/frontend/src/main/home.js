@@ -27,7 +27,7 @@ function Home() {
 
   console.log(state.user);
 
-  if (state.user.authenticated) {
+  if (state.user.user.authenticated) {
     return (
       <div className="home-mrg-right">
         <h1>Teams here</h1>
