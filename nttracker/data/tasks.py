@@ -1,6 +1,6 @@
 import nitrotype   # clone adl212's repo lmao
 import json
-import datetime
+from datetime import datetime
 
 from huey import crontab
 from huey.contrib.djhuey import periodic_task, task
@@ -8,11 +8,11 @@ from huey.contrib.djhuey import periodic_task, task
 from .models import RaceData, RacerLog, RacerData, TeamData
 
 
-@periodic_task(crontab(minute='*/15'))
+@periodic_task(crontab(minute='*/1'))
 def record_racedata():
     team = nitrotype.Team('PR2W')
     team_id = team.data["info"]["teamID"]
-    timestamp = datetime.datetime.now()
+    timestamp = datetime.now().timestamp()
     
     for members in team.data["members"]:
         racer_id = members["userID"]
@@ -37,7 +37,7 @@ def record_racedata():
 def record_racerlog():
     team = nitrotype.Team('PR2W')
     team_id = team.data["info"]["teamID"]
-    timestamp = datetime.datetime.now()
+    timestamp = datetime.now().timestamp()
     
     for members in team.data["members"]:
         racer_id = members["userID"]
@@ -61,10 +61,10 @@ def record_racerlog():
         rcrl.save()
 
 
-@periodic_task(crontab(minute='*/15'))
+@periodic_task(crontab(minute='*/1'))
 def record_racerdata():
     team = nitrotype.Team('PR2W')
-    timestamp = datetime.datetime.now()
+    timestamp = datetime.now().timestamp()
     
     for members in team.data["members"]:
         racer_id = members["userID"]
@@ -86,7 +86,7 @@ def record_racerdata():
 def record_teamdata():
     team = nitrotype.Team('PR2W')
     team_id = team.data["info"]["teamID"]
-    timestamp = datetime.datetime.now()
+    timestamp = datetime.now().timestamp()
     tag = team.data["info"]["tag"]
     tag_color = team.data["tagColor"]
     name = team.data["info"]["name"]
