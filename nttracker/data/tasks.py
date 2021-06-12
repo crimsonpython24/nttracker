@@ -8,10 +8,9 @@ from huey.contrib.djhuey import periodic_task, task
 from .models import RaceData, RacerLog, RacerData, TeamData
 
 
-@periodic_task(crontab(minute='*/1'))
-def every_five_mins():
+@periodic_task(crontab(minute='*/15'))
+def record_racedata():
     team = nitrotype.Team('PR2W')
-
     team_id = team.data["info"]["teamID"]
     timestamp = datetime.datetime.now()
     
@@ -32,3 +31,71 @@ def every_five_mins():
             errs=errs
         )
         rcd.save()
+
+
+@periodic_task(crontab(day_of_week='1'))
+def record_racerlog():
+    team = nitrotype.Team('PR2W')
+    team_id = team.data["info"]["teamID"]
+    timestamp = datetime.datetime.now()
+    
+    for members in team.data["members"]:
+        racer_id = members["userID"]
+        races = members["played"]
+        role = members["role"]
+        username = members["username"]
+        display_name = members["displayName"]
+        total_races = members["racesPlayed"]
+        speed = members["avgSpeed"]
+
+        rcrl = RacerLog(
+            racer_id=racer_id,
+            team_id=team_id,
+            timestamp=timestamp,
+            role=timestamp,
+            username=username,
+            display_name=display_name,
+            total_races=total_races,
+            speed=speed
+        )
+        rcrl.save()
+
+
+@periodic_task(crontab(minute='*/15'))
+def record_racerdata():
+    team = nitrotype.Team('PR2W')
+    timestamp = datetime.datetime.now()
+    
+    for members in team.data["members"]:
+        racer_id = members["userID"]
+        join_stamp = members["joinStamp"]
+        last_activity = members["lastActivity"]
+        last_login = members["lastLogin"]
+
+        rcrd = RacerData(
+            racer_id=racer_id,
+            timestamp=timestamp,
+            join_stamp=join_stamp,
+            last_activity=last_activity,
+            last_login=last_login,
+        )
+        rcrd.save()
+
+
+@periodic_task(crontab(day_of_week='1'))
+def record_teamdata():
+    team = nitrotype.Team('PR2W')
+    team_id = team.data["info"]["teamID"]
+    timestamp = datetime.datetime.now()
+    tag = team.data["info"]["tag"]
+    tag_color = team.data["tagColor"]
+    name = team.data["info"]["name"]
+
+    td = TeamData(
+        team_id=team_id,
+        timestamp=timestamp,
+        tag=tag,
+        tag_color=tag_color,
+        name=name,
+    )
+    td.save()
