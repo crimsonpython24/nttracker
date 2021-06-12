@@ -11,12 +11,7 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
-    filters: [
-      {
-        text: 'filter1',
-        value: 'filter1',
-      },
-    ],
+    filters: [{text: 'filter1', value: 'filter1',},],
   },
   {
     title: 'Age',
@@ -27,6 +22,8 @@ const columns = [
 
 function Home() {
   const [state, dispatch] = useContext(NTTrackerContext);
+
+  console.log(state.user);
 
   if (state.user.authenticated) {
     return (

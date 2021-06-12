@@ -6,19 +6,19 @@ from .models import RaceData, RacerLog, RacerData, TeamData
 
 def racedata_json(request):
     data = list(RaceData.objects.values())
-    return JsonResponse({'data': data})
+    return JsonResponse({'racedata': data})
 
 
 def racerlog_json(request):
     data = list(RacerLog.objects.values())
-    return JsonResponse({'data': data})
+    return JsonResponse({'racerlog': data})
 
 
 def racerdata_json(request):
     data = list(RacerData.objects.values())
-    return JsonResponse({'data': data})
+    return JsonResponse({'racerdata': data})
 
 
 def teamdata_json(request):
     data = list(TeamData.objects.values())
-    return JsonResponse({'data': data})
+    return JsonResponse({'teamdata': data})

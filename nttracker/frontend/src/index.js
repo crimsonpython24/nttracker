@@ -14,23 +14,27 @@ let development = false;                               // use true while testing
 let url = !development ? "initstate" : "teststate";   // use TESTUSER_ID=1 when running with teststate
 
 
-fetch(`http://127.0.0.1:8000/accounts/${url}`)
-  .then(res => res.json())
-  .then(
-    (data) => {
-      const initialState = {
-        user: data.user,
-        site: {
-          locale: enUS,
-        }
-      };
-      const App = () => {
-        return (
-          <NTTrackerContextProvider initState={initialState}>
-            <NTTracker/>
-          </NTTrackerContextProvider>
-        )
-      };
-      ReactDOM.render(<App />, document.getElementById('root'));
-    }
-  )
+Promise.all([
+  fetch(("http://127.0.0.1:8000/accounts/" + url)),
+  fetch("http://127.0.0.1:8000/data/racedata_json/"),
+  fetch("http://127.0.0.1:8000/data/racerlog_json/"),
+  fetch("http://127.0.0.1:8000/data/racerdata_json/"),
+  fetch("http://127.0.0.1:8000/data/teamdata_json/"),
+  ])
+  .then(([usr, rcdata, rclog, rcrdata, tdata]) => {
+    const initialState = {
+      user: usr,
+      site: {locale: enUS,},
+      raceapi: {
+        racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,
+      }
+    };
+    const App = () => {
+      return (
+        <NTTrackerContextProvider initState={initialState}>
+          <NTTracker/>
+        </NTTrackerContextProvider>
+      )
+    };
+    ReactDOM.render(<App />, document.getElementById('root'));
+  })

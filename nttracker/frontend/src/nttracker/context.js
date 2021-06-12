@@ -5,13 +5,10 @@ export const NTTrackerContext = React.createContext([{}]);
 
 
 const initialState = {
-  user: {
-    username: "",
-    authenticated: false,
-    email: "",
-  },
-  site: {
-    locale: enUS,
+  user: {username: "", authenticated: false, email: "",},
+  site: {locale: enUS,},
+  raceapi: {
+    racerdata: {}, racedata: {}, racerlog: {}, racerdata: {}, teamdata: {},
   }
 };
 
@@ -19,49 +16,27 @@ const initialState = {
 const nttrackerReducer = (state, action) => {
   switch (action.type) {
     case 'LOGGED_IN': {
-      let {user, site, ...etc} = state;
+      let {user, site, raceapi, ...etc} = state;
       let {userdata} = action;
       return {
-        ...etc,
-        user: {
-          ...user,
-          ...userdata,
-        },
-        site: {
-          ...site
-        }
+        ...etc, user: {...user, ...userdata,}, site: {...site}, raceapi: {...raceapi},
       }
     }
     case 'LOGGED_OUT': {
-      let {user, site, ...etc} = state;
+      let {user, site, raceapi, ...etc} = state;
       return {
         ...etc,
-        user: {
-          ...user,
-          username: "",
-          authenticated: false,
-          email: "",
-        },
-        site: {
-          ...site
-        }
+        user: {...user, username: "", authenticated: false, email: "",},
+        site: {...site},
+        raceapi: {...raceapi},
       }
     }
     case 'SWITCHED_LOCALE': {
-      let {user, site, ...etc} = state;
+      let {user, site, raceapi, ...etc} = state;
       let {locale} = action;
-      return {
-        ...etc,
-        user: {
-          ...user,
-        },
-        site: {
-          locale: locale
-        }
-      }
+      return {...etc, user: {...user,}, site: {locale: locale}, raceapi: {...raceapi},}
     }
-    default:
-      return state;
+    default: return state;
   }
 };
 
