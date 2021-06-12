@@ -3,6 +3,8 @@ import React, { useContext } from "react";
 import "antd/dist/antd.css";
 import { Table } from 'antd';
 
+import { Link } from "react-router-dom"
+
 import { NTTrackerContext } from "../nttracker/context";
 import "./home.css"
 
@@ -29,6 +31,8 @@ function Home() {
     return (
       <div className="home-mrg-right">
         <h1>Teams here</h1>
+        <br/>
+        <h2>Test API Pages: <Link to="/api">view</Link></h2>
       </div>
     )
   } else {

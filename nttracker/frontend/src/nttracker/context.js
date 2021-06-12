@@ -8,7 +8,7 @@ const initialState = {
   user: {username: "", authenticated: false, email: "",},
   site: {locale: enUS,},
   raceapi: {
-    racerdata: {}, racedata: {}, racerlog: {}, racerdata: {}, teamdata: {},
+    racedata: {'data': null}, racerlog: {}, racerdata: {}, teamdata: {},
   }
 };
 
