@@ -35,9 +35,7 @@ function Home() {
           <Col xs={22} sm={20} md={18} lg={16} xl={12}>
             <Card>
               <div style={{ display: "flex" }}>
-                <div style={{ flexGrow: 1 }}>
-                  <h1>PR2W Event Admin</h1>
-                </div>
+                <div style={{ flexGrow: 1 }}><h1>PR2W Event Admin</h1></div>
                 <div>
                   <Link to="/api">
                     <Button type="dashed" className="viewapi-button">View API</Button>
@@ -54,7 +52,9 @@ function Home() {
     return (
       <div className="home-mrg-right">
         <h1>You shouldn't be here...</h1>
-        <h3>Had your team mod give you the wrong link? Anyways, nothing for you to see before the snake awakens.</h3>
+        <h3>Had your team mod give you the wrong link?
+            Anyways, nothing for you to see before the snake awakens.
+        </h3>
       </div>
     )
   }

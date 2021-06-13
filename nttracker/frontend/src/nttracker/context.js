@@ -36,6 +36,10 @@ const nttrackerReducer = (state, action) => {
       let {locale} = action;
       return {...etc, user: {...user,}, site: {locale: locale}, raceapi: {...raceapi},}
     }
+    case 'REFRESH_APIS': {
+      let {user, site, raceapi, ...etc} = state;
+      return {...etc, user: {...user,}, site: {...site}, raceapi: {...raceapi},}
+    }
     default: return state;
   }
 };

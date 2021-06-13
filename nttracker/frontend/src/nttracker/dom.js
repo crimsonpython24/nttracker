@@ -13,10 +13,6 @@ import Navbar from "../../src/common/navbar";
 import Footer from "../../src/common/footer";
 import Profile from "../../src/auth/profile-dom";
 import APIHome from "../api/home.js";
-import APIRaceData from "../api/racedata.js";
-import APIRacerLog from "../api/racerlog.js";
-import APIRacerData from "../api/racerdata.js";
-import APITeamData from "../api/teamdata.js";
 import Bar from "./bar";
 import Container from "./container";
 import "./dom.css";
@@ -95,10 +91,6 @@ const NTTracker = () => {
                       <Route exact path="/accounts/login"><Login/></Route>
                       <Route exact path="/accounts/profile"><Profile/></Route>
                       <Route exact path="/api"><APIHome/></Route>
-                      <Route exact path="/api/racedata"><APIRaceData/></Route>
-                      <Route exact path="/api/racerlog"><APIRacerLog/></Route>
-                      <Route exact path="/api/racerdata"><APIRacerData/></Route>
-                      <Route exact path="/api/teamdata"><APITeamData/></Route>
                       <Route exact path="*" component={NoMatch} />
                     </Switch>
                   </CSSTransition>
