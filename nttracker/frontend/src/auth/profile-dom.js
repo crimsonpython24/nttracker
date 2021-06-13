@@ -205,7 +205,7 @@ function Profile() {
   ///////////////////////////
   // PART 3: Local Storage //
   ///////////////////////////
-  if (state.user.user.authenticated) localStorage.setItem("ever_logged_in", true);
+  if (state.user.authenticated) localStorage.setItem("ever_logged_in", true);
   has_auth = localStorage.getItem("ever_logged_in");
 
   /////////////////////

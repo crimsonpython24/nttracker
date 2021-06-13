@@ -25,9 +25,7 @@ const columns = [
 function Home() {
   const [state, dispatch] = useContext(NTTrackerContext);
 
-  console.log(state.user);
-
-  if (state.user.user.authenticated) {
+  if (state.user.authenticated) {
     return (
       <div className="home-mrg-right">
         <h1>Teams here</h1>

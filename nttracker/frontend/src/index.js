@@ -26,7 +26,7 @@ Promise.all([
   )))
   .then(([usr, rcdata, rclog, rcrdata, tdata]) => {
     const initialState = {
-      user: usr,
+      user: usr.user,
       site: {locale: enUS,},
       raceapi: {
         racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,

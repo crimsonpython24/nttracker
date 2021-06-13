@@ -98,8 +98,6 @@ function Login() {
     });
     setTimeout(() => {
       localStorage.setItem("login_yet", true);
-      console.log('settrue')
-      console.log(JSON.parse(localStorage.getItem('login_yet')) === true)
     }, 3550);
   };
 
