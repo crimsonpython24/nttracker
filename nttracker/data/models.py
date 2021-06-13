@@ -29,6 +29,7 @@ class RacerLog(models.Model):
 class RacerData(models.Model):
     id = models.BigAutoField(primary_key=True)
     racer_id = models.IntegerField()
+    team_id = models.IntegerField()
     timestamp = models.IntegerField()
     role = models.CharField(max_length=10)
     join_stamp = models.IntegerField()

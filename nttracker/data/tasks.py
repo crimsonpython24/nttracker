@@ -64,6 +64,7 @@ def record_racerlog():
 @periodic_task(crontab(minute='*/1'))
 def record_racerdata():
     team = nitrotype.Team('PR2W')
+    team_id = team.data["info"]["teamID"]
     timestamp = datetime.now().timestamp()
     
     for members in team.data["members"]:
@@ -74,6 +75,7 @@ def record_racerdata():
 
         rcrd = RacerData(
             racer_id=racer_id,
+            team_id=team_id,
             timestamp=timestamp,
             join_stamp=join_stamp,
             last_activity=last_activity,

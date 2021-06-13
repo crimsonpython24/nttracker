@@ -87,10 +87,16 @@ const NTTracker = () => {
                     in={true}
                   >
                     <Switch location={location}>
-                      <Route exact path="/"><Home/></Route>
+                      <Route exact path="/">
+                        <h1>index page, nothin' here</h1>
+                        <br/>
+                        <p>Testing routes that won't appear on production</p>
+                        <Link to="/team/PR2W">PR2W team link</Link>
+                      </Route>
+                      <Route exact path="/team/:teamname"><Home/></Route>
                       <Route exact path="/accounts/login"><Login/></Route>
                       <Route exact path="/accounts/profile"><Profile/></Route>
-                      <Route exact path="/api"><APIHome/></Route>
+                      <Route exact path="/api/:teamname"><APIHome/></Route>
                       <Route exact path="*" component={NoMatch} />
                     </Switch>
                   </CSSTransition>

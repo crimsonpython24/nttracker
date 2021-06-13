@@ -105,9 +105,6 @@ function Navbar() {
             <InfoCircleOutlined className="info-no-login"/>
           </Tooltip>
           <Localedropdown/> 
-          <Link to="/accounts/login" key="login">
-            <Button type="primary">Log in</Button>
-          </Link>
         </>
       )
     }

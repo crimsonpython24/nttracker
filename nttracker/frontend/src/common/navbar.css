@@ -32,6 +32,11 @@
     margin-left: 0px !important;
 }
 
-.less-right-mrg-navbar {
-    /* margin-right: -3px; */
+.main-navbar {
+    height: 50px !important;
+}
+
+.main-navbar > * {
+    position: relative;
+    top: -5px;
 }

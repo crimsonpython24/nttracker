@@ -1,11 +1,11 @@
 import { useContext, useEffect } from "react";
 
 import "antd/dist/antd.css";
-import { Card, Row, Col, Collapse, Button } from "antd";
+import { Card, Row, Col, Collapse, Button, message } from "antd";
 
 import ReactJson from 'react-json-view'
 import { NTTrackerContext } from "../nttracker/context.js";
-import { Link, useHistory } from "react-router-dom"
+import { Link, useHistory, useParams } from "react-router-dom"
 
 import "./api_universal.css";
 
@@ -16,14 +16,30 @@ const { Panel } = Collapse;
 function APIHome() {
   const [state, dispatch] = useContext(NTTrackerContext);
   const history = useHistory();
+  const { teamname } = useParams();
+  let teamid;
+  
+  function apihome1_message() {
+    const info = message.warning({
+      key: "apihome1",
+      content: "Team " + {teamname} + " is not found!",
+      duration: 5.35, onClick: () => {info("apihome1");},
+      className: "item-no-select",
+    });
+  };
+
+  if (teamname.toString().toLowerCase() == "pr2w") {
+    teamid = 765879;
+  }
+  else {apihome1_message(); history.push("/")}
 
   useEffect(() => {
     const interval = setInterval(() => {
       Promise.all([
-        fetch("http://127.0.0.1:8000/data/racedata_json/"),
-        fetch("http://127.0.0.1:8000/data/racerlog_json/"),
-        fetch("http://127.0.0.1:8000/data/racerdata_json/"),
-        fetch("http://127.0.0.1:8000/data/teamdata_json/"),
+        fetch("http://127.0.0.1:8000/data/racedata_json/" + teamid + "/"),
+        fetch("http://127.0.0.1:8000/data/racerlog_json/" + teamid + "/"),
+        fetch("http://127.0.0.1:8000/data/racerdata_json/" + teamid + "/"),
+        fetch("http://127.0.0.1:8000/data/teamdata_json/" + teamid + "/"),
         ])
         .then((([rcdata, rclog, rcrdata, tdata]) => Promise.all(
           [rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
@@ -36,7 +52,7 @@ function APIHome() {
             }
           })
         })
-    }, 900000);
+      }, 10000);
     return () => clearInterval(interval);
   }, [])
   
@@ -59,7 +75,7 @@ function APIHome() {
                 </p>
               </div>
               <div>
-                <Link to="/">
+                <Link to={"/team/" + teamname}>
                   <Button type="dashed" className="viewapi-button">Go back</Button>
                 </Link>
               </div>
@@ -74,7 +90,7 @@ function APIHome() {
                     <div>
                       <p>
                         <i>Use the
-                          <Link to="/data/racedata_json/" target="_blank" rel="noopener noreferrer"
+                          <Link to={"/data/racedata_json/" + teamid} target="_blank" rel="noopener noreferrer"
                           > raw api </Link>if the visualized data cannot load.
                         </i>
                       </p>
