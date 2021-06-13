@@ -29,7 +29,7 @@ function Navbar() {
     });
   };
   const navbar2_message = (content) => {
-    const info = messge.info({
+    const info = message.info({
       key: "navbar2",
       content: ("Changed locale to " + content),
       duration: 3.55, onClick: () => {info("navbar2");},

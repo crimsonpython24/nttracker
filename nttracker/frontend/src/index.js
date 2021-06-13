@@ -15,7 +15,7 @@ let url = !development ? "initstate" : "teststate";   // use TESTUSER_ID=1 when 
 
 
 Promise.all([
-  fetch(("http://127.0.0.1:8000/accounts/initstate")),
+  fetch(("http://127.0.0.1:8000/accounts/teststate")),
   fetch("http://127.0.0.1:8000/data/racedata_json/"),
   fetch("http://127.0.0.1:8000/data/racerlog_json/"),
   fetch("http://127.0.0.1:8000/data/racerdata_json/"),

@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 
 import "antd/dist/antd.css";
-import { Table } from 'antd';
+import { 
+  Card, Row, Col, Space, Button
+} from "antd";
 
 import { Link } from "react-router-dom"
 
@@ -27,10 +29,25 @@ function Home() {
 
   if (state.user.authenticated) {
     return (
-      <div className="home-mrg-right">
-        <h1>Teams here</h1>
-        <br/>
-        <h2>Test API Pages: <Link to="/api">view</Link></h2>
+      <div>
+        <Row>
+          <Col xs={1} sm={2} md={3} lg={4} xl={6}></Col>
+          <Col xs={22} sm={20} md={18} lg={16} xl={12}>
+            <Card>
+              <div style={{ display: "flex" }}>
+                <div style={{ flexGrow: 1 }}>
+                  <h1>PR2W Event Admin</h1>
+                </div>
+                <div>
+                  <Link to="/api">
+                    <Button type="dashed" className="viewapi-button">View API</Button>
+                  </Link>
+                </div>
+              </div>
+              <br/>
+            </Card>
+          </Col>
+        </Row>
       </div>
     )
   } else {
@@ -38,9 +55,6 @@ function Home() {
       <div className="home-mrg-right">
         <h1>You shouldn't be here...</h1>
         <h3>Had your team mod give you the wrong link? Anyways, nothing for you to see before the snake awakens.</h3>
-        <div className="home-test-locale-table">
-          <Table dataSource={[]} columns={columns}  className="home-test-locale-table"/>
-        </div>
       </div>
     )
   }

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import "antd/dist/antd.css";
-import { Card } from 'antd';
+import { Card, Row, Col, Button } from "antd";
 
 import ReactJson from 'react-json-view'
 import { NTTrackerContext } from "../nttracker/context.js";
@@ -13,25 +13,35 @@ import "./api_universal.css";
 function APIRaceData() {
   const [state, dispatch] = useContext(NTTrackerContext);
   return (
-    <div className="mrg-right-25">
-      <h1>Race Data API</h1>
-      <p>Go back to <Link to="/api/">API home</Link></p>
-      <h3>Note: it is normal for the site to lag when expanding data. <br/>Please allow
-          up to five seconds; if the API still doesn't load, use
-          the <a href="/data/racedata_json/" target="_blank">raw API</a></h3>
-      <Card className="display-api-card">
-        <ReactJson 
-          src={state.raceapi.racedata}
-          theme="bright:inverted"
-          iconStyle="square"
-          enableClipboard={true}
-          displayDataTypes={true}
-          displayObjectSize={true}
-          collapsed={1}
-          collapseStringsAfterLength={15}
-        />
-      </Card>
-    </div>
+    <Row>
+      <Col xs={1} sm={2} md={3} lg={4} xl={6}></Col>
+      <Col xs={22} sm={20} md={18} lg={16} xl={12}>
+        <Card>
+          <div style={{ display: "flex" }}>
+            <div style={{ flexGrow: 1 }}><h1>Race API</h1></div>
+            <div>
+              <Link to="/api/">
+                <Button type="dashed" className="viewapi-button">API Home</Button>
+              </Link>
+            </div>
+          </div>
+          <h3>Note: as the files below contain historical data, please use
+              the <a href="/data/racedata_json/" target="_blank">raw API</a> if
+              possible. <br/>Only use the visualizer if necessary.
+            </h3>
+          <ReactJson 
+            src={state.raceapi.racedata}
+            theme="bright:inverted"
+            iconStyle="square"
+            enableClipboard={true}
+            displayDataTypes={true}
+            displayObjectSize={true}
+            collapsed={true}
+            collapseStringsAfterLength={15}
+          />
+        </Card>
+      </Col>
+    </Row>
   )
 }
 

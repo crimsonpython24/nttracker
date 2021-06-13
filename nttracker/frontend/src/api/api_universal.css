@@ -5,3 +5,8 @@
 .display-api-card {
     max-width: 800px;
 }
+
+.viewapi-button {
+    position: relative;
+    top: 8px;
+}
