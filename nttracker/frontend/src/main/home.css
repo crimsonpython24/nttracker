@@ -5,3 +5,8 @@
 .home-test-locale-table {
     max-width: 500px;
 }
+
+.home-button-toolbar {
+    position: relative;
+    top: -13px;
+}

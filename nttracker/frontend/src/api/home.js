@@ -5,7 +5,7 @@ import { Card, Row, Col, Collapse, Button } from "antd";
 
 import ReactJson from 'react-json-view'
 import { NTTrackerContext } from "../nttracker/context.js";
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 import "./api_universal.css";
 
@@ -15,15 +15,32 @@ const { Panel } = Collapse;
 
 function APIHome() {
   const [state, dispatch] = useContext(NTTrackerContext);
+  const history = useHistory();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      dispatch({type: "REFRESH_APIS"});
-      console.log(state.raceapi.racedata)
-    }, 60000);
-  
+      Promise.all([
+        fetch("http://127.0.0.1:8000/data/racedata_json/"),
+        fetch("http://127.0.0.1:8000/data/racerlog_json/"),
+        fetch("http://127.0.0.1:8000/data/racerdata_json/"),
+        fetch("http://127.0.0.1:8000/data/teamdata_json/"),
+        ])
+        .then((([rcdata, rclog, rcrdata, tdata]) => Promise.all(
+          [rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
+        )))
+        .then(([rcdata, rclog, rcrdata, tdata]) => {
+          dispatch({
+            type: "REFRESH_APIS",
+            data: {
+              racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,
+            }
+          })
+        })
+    }, 900000);
     return () => clearInterval(interval);
   }, [])
+  
+  if (!state.user.authenticated) history.push("/accounts/login");
 
   return (
     <div>
@@ -34,6 +51,7 @@ function APIHome() {
             <div style={{ display: "flex" }}>
               <div style={{ flexGrow: 1 }}>
                 <h1>API Home</h1>
+                <p><strong>Click on the grey boxes to expand their content!</strong></p>
                 <p>
                   Please be patient when expanding the visualized JSON within each panel.
                   <br/>A delay of up to ten seconds is normal; use the unformatted JSON
@@ -54,8 +72,12 @@ function APIHome() {
                 key="1">
                   <div className="padding-within">
                     <div>
-                      <p><i>Use the <Link to="/data/racedata_json/">raw api</Link> if the
-                         visualized data cannot load.</i></p>
+                      <p>
+                        <i>Use the
+                          <Link to="/data/racedata_json/" target="_blank" rel="noopener noreferrer"
+                          > raw api </Link>if the visualized data cannot load.
+                        </i>
+                      </p>
                       <ReactJson 
                         src={state.raceapi.racedata}
                         theme="bright:inverted"
@@ -75,8 +97,12 @@ function APIHome() {
                 key="2">
                 <div className="padding-within">
                   <div>
-                    <p><i>Use the <Link to="/data/racerlog_json/">raw api</Link> if the
-                       visualized data cannot load.</i></p>
+                    <p>
+                      <i>Use the
+                        <Link to="/data/racerlog_json/" target="_blank" rel="noopener noreferrer"
+                        >raw api</Link>if the visualized data cannot load.
+                      </i>
+                    </p>
                     <ReactJson 
                       src={state.raceapi.racerlog}
                       theme="bright:inverted"
@@ -96,8 +122,10 @@ function APIHome() {
                 key="3">
                 <div className="padding-within">
                   <div>
-                    <p><i>Use the <Link to="/data/racerdata_json/">raw api</Link> if the
-                       visualized data cannot load.</i></p>
+                    <p>
+                      <i>Use the
+                        <Link to="/data/racerdata_json/" target="_blank" rel="noopener noreferrer"
+                        > raw api </Link>if the visualized data cannot load.</i></p>
                     <ReactJson 
                       src={state.raceapi.racerdata}
                       theme="bright:inverted"
@@ -117,8 +145,10 @@ function APIHome() {
                 key="4">
                 <div className="padding-within">
                   <div>
-                    <p><i>Use the <Link to="/data/teamdata_json/">raw api</Link> if the
-                       visualized data cannot load.</i></p>
+                    <p>
+                      <i>Use the 
+                      <Link to="/data/teamdata_json/" target="_blank" rel="noopener noreferrer"
+                      > raw api </Link>if the visualized data cannot load.</i></p>
                     <ReactJson 
                       src={state.raceapi.teamdata}
                       theme="bright:inverted"

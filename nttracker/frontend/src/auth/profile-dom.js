@@ -205,8 +205,8 @@ function Profile() {
   ///////////////////////////
   // PART 3: Local Storage //
   ///////////////////////////
-  if (state.user.authenticated) localStorage.setItem("ever_logged_in", true);
-  has_auth = localStorage.getItem("ever_logged_in");
+  // if (state.user.authenticated) localStorage.setItem("ever_logged_in", true);
+  // has_auth = localStorage.getItem("ever_logged_in");
 
   /////////////////////
   // PART 4: Message //
@@ -246,8 +246,9 @@ function Profile() {
     });
   };
 
-  let has_auth;
-  if (!has_auth) {profile1_message(); history.push("/accounts/login");}
+  // let has_auth;
+  // if (!has_auth) {profile1_message(); history.push("/accounts/login");}
+  if (!state.user.authenticated) history.push("/accounts/login");
   
   function handleNotifClick(key) {post_logout(); notification.close(key);}
   function handleNotifClickRemind(key) {

@@ -36,11 +36,12 @@ function Home() {
             <Card>
               <div style={{ display: "flex" }}>
                 <div style={{ flexGrow: 1 }}><h1>PR2W Event Admin</h1></div>
-                <div>
+                <Space size="small" className="home-button-toolbar">
+                  <Button type="primary" className="viewapi-button">Create Event</Button>
                   <Link to="/api">
                     <Button type="dashed" className="viewapi-button">View API</Button>
                   </Link>
-                </div>
+                </Space>
               </div>
               <br/>
             </Card>

@@ -38,7 +38,19 @@ const nttrackerReducer = (state, action) => {
     }
     case 'REFRESH_APIS': {
       let {user, site, raceapi, ...etc} = state;
-      return {...etc, user: {...user,}, site: {...site}, raceapi: {...raceapi},}
+      let apidata = action.data;
+      return {
+        ...etc,
+        user: {...user,},
+        site: {...site},
+        raceapi: {
+          ...raceapi,
+          racedata: apidata.racedata.racedata,
+          racerlog: apidata.racerlog.racerlog,
+          racerdata: apidata.racerdata.racerdata,
+          teamdata: apidata.teamdata.teamdata,
+        },
+      }
     }
     default: return state;
   }
