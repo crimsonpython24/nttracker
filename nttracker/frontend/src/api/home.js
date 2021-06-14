@@ -28,10 +28,15 @@ function APIHome() {
     });
   };
 
+  console.log(teamname)
   if (teamname.toString().toLowerCase() == "pr2w") {
     teamid = 765879;
+  } else if (teamname.toString().toLowerCase() == "snaake") {
+    teamid = 1375202;
   }
   else {apihome1_message(); history.push("/")}
+
+  console.log(teamid)
 
   useEffect(() => {
     const interval = setInterval(() => {

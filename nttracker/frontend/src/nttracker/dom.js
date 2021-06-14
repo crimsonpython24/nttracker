@@ -92,6 +92,8 @@ const NTTracker = () => {
                         <br/>
                         <p>Testing routes that won't appear on production</p>
                         <Link to="/team/PR2W">PR2W team link</Link>
+                        <Link to="/team/snaake">snaake team link</Link>
+                        {/* update?! */}
                       </Route>
                       <Route exact path="/team/:teamname"><Home/></Route>
                       <Route exact path="/accounts/login"><Login/></Route>

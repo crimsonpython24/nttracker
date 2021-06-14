@@ -28,6 +28,8 @@ function Home() {
 
   if (teamname.toString().toLowerCase() == "pr2w") {
     teamid = 765879;
+  } else if (teamname.toString().toLowerCase() == "snaake") {
+    teamid = 1375202;
   }
   else {teamhome1_message()}
 
