@@ -73,20 +73,19 @@ const NTTracker = () => {
       <ConfigProvider locale={state.site.locale}>
         <Router>
           <Route
-            render={({ location }) => (
+            render={() => (
               <>
-                <Progress isAnimating={isLoading} key={location.key} />
+                <Progress isAnimating={isLoading}  />
                 <Navbar/>
                 <TransitionGroup className="body-dom">
                   <CSSTransition
                     classNames="fade"
-                    key={location.key}
                     onEnter={() => {setIsLoading(true)}}
                     onEntered={() => {setIsLoading(false)}}
                     timeout={450}
                     in={true}
                   >
-                    <Switch location={location}>
+                    <Switch>
                       <Route exact path="/">
                         <h1>index page, nothin' here</h1>
                         <br/>
