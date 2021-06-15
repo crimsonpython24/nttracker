@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import "antd/dist/antd.css";
 import { 
@@ -9,6 +9,7 @@ import { Link, useParams, useHistory } from "react-router-dom"
 
 import { NTTrackerContext } from "../nttracker/context";
 import "./home.css"
+import { Callbacks } from "jquery";
 
 
 function Home() {
@@ -17,23 +18,43 @@ function Home() {
   const history = useHistory();
   let teamid;
   
-  function teamhome1_message() {
+  function teamhome1_message(callback) {
     const info = message.warning({
       key: "apihome1",
       content: "Team " + {teamname} + " is not found!",
       duration: 5.35, onClick: () => {info("apihome1");},
       className: "item-no-select",
     });
+    callback();
   };
 
-  if (teamname.toString().toLowerCase() == "pr2w") {
-    teamid = 765879;
-  } else if (teamname.toString().toLowerCase() == "snaake") {
-    teamid = 1375202;
-  }
-  else {teamhome1_message()}
+  function teamhome2_message(callback) {
+    const info = message.error({
+      key: "apihome2",
+      content: "Log in to access team data!",
+      duration: 5.35, onClick: () => {info("apihome2");},
+      className: "item-no-select",
+    });
+    callback();
+  };
 
-  if (!state.user.authenticated) history.push("/accounts/login");
+  function checklogin(callback) {
+    if (!state.user.authenticated) {
+      teamhome2_message(function() {history.push("/accounts/login");});
+    }
+    callback();
+  }
+
+  useEffect(() => {
+    checklogin(function() {
+      if (teamname.toString().toLowerCase() == "pr2w") {
+        teamid = 765879;
+      } else if (teamname.toString().toLowerCase() == "snaake") {
+        teamid = 1375202;
+      }
+      else {teamhome1_message(); history.push("/");}
+    })
+  }, []);
 
   return (
     <div>

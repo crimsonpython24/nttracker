@@ -11,7 +11,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useMediaQuery } from "react-responsive"
 
 import { NTTrackerContext } from "../nttracker/context.js";
-import fetchData from "../common/utilities.js";
+import { fetchData } from "../common/utilities.js";
 import "./navbar.css";
 
 
@@ -99,11 +99,6 @@ function Navbar() {
     } else {
       return (
         <>
-          <Tooltip placement="bottomRight" 
-            title={"Sign-up is limited for team admins; however, you could still\
-                    view stats without authentication"}>
-            <InfoCircleOutlined className="info-no-login"/>
-          </Tooltip>
           <Localedropdown/> 
         </>
       )

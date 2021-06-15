@@ -73,19 +73,20 @@ const NTTracker = () => {
       <ConfigProvider locale={state.site.locale}>
         <Router>
           <Route
-            render={() => (
+            render={({ location }) => (
               <>
-                <Progress isAnimating={isLoading}  />
+                <Progress isAnimating={isLoading} key={location.key} />
                 <Navbar/>
                 <TransitionGroup className="body-dom">
                   <CSSTransition
                     classNames="fade"
+                    key={location.key}
                     onEnter={() => {setIsLoading(true)}}
                     onEntered={() => {setIsLoading(false)}}
                     timeout={450}
                     in={true}
                   >
-                    <Switch>
+                    <Switch location={location}>
                       <Route exact path="/">
                         <div  style={{ paddingLeft: 23 }}>
                           <h1>index page, nothin' here</h1>
@@ -93,7 +94,7 @@ const NTTracker = () => {
                           <h2>Managable teams:</h2>
                           <ul>
                             {(state.user.available_teams).map((team) => (
-                              <li>
+                              <li key={team}>
                                 <Link to={"/team/" + team}>
                                   {team.toString().toUpperCase()}
                                 </Link>

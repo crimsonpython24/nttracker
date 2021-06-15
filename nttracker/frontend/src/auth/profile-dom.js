@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 
 import { NTTrackerContext } from "../nttracker/context.js";
-import fetchData from "../common/utilities.js";
+import { fetchData } from "../common/utilities.js";
 import "./profile-dom.css";
 
 
@@ -202,22 +202,26 @@ function Profile() {
     })
   }
   
-  ///////////////////////////
-  // PART 3: Local Storage //
-  ///////////////////////////
-  // if (state.user.authenticated) localStorage.setItem("ever_logged_in", true);
-  // has_auth = localStorage.getItem("ever_logged_in");
+  /////////////////////////
+  // PART 3: Verify auth //
+  /////////////////////////
+  useEffect(() => {
+    if (!state.user.authenticated) {
+      profile1_message(function() {history.push("/accounts/login");});
+    }
+  }, []);
 
   /////////////////////
   // PART 4: Message //
   /////////////////////
-  function profile1_message() {
-    const info = message.warning({
+  function profile1_message(callback) {
+    const info = message.error({
       key: "profile1",
       content: "Please log in to edit account!",
       duration: 5.35, onClick: () => {info("profile1");},
       className: "item-no-select",
     });
+    callback();
   };
   function profile2_message() {
     const info = message.info({
@@ -245,10 +249,6 @@ function Profile() {
       className: "item-no-select",
     });
   };
-
-  // let has_auth;
-  // if (!has_auth) {profile1_message(); history.push("/accounts/login");}
-  if (!state.user.authenticated) history.push("/accounts/login");
   
   function handleNotifClick(key) {post_logout(); notification.close(key);}
   function handleNotifClickRemind(key) {

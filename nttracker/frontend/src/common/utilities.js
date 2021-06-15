@@ -40,4 +40,26 @@ function fetchData(url, met, data=null) {
 }
 
 
-export default fetchData;
+function fetchData_csrf(url, met, data=null, csrftoken) {
+  return fetch(url, {
+    method: met,
+    credentials: 'include',
+    headers: {
+      "Accept": "application/json",
+      'X-Requested-With': 'XMLHttpRequest',
+      "X-CSRFToken": csrftoken
+    },
+    body: JSON.stringify(data)
+  }).then((response) => {
+    if (response.status === 400) {
+      return response.json()
+      .then((json) => {
+        return Promise.reject(json);
+      })
+    } else {
+      return response.json();
+    }
+  });
+}
+
+export { fetchData, fetchData_csrf}
