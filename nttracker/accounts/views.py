@@ -22,13 +22,13 @@ def ajax_login(request):
             if user is not None:
                 login(request, user)
 
-                # pick appropriate data here (for user)
-                userdata = {
-                    'authenticated': user is not None,
-                    'username': user.username,
-                    'email': user.email,
-                }
-                return JsonResponse(userdata)
+                user_s = UserSerializer(instance=user).data
+                user_s['authenticated'] = True
+                remove = ['password']  
+                for entry in remove:
+                    user_s.pop(entry, None)
+
+                return JsonResponse(user_s)
 
             else:
                 return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
@@ -52,12 +52,14 @@ def ajax_profile(request):
                 user.set_password(new)
                 user.save()
 
-                userdata = {
-                    'authenticated': user is not None,
-                    'username': user.username,
-                    'email': user.email,
-                }
-                return JsonResponse(userdata)
+                user_s = UserSerializer(instance=user).data
+                user_s['authenticated'] = True
+                remove = ['password']  
+                for entry in remove:
+                    user_s.pop(entry, None)
+
+                return JsonResponse(user_s)
+                
             else:
                 return JsonResponse({'authenticated': False, 'errors': {'inv_credentials': 'Invalid credentials provided'}})
 
@@ -94,7 +96,7 @@ def test_state(request):
     user_id = os.environ.get('TESTUSER_ID')
 
     if user_id is None:
-        return JsonResponse({'user': {'username': 'guest_8000', 'id': -1, "authenticated": False}})
+        return JsonResponse({'user': {'username': 'guest_8000', 'id': -1, "authenticated": False, "available_teams": []}})
 
     user = UserSerializer(instance=User.objects.get(id=user_id)).data
     user['authenticated'] = True
@@ -122,4 +124,4 @@ def init_state(request):
     if user:
         return JsonResponse({'user': user, 'csrftoken': csrf_token})
     else:
-        return JsonResponse({'user': {'username': 'guest', 'authenticated': False}, 'csrftoken': csrf_token})
+        return JsonResponse({'user': {'username': 'guest', 'authenticated': False, "available_teams": []}, 'csrftoken': csrf_token})

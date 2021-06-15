@@ -33,40 +33,31 @@ function Home() {
   }
   else {teamhome1_message()}
 
-  if (state.user.authenticated) {
-    return (
-      <div>
-        <Row>
-          <Col xs={1} sm={2} md={3} lg={4} xl={6}></Col>
-          <Col xs={22} sm={20} md={18} lg={16} xl={12}>
-            <Card>
-              <div style={{ display: "flex" }}>
-                <div style={{ flexGrow: 1 }}>
-                  <h1>{ teamname.toString().toUpperCase() } Event Admin</h1>
-                </div>
-                <Space size="small" className="home-button-toolbar">
-                  <Button type="primary" className="viewapi-button">Create Event</Button>
-                  <Link to={"/api/" + teamname}>
-                    <Button type="dashed" className="viewapi-button">View API</Button>
-                  </Link>
-                </Space>
+  if (!state.user.authenticated) history.push("/accounts/login");
+
+  return (
+    <div>
+      <Row>
+        <Col xs={1} sm={2} md={3} lg={4} xl={6}></Col>
+        <Col xs={22} sm={20} md={18} lg={16} xl={12}>
+          <Card>
+            <div style={{ display: "flex" }}>
+              <div style={{ flexGrow: 1 }}>
+                <h1>{ teamname.toString().toUpperCase() } Event Admin</h1>
               </div>
-              <br/>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    )
-  } else {
-    return (
-      <div className="home-mrg-right">
-        <h1>You shouldn't be here...</h1>
-        <h3>Had your team mod give you the wrong link?
-            Anyways, nothing for you to see before the snake awakens.
-        </h3>
-      </div>
-    )
-  }
+              <Space size="small" className="home-button-toolbar">
+                <Button type="primary" className="viewapi-button">Create Event</Button>
+                <Link to={"/api/" + teamname}>
+                  <Button type="dashed" className="viewapi-button">View API</Button>
+                </Link>
+              </Space>
+            </div>
+            <br/>
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  )
 }
 
 

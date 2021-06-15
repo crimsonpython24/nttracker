@@ -87,12 +87,20 @@ const NTTracker = () => {
                   >
                     <Switch>
                       <Route exact path="/">
-                        <h1>index page, nothin' here</h1>
-                        <br/>
-                        <p>Testing routes that won't appear on production</p>
-                        <Link to="/team/PR2W">PR2W team link</Link>
-                        <Link to="/team/snaake">snaake team link</Link>
-                        {/* update?! */}
+                        <div  style={{ paddingLeft: 23 }}>
+                          <h1>index page, nothin' here</h1>
+                          <br/>
+                          <h2>Managable teams:</h2>
+                          <ul>
+                            {(state.user.available_teams).map((team) => (
+                              <li>
+                                <Link to={"/team/" + team}>
+                                  {team.toString().toUpperCase()}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </Route>
                       <Route exact path="/team/:teamname"><Home/></Route>
                       <Route exact path="/accounts/login"><Login/></Route>

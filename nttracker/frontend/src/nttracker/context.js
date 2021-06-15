@@ -5,7 +5,7 @@ export const NTTrackerContext = React.createContext([{}]);
 
 
 const initialState = {
-  user: {username: "", authenticated: false, email: "",},
+  user: {id: -1, username: "", authenticated: false, email: "", available_teams: []},
   site: {locale: enUS,},
   raceapi: {
     racedata: {'data': null},
@@ -30,7 +30,7 @@ const nttrackerReducer = (state, action) => {
       let {user, site, raceapi, ...etc} = state;
       return {
         ...etc,
-        user: {...user, username: "", authenticated: false, email: "",},
+        user: {...user, id: -1, username: "", authenticated: false, email: "", available_teams: []},
         site: {...site},
         raceapi: {...raceapi},
       }

@@ -1,7 +1,7 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import "antd/dist/antd.css";
-import { Card, Row, Col, Collapse, Button, message } from "antd";
+import { Card, Row, Col, Collapse, Button, message, Switch } from "antd";
 
 import ReactJson from 'react-json-view'
 import { NTTrackerContext } from "../nttracker/context.js";
@@ -19,7 +19,7 @@ function timeConverter(UNIX_timestamp){
   var year = a.getFullYear();
   var month = months[a.getMonth()];
   var date = a.getDate();
-  var hour = a.getHours();
+  var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours(); 
   var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes(); 
   var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
   var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
@@ -52,6 +52,11 @@ function APIHome() {
     teamid = 1375202;
   }
   else {apihome1_message(); history.push("/")}
+
+  const [simpJson, setSimpJson] = useState(false);
+  function onSimplifiedJsonChange(checked) {
+    setSimpJson(checked);
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -120,6 +125,7 @@ function APIHome() {
                   <br/>A delay of up to ten seconds is normal; use the unformatted JSON
                   file if the visualizer failed to load.
                 </p>
+                Only show the latest JSON entry <Switch size="small" defaultChecked onChange={onSimplifiedJsonChange} />
               </div>
               <div>
                 <Link to={"/team/" + teamname}>
@@ -171,7 +177,7 @@ function APIHome() {
                         </i>
                       </p>
                       <ReactJson 
-                        src={state.raceapi.racedata}
+                        src={simpJson ? {} : state.raceapi.racedata}
                         theme="bright:inverted"
                         iconStyle="square"
                         enableClipboard={true}
