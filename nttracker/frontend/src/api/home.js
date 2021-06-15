@@ -13,11 +13,29 @@ import "./api_universal.css";
 const { Panel } = Collapse;
 
 
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes(); 
+  var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
+
+
 function APIHome() {
   const [state, dispatch] = useContext(NTTrackerContext);
   const history = useHistory();
   const { teamname } = useParams();
   let teamid;
+  let last_updated_rcd = 0;
+  let last_updated_rcl = 0;
+  let last_updated_rcrd = 0;
+  let last_updated_td = 0;
   
   function apihome1_message() {
     const info = message.warning({
@@ -28,15 +46,12 @@ function APIHome() {
     });
   };
 
-  console.log(teamname)
   if (teamname.toString().toLowerCase() == "pr2w") {
     teamid = 765879;
   } else if (teamname.toString().toLowerCase() == "snaake") {
     teamid = 1375202;
   }
   else {apihome1_message(); history.push("/")}
-
-  console.log(teamid)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -50,11 +65,38 @@ function APIHome() {
           [rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
         )))
         .then(([rcdata, rclog, rcrdata, tdata]) => {
+          if (typeof rcdata['racedata'][rcdata['racedata'].length-1] == 'undefined') {
+            last_updated_rcd = 0;
+          } else {
+            last_updated_rcd = rcdata['racedata'][rcdata['racedata'].length-1]['timestamp']
+          }
+          if (typeof rclog['racerlog'][rclog['racerlog'].length-1] == 'undefined') {
+            last_updated_rcl = 0;
+          } else {
+            last_updated_rcl = rclog['racerlog'][rclog['racerlog'].length-1]['timestamp']
+          }
+          if (typeof rcrdata['racerdata'][rcrdata['racerdata'].length-1] == 'undefined') {
+            last_updated_rcrd = 0;
+          } else {
+            last_updated_rcrd = rcrdata['racerdata'][rcrdata['racerdata'].length-1]['timestamp']
+          }
+          if (typeof tdata['teamdata'][tdata['teamdata'].length-1] == 'undefined') {
+            last_updated_td = 0;
+          } else {
+            last_updated_td = tdata['teamdata'][tdata['teamdata'].length-1]['timestamp']
+          }
+
           dispatch({
             type: "REFRESH_APIS",
             data: {
               racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,
-            }
+              data_date: {
+                racedata: last_updated_rcd,
+                racerlog: last_updated_rcl,
+                racerdata: last_updated_rcrd,
+                teamdata: last_updated_td,
+              },
+            },
           })
         })
       }, 10000);
@@ -87,15 +129,44 @@ function APIHome() {
             </div>
             <br/>
             <Collapse bordered={false}>
+            <Panel
+                header="Update Status"
+                key="1">
+                  <div className="padding-within">
+                    <div>
+                      <ul>
+                        <li>
+                          Racedata: {state.raceapi.datatime.racedata == 0 ?
+                          "Not Updated Yet" : timeConverter(state.raceapi.datatime.racedata)}
+                        </li>
+                        <li>
+                          Racerlog: {state.raceapi.datatime.racerlog == 0 ?
+                          "Not Updated Yet" : timeConverter(state.raceapi.datatime.racerlog)}
+                        </li>
+                        <li>
+                          Racerdata: {state.raceapi.datatime.racerdata == 0 ?
+                          "Not Updated Yet" : timeConverter(state.raceapi.datatime.racerdata)}
+                        </li>
+                        <li>
+                          Teamdata: {state.raceapi.datatime.teamdata == 0 ?
+                          "Not Updated Yet" : timeConverter(state.raceapi.datatime.teamdata)}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+              </Panel>
               <Panel
                 header="Race data: stores every user's team race count, characters
                   typed/missed, and time at a given point forever (updated every 15 minutes)"
-                key="1">
+                key="2">
                   <div className="padding-within">
                     <div>
                       <p>
                         <i>Use the
-                          <Link to={"/data/racedata_json/" + teamid} target="_blank" rel="noopener noreferrer"
+                          <Link
+                            to={"/data/racedata_json/" + teamid}
+                            target="_blank"
+                            rel="noopener noreferrer"
                           > raw api </Link>if the visualized data cannot load.
                         </i>
                       </p>
@@ -115,12 +186,15 @@ function APIHome() {
               <Panel 
                 header="Racer log: stores every user's username, total races, and average
                   speed for the past year (updated every one week)"
-                key="2">
+                key="3">
                 <div className="padding-within">
                   <div>
                     <p>
                       <i>Use the
-                        <Link to="/data/racerlog_json/" target="_blank" rel="noopener noreferrer"
+                        <Link
+                          to="/data/racerlog_json/"
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >raw api</Link>if the visualized data cannot load.
                       </i>
                     </p>
@@ -140,12 +214,15 @@ function APIHome() {
               <Panel 
                 header="Racer data: stores every user's role (in team), join stamp, last\
                   activity, and last login for the last entry (updated every 15 mins)"
-                key="3">
+                key="4">
                 <div className="padding-within">
                   <div>
                     <p>
                       <i>Use the
-                        <Link to="/data/racerdata_json/" target="_blank" rel="noopener noreferrer"
+                        <Link
+                          to="/data/racerdata_json/"
+                          target="_blank"
+                          rel="noopener noreferrer"
                         > raw api </Link>if the visualized data cannot load.</i></p>
                     <ReactJson 
                       src={state.raceapi.racerdata}
@@ -163,12 +240,15 @@ function APIHome() {
               <Panel 
                 header="Team data: stores every user's team race count, characters
                   typed/missed, and time at a given point forever (updated every one week)"
-                key="4">
+                key="5">
                 <div className="padding-within">
                   <div>
                     <p>
                       <i>Use the 
-                      <Link to="/data/teamdata_json/" target="_blank" rel="noopener noreferrer"
+                      <Link
+                        to="/data/teamdata_json/"
+                        target="_blank"
+                        rel="noopener noreferrer"
                       > raw api </Link>if the visualized data cannot load.</i></p>
                     <ReactJson 
                       src={state.raceapi.teamdata}

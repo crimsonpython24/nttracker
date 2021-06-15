@@ -25,8 +25,12 @@ Promise.all([
       user: usr.user,
       site: {locale: enUS,},
       raceapi: {
-        racedata: {}, racerlog: {}, racerdata: {}, teamdata: {},
-      }
+        racedata: {},
+        racerlog: {},
+        racerdata: {},
+        teamdata: {},
+        datatime: {racedata: 0, racerlog: 0, racerdata: 0, teamdata: 0,},
+      },
     };
     const App = () => {
       return (
@@ -37,32 +41,3 @@ Promise.all([
     };
     ReactDOM.render(<App />, document.getElementById('root'));
   })
-
-
-// Promise.all([
-//   fetch(("http://127.0.0.1:8000/accounts/teststate")),
-//   fetch("http://127.0.0.1:8000/data/racedata_json/"),
-//   fetch("http://127.0.0.1:8000/data/racerlog_json/"),
-//   fetch("http://127.0.0.1:8000/data/racerdata_json/"),
-//   fetch("http://127.0.0.1:8000/data/teamdata_json/"),
-//   ])
-//   .then((([usr, rcdata, rclog, rcrdata, tdata]) => Promise.all(
-//     [usr.json(), rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
-//   )))
-//   .then(([usr, rcdata, rclog, rcrdata, tdata]) => {
-//     const initialState = {
-//       user: usr.user,
-//       site: {locale: enUS,},
-//       raceapi: {
-//         racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,
-//       }
-//     };
-//     const App = () => {
-//       return (
-//         <NTTrackerContextProvider initState={initialState}>
-//           <NTTracker/>
-//         </NTTrackerContextProvider>
-//       )
-//     };
-//     ReactDOM.render(<App />, document.getElementById('root'));
-//   })

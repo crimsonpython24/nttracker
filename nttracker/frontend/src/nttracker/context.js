@@ -8,7 +8,11 @@ const initialState = {
   user: {username: "", authenticated: false, email: "",},
   site: {locale: enUS,},
   raceapi: {
-    racedata: {'data': null}, racerlog: {}, racerdata: {}, teamdata: {},
+    racedata: {'data': null},
+    racerlog: {},
+    racerdata: {},
+    teamdata: {},
+    datatime: {racedata: 0, racerlog: 0, racerdata: 0, teamdata: 0,},
   }
 };
 
@@ -49,6 +53,7 @@ const nttrackerReducer = (state, action) => {
           racerlog: apidata.racerlog.racerlog,
           racerdata: apidata.racerdata.racerdata,
           teamdata: apidata.teamdata.teamdata,
+          datatime: apidata.data_date,
         },
       }
     }
