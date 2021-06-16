@@ -205,23 +205,26 @@ function Profile() {
   /////////////////////////
   // PART 3: Verify auth //
   /////////////////////////
+  function pushhistory(url, callback) {
+    history.push(url);
+    callback();
+  }
   useEffect(() => {
     if (!state.user.authenticated) {
-      profile1_message(function() {history.push("/accounts/login");});
+      pushhistory("/accounts/login/", function() {profile1_message()});
     }
   }, []);
 
   /////////////////////
   // PART 4: Message //
   /////////////////////
-  function profile1_message(callback) {
+  function profile1_message() {
     const info = message.error({
       key: "profile1",
       content: "Please log in to edit account!",
       duration: 5.35, onClick: () => {info("profile1");},
       className: "item-no-select",
     });
-    callback();
   };
   function profile2_message() {
     const info = message.info({
@@ -289,8 +292,7 @@ function Profile() {
     fetchData("http://127.0.0.1:8000/accounts/ajaxlogout", 'POST', {})
     .then(() => {
       dispatch({type: 'LOGGED_OUT'});
-      profile2_message();
-      history.push("/");
+      pushhistory("/", function() {profile2_message()});
       localStorage.removeItem('ever_logged_in');
     })
   }

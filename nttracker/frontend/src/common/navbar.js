@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 
 import "antd/dist/antd.css";
-import { PageHeader, Button, Tooltip, message, Dropdown, Menu, ConfigProvider } from "antd";
-import { InfoCircleOutlined, DownOutlined, GlobalOutlined } from "@ant-design/icons";
+import { PageHeader, Button, Tooltip, message, Dropdown, Menu } from "antd";
+import { GlobalOutlined } from "@ant-design/icons";
 
 import enUS from 'antd/lib/locale/en_US';
 import zhTW from 'antd/lib/locale/zh_TW';
@@ -37,12 +37,16 @@ function Navbar() {
     });
   };
 
+  function pushhistory(url, callback) {
+    history.push(url);
+    callback();
+  }
+
   function post_logout() {
     fetchData("http://127.0.0.1:8000/accounts/ajaxlogout", 'POST', {})
     .then((json) => {
       dispatch({type: 'LOGGED_OUT'});
-      navbar1_message();
-      history.push("/");
+      pushhistory("/", function() {navbar1_message()});
       localStorage.removeItem('ever_logged_in');
     })
   }

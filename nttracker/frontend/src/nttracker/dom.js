@@ -91,7 +91,8 @@ const NTTracker = () => {
                         <div  style={{ paddingLeft: 23 }}>
                           <h1>index page, nothin' here</h1>
                           <br/>
-                          <h2>Managable teams:</h2>
+                          {(state.user.available_teams.length != 0) ?
+                            <h2>Managable teams:</h2> : <></>}
                           <ul>
                             {(state.user.available_teams).map((team) => (
                               <li key={team}>
@@ -103,10 +104,10 @@ const NTTracker = () => {
                           </ul>
                         </div>
                       </Route>
-                      <Route exact path="/team/:teamname"><Home/></Route>
                       <Route exact path="/accounts/login"><Login/></Route>
                       <Route exact path="/accounts/profile"><Profile/></Route>
-                      <Route exact path="/api/:teamname"><APIHome/></Route>
+                      <Route exact path="/team/:teamname"><Home/></Route>
+                      <Route exact path="/team/:teamname/api"><APIHome/></Route>
                       <Route exact path="*" component={NoMatch} />
                     </Switch>
                   </CSSTransition>

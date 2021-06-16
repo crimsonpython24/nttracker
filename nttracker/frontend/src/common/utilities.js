@@ -1,4 +1,5 @@
 import jQuery from "jquery";
+import { useHistory } from "react-router-dom"
 
 
 function getCookie(name) {
@@ -17,7 +18,7 @@ function getCookie(name) {
 }
 
 
-function fetchData(url, met, data=null) {
+function fetchData (url, met, data=null) {
   return fetch(url, {
     method: met,
     credentials: 'include',
@@ -40,26 +41,4 @@ function fetchData(url, met, data=null) {
 }
 
 
-function fetchData_csrf(url, met, data=null, csrftoken) {
-  return fetch(url, {
-    method: met,
-    credentials: 'include',
-    headers: {
-      "Accept": "application/json",
-      'X-Requested-With': 'XMLHttpRequest',
-      "X-CSRFToken": csrftoken
-    },
-    body: JSON.stringify(data)
-  }).then((response) => {
-    if (response.status === 400) {
-      return response.json()
-      .then((json) => {
-        return Promise.reject(json);
-      })
-    } else {
-      return response.json();
-    }
-  });
-}
-
-export { fetchData, fetchData_csrf}
+export { fetchData };

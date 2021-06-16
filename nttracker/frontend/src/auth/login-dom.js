@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { NTTrackerContext } from "../nttracker/context.js";
-import { fetchData, fetchData_csrf } from "../common/utilities.js";
+import { fetchData } from "../common/utilities.js";
 import "./login-dom.css";
 
 
@@ -83,7 +83,18 @@ function Login() {
   function handleRememberChange(e) {
     localStorage.setItem("remember_user", e.target.checked);
   }
-  localStorage.setItem("login_yet", false);
+
+  //////////////////////////////////////
+  // PART 3.5: Hangle Logged In Users //
+  //////////////////////////////////////
+  function pushhistory(url, callback) {
+    history.push(url);
+    callback();
+  }
+  useEffect(() => {
+    if (state.user.authenticated) {pushhistory("/", function() {login2_message()});}
+  }, [])
+  
 
   /////////////////////
   // PART 4: Message //
@@ -96,24 +107,17 @@ function Login() {
       onClick: () => {info("login1");},
       className: "item-no-select",
     });
-    setTimeout(() => {
-      localStorage.setItem("login_yet", true);
-    }, 3550);
   };
 
   function login2_message() {
-    const info = message.info({
+    const info = message.error({
       key: "login2",
-      content: "Already authenticated, smarty",
+      content: "Already logged in, smarty",
       duration: 3.55,
       onClick: () => {info("login2");},
       className: "item-no-select",
     });
   };
-  if (JSON.parse(localStorage.getItem('login_yet')) === true) {
-    login2_message();
-    history.push('/');
-  }
 
   ////////////////////////////
   // PART 5: Post Functions //

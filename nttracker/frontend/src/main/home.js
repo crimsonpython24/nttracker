@@ -17,6 +17,11 @@ function Home() {
   const { teamname } = useParams();
   const history = useHistory();
   let teamid;
+
+  function pushhistory(url, callback) {
+    history.push(url);
+    callback();
+  }
   
   function teamhome1_message(callback) {
     const info = message.warning({
@@ -28,19 +33,18 @@ function Home() {
     callback();
   };
 
-  function teamhome2_message(callback) {
+  function teamhome2_message() {
     const info = message.error({
       key: "apihome2",
       content: "Log in to access team data!",
       duration: 5.35, onClick: () => {info("apihome2");},
       className: "item-no-select",
     });
-    callback();
   };
 
   function checklogin(callback) {
     if (!state.user.authenticated) {
-      teamhome2_message(function() {history.push("/accounts/login");});
+      pushhistory("/accounts/login", function() {teamhome2_message()});
     }
     callback();
   }
@@ -52,7 +56,7 @@ function Home() {
       } else if (teamname.toString().toLowerCase() == "snaake") {
         teamid = 1375202;
       }
-      else {teamhome1_message(); history.push("/");}
+      else {pushhistory("/", function() {teamhome1_message()});}
     })
   }, []);
 
@@ -68,7 +72,7 @@ function Home() {
               </div>
               <Space size="small" className="home-button-toolbar">
                 <Button type="primary" className="viewapi-button">Create Event</Button>
-                <Link to={"/api/" + teamname}>
+                <Link to={"/team/" + teamname + "/api/"}>
                   <Button type="dashed" className="viewapi-button">View API</Button>
                 </Link>
               </Space>

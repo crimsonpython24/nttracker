@@ -4,10 +4,10 @@ import "antd/dist/antd.css";
 import { Card, Row, Col, Collapse, Button, message, Switch } from "antd";
 
 import ReactJson from 'react-json-view'
-import { NTTrackerContext } from "../nttracker/context.js";
 import { Link, useHistory, useParams } from "react-router-dom"
 
 import "./api_universal.css";
+import { NTTrackerContext } from "../nttracker/context.js";
 
 
 const { Panel } = Collapse;
@@ -36,6 +36,11 @@ function APIHome() {
   let last_updated_rcl = 0;
   let last_updated_rcrd = 0;
   let last_updated_td = 0;
+
+  function pushhistory(url, callback) {
+    history.push(url);
+    callback();
+  }
   
   function apihome1_message() {
     const info = message.warning({
@@ -56,6 +61,15 @@ function APIHome() {
     callback();
   };
 
+  function apihome3_message() {
+    const info = message.warning({
+      key: "apihome3",
+      content: "You do not have access to this API!",
+      duration: 5.35, onClick: () => {info("apihome3");},
+      className: "item-no-select",
+    });
+  };
+
   const [simpJson, setSimpJson] = useState(false);
   function onSimplifiedJsonChange(checked) {
     setSimpJson(checked);
@@ -68,14 +82,34 @@ function APIHome() {
     callback();
   }
 
+  let has_group_auth = false;
+  function checkauth(callback) {
+    state.user.available_teams.forEach(function(currentValue) {
+      if (currentValue.toString().toLowerCase() === teamname.toString().toLowerCase()) {
+        has_group_auth = true;
+      }
+    })
+    callback();
+  }
+
   useEffect(() => {
     checklogin(function() {
-      if (teamname.toString().toLowerCase() == "pr2w") {
-        teamid = 765879;
-      } else if (teamname.toString().toLowerCase() == "snaake") {
-        teamid = 1375202;
-      }
-      else {apihome2_message(); history.push("/");}
+      checkauth(function() {
+        if (teamname.toString().toLowerCase() == "pr2w") {
+          teamid = 765879;
+        } else if (teamname.toString().toLowerCase() == "snaake") {
+          teamid = 1375202;
+        }
+        else {pushhistory("/", function() {apihome1_message()});}
+        if (!has_group_auth) {
+          if (state.user.available_teams.length != 0)
+            pushhistory("/team/" + state.user.available_teams[0] + "/api/", function() {
+              apihome3_message()
+            });
+          else
+            pushhistory("/", function() {apihome3_message()});
+        }
+      })
     })
   }, []);
 
@@ -191,7 +225,7 @@ function APIHome() {
                   <br/>A delay of up to ten seconds is normal; use the unformatted JSON
                   file if the visualizer failed to load.
                 </p>
-                Only show the latest JSON entry <Switch size="small" defaultChecked onChange={() => onSimplifiedJsonChange()} />
+                Only show the latest JSON entry <Switch size="small" onChange={() => onSimplifiedJsonChange()} />
               </div>
               <div>
                 <Link to={"/team/" + teamname}>
