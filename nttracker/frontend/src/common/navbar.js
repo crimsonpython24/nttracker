@@ -20,6 +20,37 @@ function Navbar() {
   const shrinkNavbar = useMediaQuery({ query: '(max-width: 533px)' })
   const history = useHistory();
 
+  ////////////////////////////
+  // Part 6: Post Functions //
+  ////////////////////////////
+  function post_logout() {
+    fetchData("http://127.0.0.1:8000/accounts/ajaxlogout", 'POST', {})
+    .then((json) => {
+      dispatch({type: 'LOGGED_OUT'});
+      pushhistory("/", function() {navbar1_message()});
+      localStorage.removeItem('ever_logged_in');
+    })
+  }
+
+  /////////////////////////
+  // Part 7: Redirection //
+  /////////////////////////
+  function pushhistory(url, callback) {
+    history.push(url);
+    callback();
+  }
+
+  ////////////////////////////
+  // Part 9: Event Handlers //
+  ////////////////////////////
+  function changeLocale(locale, name) {
+    dispatch({type: "SWITCHED_LOCALE", locale});
+    navbar2_message(name);
+  }
+
+  ////////////////////////////////////
+  // Part 10: Additional Components //
+  ////////////////////////////////////
   const navbar1_message = () => {
     const info = message.info({
       key: "navbar1",
@@ -36,26 +67,6 @@ function Navbar() {
       className: "item-no-select",
     });
   };
-
-  function pushhistory(url, callback) {
-    history.push(url);
-    callback();
-  }
-
-  function post_logout() {
-    fetchData("http://127.0.0.1:8000/accounts/ajaxlogout", 'POST', {})
-    .then((json) => {
-      dispatch({type: 'LOGGED_OUT'});
-      pushhistory("/", function() {navbar1_message()});
-      localStorage.removeItem('ever_logged_in');
-    })
-  }
-
-  function changeLocale(locale, name) {
-    dispatch({type: "SWITCHED_LOCALE", locale});
-    navbar2_message(name);
-  }
-
   const menu = (
     <Menu>
       <Menu.Item key="1" onClick={() => changeLocale(enUS, "English (US)")}>
@@ -66,8 +77,7 @@ function Navbar() {
       </Menu.Item>
     </Menu>
   );
-
-  function Localedropdown() {
+  const Localedropdown = () => {
     return (
       <Dropdown overlay={menu} placement="bottomRight" trigger={['click']}>
         <Tooltip placement="leftTop" 
@@ -80,9 +90,7 @@ function Navbar() {
       </Dropdown>
     )
   }
-
-  function extras(authenticated, shrink) {
-    // if (shrink) return null;
+  const extras = (authenticated, shrink) => {
     if (authenticated) {
       return (
         <div>
@@ -102,9 +110,7 @@ function Navbar() {
       )
     } else {
       return (
-        <>
-          <Localedropdown/> 
-        </>
+        <Localedropdown/>
       )
     }
   }

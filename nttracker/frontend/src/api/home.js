@@ -37,47 +37,12 @@ function APIHome() {
   let last_updated_rcrd = 0;
   let last_updated_td = 0;
 
-  function pushhistory(url, callback) {
-    history.push(url);
-    callback();
-  }
-  
-  function apihome1_message() {
-    const info = message.warning({
-      key: "apihome1",
-      content: "Team " + {teamname} + " is not found!",
-      duration: 5.35, onClick: () => {info("apihome1");},
-      className: "item-no-select",
-    });
-  };
-  
-  function apihome2_message(callback) {
-    const info = message.error({
-      key: "apihome2",
-      content: "Log in to access team API!",
-      duration: 5.35, onClick: () => {info("apihome2");},
-      className: "item-no-select",
-    });
-    callback();
-  };
-
-  function apihome3_message() {
-    const info = message.warning({
-      key: "apihome3",
-      content: "You do not have access to this API!",
-      duration: 5.35, onClick: () => {info("apihome3");},
-      className: "item-no-select",
-    });
-  };
-
-  const [simpJson, setSimpJson] = useState(false);
-  function onSimplifiedJsonChange(checked) {
-    setSimpJson(checked);
-  }
-
+  //////////////////////////
+  // Part 4: Handle Login //
+  //////////////////////////
   function checklogin(callback) {
     if (!state.user.authenticated) 
-      apihome2_message(function() {history.push("/accounts/login");}); 
+      pushhistory("/accounts/login", function(){apihome2_message();}); 
     else 
       callback();
   }
@@ -101,6 +66,42 @@ function APIHome() {
     }
   }
 
+  /////////////////////
+  // Part 5: Message //
+  /////////////////////
+  function apihome1_message() {
+    const info = message.warning({
+      key: "apihome1",
+      content: "Team " + {teamname} + " is not found!",
+      duration: 5.35, onClick: () => {info("apihome1");},
+      className: "item-no-select",
+    });
+  };
+  function apihome2_message() {
+    const info = message.error({
+      key: "apihome2",
+      content: "Log in to access team API!",
+      duration: 5.35, onClick: () => {info("apihome2");},
+      className: "item-no-select",
+    });
+  };
+  function apihome3_message() {
+    const info = message.warning({
+      key: "apihome3",
+      content: "You do not have access to this API admin!",
+      duration: 5.35, onClick: () => {info("apihome3");},
+      className: "item-no-select",
+    });
+  };
+
+  /////////////////////////
+  // Part 7: Redirection //
+  /////////////////////////
+  function pushhistory(url, callback) {
+    history.push(url);
+    callback();
+  }
+
   function checkteamexists(teamname) {
     if (teamname.toString().toLowerCase() == "pr2w") {
       teamid = 765879;
@@ -110,6 +111,9 @@ function APIHome() {
     else {pushhistory("/", function() {apihome1_message()});}
   }
 
+  ////////////////////////////
+  // Part 8: Initialization //
+  ////////////////////////////
   useEffect(() => {
     checklogin(function() {
       checkauth(function() {
@@ -117,6 +121,14 @@ function APIHome() {
       })
     })
   }, []);
+
+  ////////////////////////////
+  // Part 9: Event Handlers //
+  ////////////////////////////
+  const [simpJson, setSimpJson] = useState(false);
+  function onSimplifiedJsonChange(checked) {
+    setSimpJson(checked);
+  }
 
   // useEffect(() => {
   //   Promise.all([
