@@ -9,6 +9,19 @@ import { NTTrackerContext } from "../nttracker/context";
 import "./home.css"
 
 
+function useLogin(state, url, loginMessage) {
+  const history = useHistory();
+  const logged_in = state.user.authenticated;
+  useEffect(() => {
+    if (!logged_in) {
+      history.push(url);
+      loginMessage();
+    }
+  }, [logged_in])
+  return logged_in;
+}
+
+
 function Home() {
   const [state, dispatch] = useContext(NTTrackerContext);
   const { teamname } = useParams();
@@ -18,12 +31,12 @@ function Home() {
   //////////////////////////
   // Part 4: Handle Login //
   //////////////////////////
-  function checklogin(callback) {
-    if (!state.user.authenticated) 
-      pushhistory("/accounts/login", function(){teamhome2_message();});
-    else 
-      callback();
-  }
+  // function checklogin(callback) {
+  //   if (!state.user.authenticated) 
+  //     pushhistory("/accounts/login", function(){teamhome2_message();});
+  //   else 
+  //     callback();
+  // }
 
   let has_group_auth = false;
   function checkauth(callback) {
@@ -38,7 +51,7 @@ function Home() {
           teamhome3_message()
         });
       else
-        pushhistory("/", function() {apihome3_message()});
+        pushhistory("/", function() {teamhome3_message()});
     } else {
       callback();
     }
@@ -49,17 +62,17 @@ function Home() {
   /////////////////////
   function teamhome1_message() {
     const info = message.warning({
-      key: "apihome1",
+      key: "teamhome1",
       content: "Team " + teamname + " not found!",
-      duration: 5.35, onClick: () => {info("apihome1");},
+      duration: 5.35, onClick: () => {info("teamhome1");},
       className: "item-no-select",
     });
   };
   function teamhome2_message() {
     const info = message.error({
-      key: "apihome2",
+      key: "teamhome2",
       content: "Log in to access team data!",
-      duration: 5.35, onClick: () => {info("apihome2");},
+      duration: 5.35, onClick: () => {info("teamhome2");},
       className: "item-no-select",
     });
   };
@@ -67,7 +80,7 @@ function Home() {
     const info = message.warning({
       key: "teamhome3",
       content: "You do not have access to this team admin!",
-      duration: 5.35, onClick: () => {info("apihome3");},
+      duration: 5.35, onClick: () => {info("teamhome3");},
       className: "item-no-select",
     });
   };
@@ -91,12 +104,13 @@ function Home() {
   ////////////////////////////
   // Part 8: Initialization //
   ////////////////////////////
+  let loggedin = useLogin(state, "/accounts/login", teamhome2_message);
   useEffect(() => {
-    checklogin(function() {
+    if (loggedin) {
       checkauth(function() {
         checkteamexists(teamname);
       })
-    })
+    }
   }, []);
 
   return (
