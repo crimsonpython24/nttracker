@@ -76,10 +76,10 @@ function APIHome() {
   }
 
   function checklogin(callback) {
-    if (!state.user.authenticated) {
+    if (!state.user.authenticated) 
       apihome2_message(function() {history.push("/accounts/login");}); 
-    }
-    callback();
+    else 
+      callback();
   }
 
   let has_group_auth = false;
@@ -89,76 +89,81 @@ function APIHome() {
         has_group_auth = true;
       }
     })
-    callback();
+    if (!has_group_auth) {
+      if (state.user.available_teams.length != 0)
+        pushhistory("/team/" + state.user.available_teams[0] + "/api/", function() {
+          apihome3_message()
+        });
+      else
+        pushhistory("/", function() {apihome3_message()});
+    } else {
+      callback();
+    }
+  }
+
+  function checkteamexists(teamname) {
+    if (teamname.toString().toLowerCase() == "pr2w") {
+      teamid = 765879;
+    } else if (teamname.toString().toLowerCase() == "snaake") {
+      teamid = 1375202;
+    }
+    else {pushhistory("/", function() {apihome1_message()});}
   }
 
   useEffect(() => {
     checklogin(function() {
       checkauth(function() {
-        if (teamname.toString().toLowerCase() == "pr2w") {
-          teamid = 765879;
-        } else if (teamname.toString().toLowerCase() == "snaake") {
-          teamid = 1375202;
-        }
-        else {pushhistory("/", function() {apihome1_message()});}
-        if (!has_group_auth) {
-          if (state.user.available_teams.length != 0)
-            pushhistory("/team/" + state.user.available_teams[0] + "/api/", function() {
-              apihome3_message()
-            });
-          else
-            pushhistory("/", function() {apihome3_message()});
-        }
+        checkteamexists(teamname);
       })
     })
   }, []);
 
-  useEffect(() => {
-    Promise.all([
-      fetch("http://127.0.0.1:8000/data/racedata_json/" + teamid + "/"),
-      fetch("http://127.0.0.1:8000/data/racerlog_json/" + teamid + "/"),
-      fetch("http://127.0.0.1:8000/data/racerdata_json/" + teamid + "/"),
-      fetch("http://127.0.0.1:8000/data/teamdata_json/" + teamid + "/"),
-    ])
-    .then((([rcdata, rclog, rcrdata, tdata]) => Promise.all(
-      [rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
-    )))
-    .then(([rcdata, rclog, rcrdata, tdata]) => {
-      if (typeof rcdata['racedata'][rcdata['racedata'].length-1] == 'undefined') {
-        last_updated_rcd = 0;
-      } else {
-        last_updated_rcd = rcdata['racedata'][rcdata['racedata'].length-1]['timestamp']
-      }
-      if (typeof rclog['racerlog'][rclog['racerlog'].length-1] == 'undefined') {
-        last_updated_rcl = 0;
-      } else {
-        last_updated_rcl = rclog['racerlog'][rclog['racerlog'].length-1]['timestamp']
-      }
-      if (typeof rcrdata['racerdata'][rcrdata['racerdata'].length-1] == 'undefined') {
-        last_updated_rcrd = 0;
-      } else {
-        last_updated_rcrd = rcrdata['racerdata'][rcrdata['racerdata'].length-1]['timestamp']
-      }
-      if (typeof tdata['teamdata'][tdata['teamdata'].length-1] == 'undefined') {
-        last_updated_td = 0;
-      } else {
-        last_updated_td = tdata['teamdata'][tdata['teamdata'].length-1]['timestamp']
-      }
+  // useEffect(() => {
+  //   Promise.all([
+  //     fetch("http://127.0.0.1:8000/data/racedata_json/" + teamid + "/"),
+  //     fetch("http://127.0.0.1:8000/data/racerlog_json/" + teamid + "/"),
+  //     fetch("http://127.0.0.1:8000/data/racerdata_json/" + teamid + "/"),
+  //     fetch("http://127.0.0.1:8000/data/teamdata_json/" + teamid + "/"),
+  //   ])
+  //   .then((([rcdata, rclog, rcrdata, tdata]) => Promise.all(
+  //     [rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
+  //   )))
+  //   .then(([rcdata, rclog, rcrdata, tdata]) => {
+  //     if (typeof rcdata['racedata'][rcdata['racedata'].length-1] == 'undefined') {
+  //       last_updated_rcd = 0;
+  //     } else {
+  //       last_updated_rcd = rcdata['racedata'][rcdata['racedata'].length-1]['timestamp']
+  //     }
+  //     if (typeof rclog['racerlog'][rclog['racerlog'].length-1] == 'undefined') {
+  //       last_updated_rcl = 0;
+  //     } else {
+  //       last_updated_rcl = rclog['racerlog'][rclog['racerlog'].length-1]['timestamp']
+  //     }
+  //     if (typeof rcrdata['racerdata'][rcrdata['racerdata'].length-1] == 'undefined') {
+  //       last_updated_rcrd = 0;
+  //     } else {
+  //       last_updated_rcrd = rcrdata['racerdata'][rcrdata['racerdata'].length-1]['timestamp']
+  //     }
+  //     if (typeof tdata['teamdata'][tdata['teamdata'].length-1] == 'undefined') {
+  //       last_updated_td = 0;
+  //     } else {
+  //       last_updated_td = tdata['teamdata'][tdata['teamdata'].length-1]['timestamp']
+  //     }
 
-      dispatch({
-        type: "REFRESH_APIS",
-        data: {
-          racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,
-          data_date: {
-            racedata: last_updated_rcd,
-            racerlog: last_updated_rcl,
-            racerdata: last_updated_rcrd,
-            teamdata: last_updated_td,
-          },
-        },
-      })
-    })
-  }, [])
+  //     dispatch({
+  //       type: "REFRESH_APIS",
+  //       data: {
+  //         racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,
+  //         data_date: {
+  //           racedata: last_updated_rcd,
+  //           racerlog: last_updated_rcl,
+  //           racerdata: last_updated_rcrd,
+  //           teamdata: last_updated_td,
+  //         },
+  //       },
+  //     })
+  //   })
+  // }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {

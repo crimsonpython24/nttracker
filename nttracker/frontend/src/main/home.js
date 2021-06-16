@@ -23,14 +23,13 @@ function Home() {
     callback();
   }
   
-  function teamhome1_message(callback) {
+  function teamhome1_message() {
     const info = message.warning({
       key: "apihome1",
-      content: "Team " + {teamname} + " is not found!",
+      content: "Team " + teamname + " not found!",
       duration: 5.35, onClick: () => {info("apihome1");},
       className: "item-no-select",
     });
-    callback();
   };
 
   function teamhome2_message() {
@@ -43,20 +42,24 @@ function Home() {
   };
 
   function checklogin(callback) {
-    if (!state.user.authenticated) {
+    if (!state.user.authenticated) 
       pushhistory("/accounts/login", function() {teamhome2_message()});
+    else 
+      callback();
+  }
+
+  function checkteamexists(teamname) {
+    if (teamname.toString().toLowerCase() == "pr2w") {
+      teamid = 765879;
+    } else if (teamname.toString().toLowerCase() == "snaake") {
+      teamid = 1375202;
     }
-    callback();
+    else {pushhistory("/", function() {teamhome1_message()});}
   }
 
   useEffect(() => {
     checklogin(function() {
-      if (teamname.toString().toLowerCase() == "pr2w") {
-        teamid = 765879;
-      } else if (teamname.toString().toLowerCase() == "snaake") {
-        teamid = 1375202;
-      }
-      else {pushhistory("/", function() {teamhome1_message()});}
+      checkteamexists(teamname);
     })
   }, []);
 
