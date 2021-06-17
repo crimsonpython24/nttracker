@@ -9,16 +9,37 @@ import { NTTrackerContext } from "../nttracker/context";
 import "./home.css"
 
 
-function useLogin(state, url, loginMessage) {
+function useLogin(state, url, loginMessage, callback) {
   const history = useHistory();
   const logged_in = state.user.authenticated;
   useEffect(() => {
-    if (!logged_in) {
-      history.push(url);
-      loginMessage();
-    }
+    if (!logged_in) {history.push(url); loginMessage();}
+    else callback();
   }, [logged_in])
   return logged_in;
+}
+
+
+function useGroupAuth(state, url, loginMessage) {
+  const history = useHistory();
+  let has_group_auth = false;
+  state.user.available_teams.forEach(function(currentValue) {
+    if (currentValue.toString().toLowerCase() === teamname.toString().toLowerCase()) {
+      has_group_auth = true;
+    }
+  })
+  useEffect(() => {
+    if (!has_group_auth) {
+      if (state.user.available_teams.length != 0) {
+        history.push(url); loginMessage();
+      }
+      else
+        history.push("/"); loginMessage();
+    } else {
+      callback();
+    }
+  }, [has_group_auth])
+  return has_group_auth;
 }
 
 
@@ -36,26 +57,7 @@ function Home() {
   //     pushhistory("/accounts/login", function(){teamhome2_message();});
   //   else 
   //     callback();
-  // }
-
-  let has_group_auth = false;
-  function checkauth(callback) {
-    state.user.available_teams.forEach(function(currentValue) {
-      if (currentValue.toString().toLowerCase() === teamname.toString().toLowerCase()) {
-        has_group_auth = true;
-      }
-    })
-    if (!has_group_auth) {
-      if (state.user.available_teams.length != 0)
-        pushhistory("/team/" + state.user.available_teams[0], function() {
-          teamhome3_message()
-        });
-      else
-        pushhistory("/", function() {teamhome3_message()});
-    } else {
-      callback();
-    }
-  }
+  // } 
 
   /////////////////////
   // Part 5: Message //
@@ -105,12 +107,11 @@ function Home() {
   // Part 8: Initialization //
   ////////////////////////////
   let loggedin = useLogin(state, "/accounts/login", teamhome2_message);
+  let properauth = useGroupAuth(state, ("/team/" + state.user.available_teams[0]), teamhome3_message);
   useEffect(() => {
-    if (loggedin) {
-      checkauth(function() {
+    if (loggedin)
+      if (properauth)
         checkteamexists(teamname);
-      })
-    }
   }, []);
 
   return (
