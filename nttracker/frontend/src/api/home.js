@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 
 import "antd/dist/antd.css";
-import { Card, Row, Col, Collapse, Button, message, Switch } from "antd";
+import { Card, Row, Col, Collapse, Button, message, Switch, Typography } from "antd";
 
 import ReactJson from 'react-json-view'
 import { Link, useHistory, useParams } from "react-router-dom"
@@ -11,6 +11,7 @@ import { NTTrackerContext } from "../nttracker/context.js";
 
 
 const { Panel } = Collapse;
+const { Text, Title } = Typography;
 
 
 function timeConverter(UNIX_timestamp){
@@ -102,11 +103,13 @@ function APIHome() {
     callback();
   }
 
-  function checkteamexists(teamname) {
+  function checkteamexists(teamname, callback) {
     if (teamname.toString().toLowerCase() == "pr2w") {
       teamid = 765879;
+      callback();
     } else if (teamname.toString().toLowerCase() == "snaake") {
       teamid = 1375202;
+      callback();
     }
     else {pushhistory("/", function() {apihome1_message()});}
   }
@@ -117,7 +120,32 @@ function APIHome() {
   useEffect(() => {
     checklogin(function() {
       checkauth(function() {
-        checkteamexists(teamname);
+        checkteamexists(teamname, function() {
+          Promise.all([
+            fetch("http://127.0.0.1:8000/data/racedata_json/" + teamid + "/"),
+            fetch("http://127.0.0.1:8000/data/racerlog_json/" + teamid + "/"),
+            fetch("http://127.0.0.1:8000/data/racerdata_json/" + teamid + "/"),
+            fetch("http://127.0.0.1:8000/data/teamdata_json/" + teamid + "/"),
+          ])
+          .then((([rcdata, rclog, rcrdata, tdata]) => Promise.all(
+            [rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
+          )))
+          .then(([rcdata, rclog, rcrdata, tdata]) => {
+            handleapi(rcdata, rclog, rcrdata, tdata);
+            dispatch({
+              type: "REFRESH_APIS",
+              data: {
+                racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,
+                data_date: {
+                  racedata: last_updated_rcd,
+                  racerlog: last_updated_rcl,
+                  racerdata: last_updated_rcrd,
+                  teamdata: last_updated_td,
+                },
+              },
+            })
+          })
+        });
       })
     })
   }, []);
@@ -130,52 +158,24 @@ function APIHome() {
     setSimpJson(checked);
   }
 
-  // useEffect(() => {
-  //   Promise.all([
-  //     fetch("http://127.0.0.1:8000/data/racedata_json/" + teamid + "/"),
-  //     fetch("http://127.0.0.1:8000/data/racerlog_json/" + teamid + "/"),
-  //     fetch("http://127.0.0.1:8000/data/racerdata_json/" + teamid + "/"),
-  //     fetch("http://127.0.0.1:8000/data/teamdata_json/" + teamid + "/"),
-  //   ])
-  //   .then((([rcdata, rclog, rcrdata, tdata]) => Promise.all(
-  //     [rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
-  //   )))
-  //   .then(([rcdata, rclog, rcrdata, tdata]) => {
-  //     if (typeof rcdata['racedata'][rcdata['racedata'].length-1] == 'undefined') {
-  //       last_updated_rcd = 0;
-  //     } else {
-  //       last_updated_rcd = rcdata['racedata'][rcdata['racedata'].length-1]['timestamp']
-  //     }
-  //     if (typeof rclog['racerlog'][rclog['racerlog'].length-1] == 'undefined') {
-  //       last_updated_rcl = 0;
-  //     } else {
-  //       last_updated_rcl = rclog['racerlog'][rclog['racerlog'].length-1]['timestamp']
-  //     }
-  //     if (typeof rcrdata['racerdata'][rcrdata['racerdata'].length-1] == 'undefined') {
-  //       last_updated_rcrd = 0;
-  //     } else {
-  //       last_updated_rcrd = rcrdata['racerdata'][rcrdata['racerdata'].length-1]['timestamp']
-  //     }
-  //     if (typeof tdata['teamdata'][tdata['teamdata'].length-1] == 'undefined') {
-  //       last_updated_td = 0;
-  //     } else {
-  //       last_updated_td = tdata['teamdata'][tdata['teamdata'].length-1]['timestamp']
-  //     }
-
-  //     dispatch({
-  //       type: "REFRESH_APIS",
-  //       data: {
-  //         racedata: rcdata, racerlog: rclog, racerdata: rcrdata, teamdata: tdata,
-  //         data_date: {
-  //           racedata: last_updated_rcd,
-  //           racerlog: last_updated_rcl,
-  //           racerdata: last_updated_rcrd,
-  //           teamdata: last_updated_td,
-  //         },
-  //       },
-  //     })
-  //   })
-  // }, [])
+  const handleapi = (rcdata, rclog, rcrdata, tdata) => {
+    if (typeof rcdata['racedata'][rcdata['racedata'].length-1] == 'undefined')
+      last_updated_rcd = 0;
+    else
+      last_updated_rcd = rcdata['racedata'][rcdata['racedata'].length-1]['timestamp']
+    if (typeof rclog['racerlog'][rclog['racerlog'].length-1] == 'undefined')
+      last_updated_rcl = 0;
+    else
+      last_updated_rcl = rclog['racerlog'][rclog['racerlog'].length-1]['timestamp']
+    if (typeof rcrdata['racerdata'][rcrdata['racerdata'].length-1] == 'undefined')
+      last_updated_rcrd = 0;
+    else
+      last_updated_rcrd = rcrdata['racerdata'][rcrdata['racerdata'].length-1]['timestamp']
+    if (typeof tdata['teamdata'][tdata['teamdata'].length-1] == 'undefined')
+      last_updated_td = 0;
+    else
+      last_updated_td = tdata['teamdata'][tdata['teamdata'].length-1]['timestamp']
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -189,27 +189,7 @@ function APIHome() {
           [rcdata.json(), rclog.json(), rcrdata.json(), tdata.json()]
         )))
         .then(([rcdata, rclog, rcrdata, tdata]) => {
-          if (typeof rcdata['racedata'][rcdata['racedata'].length-1] == 'undefined') {
-            last_updated_rcd = 0;
-          } else {
-            last_updated_rcd = rcdata['racedata'][rcdata['racedata'].length-1]['timestamp']
-          }
-          if (typeof rclog['racerlog'][rclog['racerlog'].length-1] == 'undefined') {
-            last_updated_rcl = 0;
-          } else {
-            last_updated_rcl = rclog['racerlog'][rclog['racerlog'].length-1]['timestamp']
-          }
-          if (typeof rcrdata['racerdata'][rcrdata['racerdata'].length-1] == 'undefined') {
-            last_updated_rcrd = 0;
-          } else {
-            last_updated_rcrd = rcrdata['racerdata'][rcrdata['racerdata'].length-1]['timestamp']
-          }
-          if (typeof tdata['teamdata'][tdata['teamdata'].length-1] == 'undefined') {
-            last_updated_td = 0;
-          } else {
-            last_updated_td = tdata['teamdata'][tdata['teamdata'].length-1]['timestamp']
-          }
-
+          handleapi(rcdata, rclog, rcrdata, tdata);
           dispatch({
             type: "REFRESH_APIS",
             data: {
@@ -235,13 +215,13 @@ function APIHome() {
           <Card>
             <div style={{ display: "flex" }}>
               <div style={{ flexGrow: 1 }}>
-                <h1>API Home</h1>
-                <p><strong>Click on the grey boxes to expand their content!</strong></p>
-                <p>
+                <Title level={2}>API Home</Title>
+                <Text><strong>Click on the grey boxes to expand their content!</strong></Text>
+                <Text>
                   Please be patient when expanding the visualized JSON within each panel.
                   <br/>A delay of up to ten seconds is normal; use the unformatted JSON
                   file if the visualizer failed to load.
-                </p>
+                </Text>
                 Only show the latest JSON entry <Switch size="small" onChange={() => onSimplifiedJsonChange()} />
               </div>
               <div>
@@ -284,7 +264,7 @@ function APIHome() {
                 key="2">
                   <div className="padding-within">
                     <div>
-                      <p>
+                      <Text>
                         <i>Use the
                           <Link
                             to={"/data/racedata_json/" + teamid}
@@ -292,7 +272,7 @@ function APIHome() {
                             rel="noopener noreferrer"
                           > raw api </Link>if the visualized data cannot load.
                         </i>
-                      </p>
+                      </Text>
                       <ReactJson 
                         src={simpJson ? {} : state.raceapi.racedata}
                         theme="bright:inverted"
@@ -312,7 +292,7 @@ function APIHome() {
                 key="3">
                 <div className="padding-within">
                   <div>
-                    <p>
+                    <Text>
                       <i>Use the
                         <Link
                           to="/data/racerlog_json/"
@@ -320,7 +300,7 @@ function APIHome() {
                           rel="noopener noreferrer"
                         >raw api</Link>if the visualized data cannot load.
                       </i>
-                    </p>
+                    </Text>
                     <ReactJson 
                       src={state.raceapi.racerlog}
                       theme="bright:inverted"
@@ -340,13 +320,13 @@ function APIHome() {
                 key="4">
                 <div className="padding-within">
                   <div>
-                    <p>
+                    <Text>
                       <i>Use the
                         <Link
                           to="/data/racerdata_json/"
                           target="_blank"
                           rel="noopener noreferrer"
-                        > raw api </Link>if the visualized data cannot load.</i></p>
+                        > raw api </Link>if the visualized data cannot load.</i></Text>
                     <ReactJson 
                       src={state.raceapi.racerdata}
                       theme="bright:inverted"
@@ -366,13 +346,13 @@ function APIHome() {
                 key="5">
                 <div className="padding-within">
                   <div>
-                    <p>
+                    <Text>
                       <i>Use the 
                       <Link
                         to="/data/teamdata_json/"
                         target="_blank"
                         rel="noopener noreferrer"
-                      > raw api </Link>if the visualized data cannot load.</i></p>
+                      > raw api </Link>if the visualized data cannot load.</i></Text>
                     <ReactJson 
                       src={state.raceapi.teamdata}
                       theme="bright:inverted"

@@ -17,9 +17,10 @@ import Bar from "./bar";
 import Container from "./container";
 import "./dom.css";
 import { NTTrackerContext } from "../nttracker/context.js";
+import CreateEvent from "../api/createevent.js";
 
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 
 const Progress = ({ isAnimating }) => {
@@ -89,10 +90,10 @@ const NTTracker = () => {
                     <Switch location={location}>
                       <Route exact path="/">
                         <div  style={{ paddingLeft: 23 }}>
-                          <h1>index page, nothin' here</h1>
+                          <Title level={2}>index page, nothin' here</Title>
                           <br/>
                           {(state.user.available_teams.length != 0) ?
-                            <h2>Managable teams:</h2> : <></>}
+                            <Title level={3}>Managable teams:</Title> : <></>}
                           <ul>
                             {(state.user.available_teams).map((team) => (
                               <li key={team}>
@@ -108,6 +109,7 @@ const NTTracker = () => {
                       <Route exact path="/accounts/profile"><Profile/></Route>
                       <Route exact path="/team/:teamname"><Home/></Route>
                       <Route exact path="/team/:teamname/api"><APIHome/></Route>
+                      <Route exact path="/team/:teamname/create_event"><CreateEvent/></Route>
                       <Route exact path="*" component={NoMatch} />
                     </Switch>
                   </CSSTransition>
