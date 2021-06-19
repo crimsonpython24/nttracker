@@ -42,8 +42,8 @@ def record_racedata(teamname, cron_min):
     task_name = 'record_racedata_%s_%s' % (int(time.time()), teamname)
     periodic_task(schedule, name=task_name)(wrapper)
 
-record_racedata('PR2W', '*/1')
-record_racedata('SNAAKE', '*/1')
+record_racedata('PR2W', '*/5')
+record_racedata('SNAAKE', '*/5')
 
 
 def get_racerlog(teamname, cron_min):
@@ -117,8 +117,8 @@ def record_racerdata(teamname, cron_min):
     task_name = 'record_racerdata_%s_%s' % (int(time.time()), teamname)
     periodic_task(schedule, name=task_name)(wrapper)
 
-record_racerdata('PR2W', '*/1')
-record_racerdata('SNAAKE', '*/1')
+record_racerdata('PR2W', '*/5')
+record_racerdata('SNAAKE', '*/5')
 
 
 def get_teamdata(teamname, cron_min):

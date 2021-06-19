@@ -89,12 +89,12 @@ WSGI_APPLICATION = 'nttracker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nttracker',
         'USER': 'crimsonpython24',
-        'PASSWORD': PSQL_PASSWORD,
+        'PASSWORD': '12345678',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '3306',
     }
 }
 
