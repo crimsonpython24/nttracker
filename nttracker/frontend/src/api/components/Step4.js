@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Steps,
   Button,
   Row,
   Col,
   Card,
+  Select,
   Typography,
   Form,
   Input,
@@ -18,8 +19,65 @@ import 'katex/dist/katex.min.css';
 import 'antd/dist/antd.css';
 import './test.css';
 
+
+const { Option } = Select;
 const { Step } = Steps;
 const { Text, Title } = Typography;
+
+
+const PriceInput = ({
+  value = {},
+  onChange,
+  editable,
+  freqchange,
+  datefreqchange
+}) => {
+  const [number, setNumber] = useState(0);
+  const [currency, setCurrency] = useState('day');
+
+  const triggerChange = changedValue => {
+    onChange?.({number, currency, ...value, ...changedValue});
+  };
+
+  const onNumberChange = e => {
+    const newNumber = parseInt(e.target.value || '0', 10);
+    if (Number.isNaN(number)) {return;}
+    if (!('number' in value)) {setNumber(newNumber); freqchange(newNumber);}
+    triggerChange({number: newNumber});
+  };
+
+  const onCurrencyChange = newCurrency => {
+    if (!('currency' in value)) {setCurrency(newCurrency); datefreqchange(newCurrency);}
+    triggerChange({currency: newCurrency});
+  };
+
+  useEffect(() => {editable = false;}, []);
+  let selectprops = { disabled: !editable };
+  let numinputprops = { disabled: !editable };
+
+  return (
+    <span>
+      <Input
+        type="text"
+        value={value.number || number}
+        onChange={onNumberChange}
+        {...numinputprops}
+        style={{width: 70}}
+      />
+      <Select
+        value={value.currency || currency}
+        style={{maxWidth: 130, margin: '0 8px'}}
+        {...selectprops}
+        onChange={onCurrencyChange}
+      >
+        <Option value="day">Per day</Option>
+        <Option value="week">Per week</Option>
+        <Option value="two weeks">Per two weeks</Option>
+        <Option value="month">Per month</Option>
+      </Select>
+    </span>
+  );
+};
 
 
 function Step4(props) {
@@ -176,23 +234,43 @@ function Step4(props) {
                         </tbody>
                       </table>
                       <Divider style={{ marginTop: 11 }} />
-                      <Text style={{ marginTop: -15, marginBottom: -10 }}>
-                        e.g., Nitrotype's formula:{' '}
-                      </Text>
+                      <div style={{ marginTop: -15, marginBottom: -15 }}>
+                        <Text>e.g., Nitrotype's formula:{' '}</Text>
+                      </div>
                       <Latex
                         displayMode={true}
                       >{`$$(100 + \\frac{wpm}{2}) * acc $$`}</Latex>
-                      <Text style={{ marginTop: -10, marginBottom: -15 }}>
-                        is equivalent to:
-                      </Text>
-                      <Latex displayMode={true}>{`$$
-                        \\begin{matrix}
-                            0.5 & 100 \\\\
-                            1 & 0 \\\\
-                        \\end{matrix}
-                      $$`}</Latex>
+                      <div>
+                        <Text style={{ marginTop: -10, marginBottom: -25 }}>
+                          is equivalent to:
+                        </Text>
+                      </div>
+                      <div
+                        style={{ position: "relative", top: -20, marginBottom: -8 }}
+                      >
+                        <Latex displayMode={true}>{`$$
+                          \\begin{matrix}
+                              0.5 & 100 \\\\
+                              1 & 0 \\\\
+                          \\end{matrix}
+                        $$`}</Latex>
+                      </div>
+                      <Divider style={{ marginTop: 11 }} />
                     </div>
                   )}
+                </Form.Item>
+                <Form.Item>
+                  <Checkbox
+                    checked={props.state.repeat}
+                    onChange={e => onChange('repeat', e.target.checked)}
+                  >
+                    Repeat Event
+                  </Checkbox>
+                  <PriceInput
+                    editable={props.state.repeat}
+                    freqchange={e => onChange('freq', e)}
+                    datefreqchange={e => onChange('freqdate', e)}
+                  />
                 </Form.Item>
               </Form>
               <br />

@@ -17,13 +17,7 @@ function Finish(props) {
           <li>Event: {props.stateone.title}</li>
           <li>URL: {props.stateone.url}</li>
           <li>Date: {props.stateone.date}</li>
-          <li>Repeating: {props.stateone.repeat.toString()}</li> 
-          {props.stateone.repeat.toString() === 'true' && (
-            <ul>
-              <li>{props.stateone.freq}</li>
-              <li>{props.stateone.freqdate}</li>
-            </ul>
-          )}
+          <li>End mode: {props.stateone.end_mode}</li>
           <li>New Members: {props.statetwo.newMembers.toString()}</li>
           <li>Leaving Members: {props.statetwo.leavingMembers.toString()}</li>
           <li>Entry Requirements: {props.statetwo.entryReq.toString()}</li>
@@ -50,6 +44,13 @@ function Finish(props) {
             <li>Accuracy factor: {props.statefour.cus_acc_fac}</li>
             <li>Accuracy const: {props.statefour.cus_acc_const}</li>
           </ul>
+          <li>Repeating: {props.statefour.repeat.toString()}</li> 
+          {props.statefour.repeat.toString() === 'true' && (
+            <ul>
+              <li>{props.statefour.freq}</li>
+              <li>{props.statefour.freqdate}</li>
+            </ul>
+          )}
         </ul>
         <Button label="Continue" onClick={() => props.firstStep()}>
           {' '}

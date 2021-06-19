@@ -8,19 +8,20 @@ import {
   Row,
   Col,
   Button,
-  Input,
-  Card,
+  Input, Card, 
   Form,
   DatePicker,
-  Checkbox,
-  Select,
-  Divider,
   Typography,
-  Space
+  Space,
+  Radio,
+  Divider,
+  InputNumber
 } from 'antd';
 
+
+const { TextArea } = Input;
+
 const { RangePicker } = DatePicker;
-const { Option } = Select;
 const { Step } = Steps;
 const { Text, Title } = Typography;
 
@@ -58,63 +59,16 @@ function disabledRangeTime(_, type) {
 }
 
 
-const PriceInput = ({
-  value = {},
-  onChange,
-  editable,
-  freqchange,
-  datefreqchange
-}) => {
-  const [number, setNumber] = useState(0);
-  const [currency, setCurrency] = useState('day');
-
-  const triggerChange = changedValue => {
-    onChange?.({number, currency, ...value, ...changedValue});
-  };
-
-  const onNumberChange = e => {
-    const newNumber = parseInt(e.target.value || '0', 10);
-    if (Number.isNaN(number)) {return;}
-    if (!('number' in value)) {setNumber(newNumber); freqchange(newNumber);}
-    triggerChange({number: newNumber});
-  };
-
-  const onCurrencyChange = newCurrency => {
-    if (!('currency' in value)) {setCurrency(newCurrency); datefreqchange(newCurrency);}
-    triggerChange({currency: newCurrency});
-  };
-
-  useEffect(() => {editable = false;}, []);
-  let selectprops = { disabled: !editable };
-  let numinputprops = { disabled: !editable };
-
-  return (
-    <span>
-      <Input
-        type="text"
-        value={value.number || number}
-        onChange={onNumberChange}
-        {...numinputprops}
-        style={{width: 70}}
-      />
-      <Select
-        value={value.currency || currency}
-        style={{maxWidth: 130, margin: '0 8px'}}
-        {...selectprops}
-        onChange={onCurrencyChange}
-      >
-        <Option value="day">Per day</Option>
-        <Option value="week">Per week</Option>
-        <Option value="two weeks">Per two weeks</Option>
-        <Option value="month">Per month</Option>
-      </Select>
-    </span>
-  );
-};
-
-
 function Step1(props) {
   const onChange = (key, val) => {props.setState(pre => ({...pre, [key]: val}));};
+  
+  const [radio1value, setRadio1Value] = React.useState("time");
+  const onRadio1Change = e => {
+    console.log('radio checked', e.target.value);
+    setRadio1Value(e.target.value);
+    props.setState(pre => ({...pre, "end_mode": e.target.value}));
+  };
+
   const { teamname } = useParams();
   return (
     <>
@@ -153,35 +107,61 @@ function Step1(props) {
               >
                 <Input placeholder="e.g., https://youtu.be/dQw4w9WgXcQ" />
               </Form.Item>
-              <Form.Item label="Event Date" style={{ maxWidth: 550 }}>
-                <RangePicker
-                  style={{ width: '100%' }}
-                  disabledDate={disabledDate}
-                  disabledTime={disabledRangeTime}
-                  showTime={{
-                    hideDisabledOptions: true,
-                    defaultValue: [
-                      moment('00:00:00', 'HH:mm'), moment('11:59:59', 'HH:mm')
-                    ]
-                  }}
-                  onChange={value => onChange('date', value.toString())}
-                  format="YYYY-MM-DD HH:mm"
-                />
+              <Form.Item label="Event Description" style={{ maxWidth: 550 }}>
+                <TextArea rows={4} />
               </Form.Item>
-              <Divider />
-              <Form.Item>
-                <Checkbox
-                  checked={props.state.repeat}
-                  onChange={e => onChange('repeat', e.target.checked)}
+              <Divider/>
+              <Form.Item label="End mode (how the event will end):" style={{ marginBottom: 7 }}>
+                <Radio.Group
+                  onChange={onRadio1Change}
+                  value={props.state.end_mode}
                 >
-                  Repeat Event
-                </Checkbox>
-                <PriceInput
-                  editable={props.state.repeat}
-                  freqchange={e => onChange('freq', e)}
-                  datefreqchange={e => onChange('freqdate', e)}
-                />
+                  <Radio value="time">Time</Radio>
+                  <Radio value="races">Races</Radio>
+                </Radio.Group>
               </Form.Item>
+              {props.state.end_mode.toString() === "time" &&
+                <Form.Item label="Event Date" style={{ maxWidth: 360 }}>
+                  <RangePicker
+                    style={{ width: '100%' }}
+                    disabledDate={disabledDate}
+                    disabledTime={disabledRangeTime}
+                    showTime={{
+                      hideDisabledOptions: true,
+                      defaultValue: [
+                        moment('00:00:00', 'HH:mm'), moment('11:59:59', 'HH:mm')
+                      ]
+                    }}
+                    onChange={value => onChange('date', value.toString())}
+                    format="YYYY-MM-DD HH:mm"
+                  />
+                </Form.Item>
+              }
+              {props.state.end_mode.toString() === "races" &&
+                <Space direction="horizontal" style={{ width: "100%" }}>
+                  <Form.Item label="Event Date" style={{ maxWidth: 550 }}>
+                    <DatePicker
+                      disabledDate={disabledDate}
+                      disabledTime={disabledRangeTime} 
+                      showTime={{
+                        hideDisabledOptions: true,
+                        defaultValue: [
+                          moment('00:00:00', 'HH:mm'), moment('11:59:59', 'HH:mm')
+                        ]
+                      }}
+                      onChange={value => onChange('raceend_date', value.toString())}
+                      format="YYYY-MM-DD HH:mm"/>
+                  </Form.Item>
+                  <Form.Item label="Race count" style={{ maxWidth: 550 }}>
+                    <InputNumber
+                      min={1}
+                      max={1000}
+                      defaultValue={100}
+                      onChange={e => onChange('raceend_count', e.target.value)}
+                    />
+                  </Form.Item>
+                </Space>
+              }
             </Form>
             <br />
             <Space spacing={3}>

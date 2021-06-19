@@ -15,7 +15,14 @@ function UserForm() {
   const [step, setStep] = React.useState(1);
 
   const [stateone, setStateone] = React.useState({
-    title: '', url: '', date: '', repeat: false, freq: 0, freqdate: 'day'
+    title: '',
+    url: '',
+    date: '',
+    freq: 0,
+    freqdate: 'day',
+    end_mode: 'time',
+    raceend_date: "",
+    raceend_count: ""
   });
 
   const [statetwo, setStatetwo] = React.useState({
@@ -40,7 +47,8 @@ function UserForm() {
     cus_wpm_fac: 0,
     cus_wpm_const: 0,
     cus_acc_fac: 0,
-    cus_acc_const: 0
+    cus_acc_const: 0,
+    repeat: false, 
   });
 
   // Go to next step
