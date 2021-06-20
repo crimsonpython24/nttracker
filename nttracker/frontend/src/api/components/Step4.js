@@ -12,7 +12,8 @@ import {
   Checkbox,
   Divider,
   Radio,
-  Space
+  Space,
+  InputNumber
 } from 'antd';
 import Latex from 'react-latex';
 import 'katex/dist/katex.min.css';
@@ -26,54 +27,26 @@ const { Text, Title } = Typography;
 
 
 const PriceInput = ({
-  value = {},
-  onChange,
-  editable,
-  freqchange,
-  datefreqchange,
-  ...props
+  editable, freqchange, datefreqchange, freq, freqdate
 }) => {
-  const [number, setNumber] = useState(0);
-  const [currency, setCurrency] = useState('day');
-
-  const triggerChange = changedValue => {
-    onChange?.({number, currency, ...value, ...changedValue});
-  };
-
-  const onNumberChange = e => {
-    const newNumber = parseInt(e.target.value || '0', 10);
-    if (Number.isNaN(number)) {return;}
-    if (!('number' in value)) {setNumber(newNumber); freqchange(newNumber);}
-    onChange('repeat_cnt', e.target.value);
-    triggerChange({number: newNumber});
-  };
-
-  const onCurrencyChange = newCurrency => {
-    if (!('currency' in value)) {setCurrency(newCurrency); datefreqchange(newCurrency);}
-    onChange('repeat_freq', newCurrency);
-    triggerChange({currency: newCurrency});
-  };
-
   useEffect(() => {editable = false;}, []);
   let selectprops = { disabled: !editable };
   let numinputprops = { disabled: !editable };
 
   return (
     <span>
-      <Input
+      <InputNumber
         type="text"
-        value={value.number || number}
-        defaultValue={props.state.repeat_cnt}
-        onChange={onNumberChange}
+        defaultValue={freq}
+        onChange={freqchange}
         {...numinputprops}
         style={{width: 70}}
       />
       <Select
-        value={value.currency || currency}
         style={{maxWidth: 130, margin: '0 8px'}}
-        defaultValue={props.state.repeat_date}
+        defaultValue={freqdate}
         {...selectprops}
-        onChange={onCurrencyChange}
+        onChange={datefreqchange}
       >
         <Option value="day">Per day</Option>
         <Option value="week">Per week</Option>
@@ -276,8 +249,9 @@ function Step4(props) {
                     Repeat Event
                   </Checkbox>
                   <PriceInput
-                    state={props.state}
                     editable={props.state.repeat}
+                    freq={props.state.freq}
+                    freqdate={props.state.freqdate}
                     freqchange={e => onChange('freq', e)}
                     datefreqchange={e => onChange('freqdate', e)}
                   />

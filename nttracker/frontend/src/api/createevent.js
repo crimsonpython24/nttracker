@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { Typography } from 'antd';
 
+import moment from 'moment';
+
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
 import Step3 from './components/Step3';
@@ -17,9 +19,8 @@ function UserForm() {
   const [stateone, setStateone] = React.useState({
     title: '',
     url: '',
-    date: '',
-    freq: 0,
-    freqdate: 'day',
+    description: '',
+    date: [moment('00:00:00', 'HH:mm'), moment('11:59:59', 'HH:mm')],
     end_mode: 'time',
     raceend_date: "",
     raceend_count: ""
@@ -49,8 +50,8 @@ function UserForm() {
     cus_acc_fac: 0,
     cus_acc_const: 0,
     repeat: false, 
-    repeat_cnt: 0,
-    repeat_freq: "day",
+    freq: 0,
+    freqdate: 'day',
   });
 
   // Go to next step

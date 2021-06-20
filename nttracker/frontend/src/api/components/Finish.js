@@ -15,8 +15,18 @@ function Finish(props) {
         <ul>
           <li>Event: {props.stateone.title}</li>
           <li>URL: {props.stateone.url}</li>
-          <li>Date: {props.stateone.date}</li>
           <li>End mode: {props.stateone.end_mode}</li>
+          {props.stateone.end_mode === 'races' &&
+            <ul>
+              <li>End date: {props.stateone.raceend_date.toString()}</li>
+              <li>End count: {props.stateone.raceend_count}</li>
+            </ul>
+          }
+          {props.stateone.end_mode === 'count' &&
+            <ul>
+              <li>Date: {props.stateone.date.toString()}</li>
+            </ul>
+          }
           <li>New Members: {props.statetwo.newMembers.toString()}</li>
           <li>Leaving Members: {props.statetwo.leavingMembers.toString()}</li>
           <li>Entry Requirements: {props.statetwo.entryReq.toString()}</li>

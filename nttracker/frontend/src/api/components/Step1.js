@@ -88,6 +88,7 @@ function Step1(props) {
                 <Input
                   placeholder="e.g., S34 Season Tracker"
                   onChange={e => onChange('title', e.target.value)}
+                  defaultValue={props.state.title}
                 />
               </Form.Item>
               <Form.Item
@@ -95,10 +96,17 @@ function Step1(props) {
                 style={{ maxWidth: 550 }}
                 onChange={e => onChange('url', e.target.value)}
               >
-                <Input placeholder="e.g., https://youtu.be/dQw4w9WgXcQ" />
+                <Input
+                  placeholder="e.g., https://youtu.be/dQw4w9WgXcQ"
+                  defaultValue={props.state.url}
+                />
               </Form.Item>
               <Form.Item label="Event Description" style={{ maxWidth: 550 }}>
-                <TextArea rows={4} />
+                <TextArea
+                  rows={4}
+                  defaultValue={props.state.description}
+                  onChange={e => onChange('description', e.target.value)}
+                />
               </Form.Item>
               <Divider/>
               <Form.Item
@@ -121,10 +129,10 @@ function Step1(props) {
                     showTime={{
                       hideDisabledOptions: true,
                       defaultValue: [
-                        moment('00:00:00', 'HH:mm'), moment('11:59:59', 'HH:mm')
+                        props.state.date[0], props.state.date[1]
                       ]
                     }}
-                    onChange={value => onChange('date', value.toString())}
+                    onChange={dates => onChange('date', dates)}
                     format="YYYY-MM-DD HH:mm"
                   />
                 </Form.Item>
@@ -133,23 +141,19 @@ function Step1(props) {
                 <Space direction="horizontal" style={{ width: "100%" }}>
                   <Form.Item label="Event Date" style={{ maxWidth: 550 }}>
                     <DatePicker
+                      format="YYYY-MM-DD HH:mm"
                       disabledDate={disabledDate}
-                      disabledTime={disabledRangeTime} 
-                      showTime={{
-                        hideDisabledOptions: true,
-                        defaultValue: [
-                          moment('00:00:00', 'HH:mm'), moment('11:59:59', 'HH:mm')
-                        ]
-                      }}
-                      onChange={value => onChange('raceend_date', value.toString())}
+                      disabledTime={disabledRangeTime}
+                      showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
+                      onChange={date => onChange('raceend_date', date)}
                       format="YYYY-MM-DD HH:mm"/>
                   </Form.Item>
                   <Form.Item label="Race count" style={{ maxWidth: 550 }}>
                     <InputNumber
                       min={1}
                       max={1000}
-                      defaultValue={100}
-                      onChange={e => onChange('raceend_count', e.target.value)}
+                      defaultValue={props.state.raceend_count}
+                      onChange={value => onChange('raceend_count', value)}
                     />
                   </Form.Item>
                 </Space>
