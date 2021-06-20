@@ -28,33 +28,23 @@ const { Text, Title } = Typography;
 
 function range(start, end) {
   const result = [];
-  for (let i = start; i < end; i++) {
+  for (let i = start; i < end; i++)
     result.push(i);
-  }
   return result;
 }
 
+function disabledDate(current) {return current && current < moment().endOf('day');}
 
-function disabledDate(current) {
-  return current && current < moment().endOf('day');
-}
-
-
-let minutes = range(0, 60).filter(function(value, index, arr) {
-  return value % 15 != 0;
-});
-
+let minutes = range(0, 60).filter(function(value, index, arr) {return value % 15 != 0;});
 
 function disabledRangeTime(_, type) {
   if (type === 'start') {
     return {
-      disabledHours: () => range(0, 60).splice(4, 20),
-      disabledMinutes: () => minutes
+      disabledHours: () => range(0, 60).splice(4, 20), disabledMinutes: () => minutes
     };
   }
   return {
-    disabledHours: () => range(0, 60).splice(20, 4),
-    disabledMinutes: () => minutes
+    disabledHours: () => range(0, 60).splice(20, 4), disabledMinutes: () => minutes
   };
 }
 
@@ -89,7 +79,7 @@ function Step1(props) {
             </Steps>
             <Title level={3}>Basic Information</Title>
             <div style={{ marginTop: -13, marginBottom: 13 }}>
-              <Text italic>
+              <Text italic="true">
                 Title, optional URL, date range, and repetition settings.
               </Text>
             </div>
@@ -111,10 +101,12 @@ function Step1(props) {
                 <TextArea rows={4} />
               </Form.Item>
               <Divider/>
-              <Form.Item label="End mode (how the event will end):" style={{ marginBottom: 7 }}>
+              <Form.Item
+                label="End mode (how the event will end):"
+                style={{ marginBottom: 7 }}
+              >
                 <Radio.Group
-                  onChange={onRadio1Change}
-                  value={props.state.end_mode}
+                  onChange={onRadio1Change} value={props.state.end_mode}
                 >
                   <Radio value="time">Time</Radio>
                   <Radio value="races">Races</Radio>

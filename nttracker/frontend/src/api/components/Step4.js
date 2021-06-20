@@ -30,7 +30,8 @@ const PriceInput = ({
   onChange,
   editable,
   freqchange,
-  datefreqchange
+  datefreqchange,
+  ...props
 }) => {
   const [number, setNumber] = useState(0);
   const [currency, setCurrency] = useState('day');
@@ -43,11 +44,13 @@ const PriceInput = ({
     const newNumber = parseInt(e.target.value || '0', 10);
     if (Number.isNaN(number)) {return;}
     if (!('number' in value)) {setNumber(newNumber); freqchange(newNumber);}
+    onChange('repeat_cnt', e.target.value);
     triggerChange({number: newNumber});
   };
 
   const onCurrencyChange = newCurrency => {
     if (!('currency' in value)) {setCurrency(newCurrency); datefreqchange(newCurrency);}
+    onChange('repeat_freq', newCurrency);
     triggerChange({currency: newCurrency});
   };
 
@@ -60,6 +63,7 @@ const PriceInput = ({
       <Input
         type="text"
         value={value.number || number}
+        defaultValue={props.state.repeat_cnt}
         onChange={onNumberChange}
         {...numinputprops}
         style={{width: 70}}
@@ -67,6 +71,7 @@ const PriceInput = ({
       <Select
         value={value.currency || currency}
         style={{maxWidth: 130, margin: '0 8px'}}
+        defaultValue={props.state.repeat_date}
         {...selectprops}
         onChange={onCurrencyChange}
       >
@@ -107,7 +112,7 @@ function Step4(props) {
               </Steps>
               <Title level={3}>More Settings</Title>
               <div style={{ marginTop: -13, marginBottom: 13 }}>
-                <Text italic>
+                <Text italic="true">
                   Tweak judging criteria and what the public will see.
                 </Text>
               </div>
@@ -118,7 +123,7 @@ function Step4(props) {
                     <Col span={8}>
                       <Checkbox
                         onChange={e => onChange('v_points', e.target.checked)}
-                        defaultChecked={true}
+                        defaultChecked={props.state.v_points}
                       >
                         Points
                       </Checkbox>
@@ -126,7 +131,7 @@ function Step4(props) {
                     <Col span={8}>
                       <Checkbox
                         onChange={e => onChange('v_wpm', e.target.checked)}
-                        defaultChecked={true}
+                        defaultChecked={props.state.v_wpm}
                       >
                         WPM
                       </Checkbox>
@@ -134,7 +139,7 @@ function Step4(props) {
                     <Col span={8}>
                       <Checkbox
                         onChange={e => onChange('v_acc', e.target.checked)}
-                        defaultChecked={true}
+                        defaultChecked={props.state.v_acc}
                       >
                         Accuracy
                       </Checkbox>
@@ -144,7 +149,7 @@ function Step4(props) {
                     <Col span={8}>
                       <Checkbox
                         onChange={e => onChange('v_races', e.target.checked)}
-                        defaultChecked={true}
+                        defaultChecked={props.state.v_races}
                       >
                         Races
                       </Checkbox>
@@ -152,7 +157,7 @@ function Step4(props) {
                     <Col span={8}>
                       <Checkbox
                         onChange={e => onChange('v_age', e.target.checked)}
-                        defaultChecked={true}
+                        defaultChecked={props.state.v_age}
                       >
                         Join Date
                       </Checkbox>
@@ -160,7 +165,7 @@ function Step4(props) {
                     <Col span={8}>
                       <Checkbox
                         onChange={e => onChange('v_analysis', e.target.checked)}
-                        defaultChecked={true}
+                        defaultChecked={props.state.v_analysis}
                       >
                         Analyses
                       </Checkbox>
@@ -188,7 +193,7 @@ function Step4(props) {
                   </Radio.Group>
                   {props.state.chooseWinner === 'custom' && (
                     <div style={{ marginTop: -5, paddingLeft: 25 }}>
-                      <Text italic style={{ marginBottom: 5, marginTop: 6 }}>
+                      <Text italic="true" style={{ marginBottom: 5, marginTop: 6 }}>
                         The factors will be multiplied and constants be added
                       </Text>
                       <table>
@@ -200,6 +205,7 @@ function Step4(props) {
                                 style={{maxWidth: 150}}
                                 bordered={false}
                                 placeholder="factor"
+                                defaultValue={props.state.cus_wpm_fac}
                                 onChange={e =>onChange('cus_wpm_fac', e.target.value)}
                               />
                             </td>
@@ -208,6 +214,7 @@ function Step4(props) {
                                 style={{maxWidth: 150}}
                                 bordered={false}
                                 placeholder="constant"
+                                defaultValue={props.state.cus_wpm_const}
                                 onChange={e => onChange('cus_wpm_const', e.target.value)}
                               />
                             </td>
@@ -219,6 +226,7 @@ function Step4(props) {
                                 style={{ maxWidth: 150 }}
                                 bordered={false}
                                 placeholder="factor"
+                                defaultValue={props.state.cus_acc_fac}
                                 onChange={e => onChange('cus_acc_fac', e.target.value)}
                               />
                             </td>
@@ -227,6 +235,7 @@ function Step4(props) {
                                 style={{maxWidth: 150}}
                                 bordered={false}
                                 placeholder="constant"
+                                defaultValue={props.state.cus_acc_const}
                                 onChange={e => onChange('cus_acc_const', e.target.value)}
                               />
                             </td>
@@ -267,6 +276,7 @@ function Step4(props) {
                     Repeat Event
                   </Checkbox>
                   <PriceInput
+                    state={props.state}
                     editable={props.state.repeat}
                     freqchange={e => onChange('freq', e)}
                     datefreqchange={e => onChange('freqdate', e)}

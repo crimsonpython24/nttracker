@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import 'antd/dist/antd.css';
 import { Steps, Button, Row, Col, Card, Typography, Space } from 'antd';
@@ -43,7 +43,7 @@ function Step3(props) {
             </Steps>
             <Title level={3}>Team Splitter</Title>
             <div style={{ marginTop: -13, marginBottom: 13 }}>
-              <Text italic>Choose who will belong to each team.</Text>
+              <Text italic="true">Choose who will belong to each team.</Text>
             </div>
             Yes, I'll keep this in mind. I'll do this once I get all the
             necessary components done.

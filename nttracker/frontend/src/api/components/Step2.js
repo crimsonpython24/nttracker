@@ -12,7 +12,8 @@ import {
   Checkbox,
   Form,
   Space,
-  Table
+  Table,
+  InputNumber 
 } from 'antd';
 
 
@@ -71,12 +72,13 @@ function Step2(props) {
             </Steps>
             <Title level={3}>Participants</Title>
             <div style={{ marginTop: -13, marginBottom: 13 }}>
-              <Text italic>Choose who to include in the competition.</Text>
+              <Text italic="true">Choose who to include in the competition.</Text>
             </div>
             <Form>
               <Form.Item style={{ marginBottom: 0 }}>
                 <Checkbox
                   onChange={e => onChange('newMembers', e.target.checked)}
+                  checked={props.state.newMembers}
                 >
                   Allow new members
                 </Checkbox>
@@ -84,6 +86,7 @@ function Step2(props) {
               <Form.Item style={{ marginBottom: 0 }}>
                 <Checkbox
                   onChange={e => onChange('leavingMembers', e.target.checked)}
+                  checked={props.state.leavingMembers}
                 >
                   Remove leaving members
                 </Checkbox>
@@ -91,6 +94,7 @@ function Step2(props) {
               <Form.Item style={{ marginBottom: 0 }}>
                 <Checkbox
                   onChange={e => onChange('entryReq', e.target.checked)}
+                  checked={props.state.entryReq}
                 >
                   Entry requirements (select to expand)
                 </Checkbox>
@@ -101,42 +105,54 @@ function Step2(props) {
                     label="Minimum WPM"
                     style={{ paddingLeft: 49, marginBottom: -5 }}
                   >
-                    <Input
+                    <InputNumber 
                       style={{ maxWidth: 150 }}
+                      defaultValue={props.state.req_wpm}
+                      size="small"
+                      min={0}
                       bordered={false}
                       placeholder="e.g., 75"
-                      onChange={e => onChange('req_wpm', e.target.value)}
+                      onChange={value => onChange('req_wpm', value)}
                     />
                   </Form.Item>
                   <Form.Item
                     label="Minimum accuracy" style={{ paddingLeft: 49, marginBottom: -5 }}
                   >
-                    <Input
+                    <InputNumber 
                       style={{ maxWidth: 150 }}
+                      defaultValue={props.state.req_acc}
+                      size="small"
+                      min={0}
                       bordered={false}
                       placeholder="e.g., 0.97"
-                      onChange={e => onChange('req_acc', e.target.value)}
+                      onChange={value => onChange('req_acc', value)}
                     />
                   </Form.Item>
                   <Form.Item
                     label="Minimum races" style={{ paddingLeft: 49, marginBottom: -5 }}
                   >
-                    <Input
+                    <InputNumber 
                       style={{ maxWidth: 150 }}
+                      defaultValue={props.state.req_races}
+                      size="small"
+                      min={0}
                       bordered={false}
                       placeholder="e.g., 50"
-                      onChange={e => onChange('req_races', e.target.value)}
+                      onChange={value => onChange('req_races', value)}
                     />
                   </Form.Item>
                   <Form.Item
                     label="Minimum days in team"
                     style={{ paddingLeft: 49, marginBottom: 0 }}
                   >
-                    <Input
+                    <InputNumber 
                       style={{ maxWidth: 150 }}
+                      defaultValue={props.state.req_age}
+                      size="small"
+                      min={0}
                       bordered={false}
                       placeholder="e.g., 10"
-                      onChange={e => onChange('req_age', e.target.value)}
+                      onChange={value => onChange('req_age', value)}
                     />
                   </Form.Item>
                 </>
@@ -147,7 +163,7 @@ function Step2(props) {
                 dataSource={data}
                 scroll={{ y: 240 }}
                 rowSelection={{
-                  type: 'checkbox', ...rowSelection, onChange: e => onChange('memberList', e)
+                  type: 'checkbox', ...rowSelection, onChange: e => onChange('memberList', e), selectedRowKeys: props.state.memberList
                 }}
                 pagination={{ pageSize: 50, position: ['none', 'none'] }}
               />

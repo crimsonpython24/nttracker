@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import 'antd/dist/antd.css';
 import { Steps, Typography, Button } from 'antd';
 
-const { Step } = Steps;
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 
 function Finish(props) {

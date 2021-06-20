@@ -49,6 +49,8 @@ function UserForm() {
     cus_acc_fac: 0,
     cus_acc_const: 0,
     repeat: false, 
+    repeat_cnt: 0,
+    repeat_freq: "day",
   });
 
   // Go to next step
