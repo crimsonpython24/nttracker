@@ -10,9 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, data):
         data = super(UserSerializer, self).to_representation(data)
         data['available_teams'] = []
-        for group in data.get('groups'):
-            if group == 1:
-                data.get('available_teams').append('pr2w')
-            if group == 2:
-                data.get('available_teams').append('snaake')
+        # print(data.get('groups'))
+        data.get('available_teams').append('pr2w')
+        data.get('available_teams').append('snaake')
         return data
