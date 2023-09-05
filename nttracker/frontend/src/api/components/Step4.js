@@ -1,68 +1,71 @@
-import React, { useState, useEffect } from 'react';
 import {
-  Steps,
   Button,
-  Row,
-  Col,
   Card,
-  Select,
-  Typography,
+  Checkbox,
+  Col,
+  Divider,
   Form,
   Input,
-  Checkbox,
-  Divider,
+  InputNumber,
   Radio,
+  Row,
+  Select,
   Space,
-  InputNumber
+  Steps,
+  Typography,
 } from 'antd';
-import Latex from 'react-latex';
-import 'katex/dist/katex.min.css';
 import 'antd/dist/antd.css';
+import 'katex/dist/katex.min.css';
+import React, { useEffect, useState } from 'react';
+import Latex from 'react-latex';
 import './test.css';
-
 
 const { Option } = Select;
 const { Step } = Steps;
 const { Text, Title } = Typography;
 
-
 const PriceInput = ({
-  editable, freqchange, datefreqchange, freq, freqdate
+  editable,
+  freqchange,
+  datefreqchange,
+  freq,
+  freqdate,
 }) => {
-  useEffect(() => {editable = false;}, []);
+  useEffect(() => {
+    editable = false;
+  }, []);
   let selectprops = { disabled: !editable };
   let numinputprops = { disabled: !editable };
 
   return (
     <span>
       <InputNumber
-        type="text"
+        type='text'
         defaultValue={freq}
         onChange={freqchange}
         {...numinputprops}
-        style={{width: 70}}
+        style={{ width: 70 }}
       />
       <Select
-        style={{maxWidth: 130, margin: '0 8px'}}
+        style={{ maxWidth: 130, margin: '0 8px' }}
         defaultValue={freqdate}
         {...selectprops}
         onChange={datefreqchange}
       >
-        <Option value="day">Per day</Option>
-        <Option value="week">Per week</Option>
-        <Option value="two weeks">Per two weeks</Option>
-        <Option value="month">Per month</Option>
+        <Option value='day'>Per day</Option>
+        <Option value='week'>Per week</Option>
+        <Option value='two weeks'>Per two weeks</Option>
+        <Option value='month'>Per month</Option>
       </Select>
     </span>
   );
 };
 
-
 function Step4(props) {
   const onChange = (key, val) => {
     props.setState(pre => ({
       ...pre,
-      [key]: val
+      [key]: val,
     }));
   };
   return (
@@ -73,24 +76,26 @@ function Step4(props) {
           <Col xs={22} sm={20} md={18} lg={16} xl={12}>
             <Card>
               <Steps
-                size="small"
+                size='small'
                 current={3}
                 onChange={current => props.gotoStep(current)}
                 style={{ paddingBottom: 20 }}
               >
-                <Step title="Basic Info" />
-                <Step title="Members" />
-                <Step title="Teams" />
-                <Step title="More Settings" />
+                <Step title='Basic Info' />
+                <Step title='Members' />
+                <Step title='Teams' />
+                <Step title='More Settings' />
               </Steps>
               <Title level={3}>More Settings</Title>
               <div style={{ marginTop: -13, marginBottom: 13 }}>
-                <Text italic="true">
+                <Text italic='true'>
                   Tweak judging criteria and what the public will see.
                 </Text>
               </div>
-              <Form layout="horizontal">
-                <Text style={{ marginBottom: 8 }}>Make the following visible:</Text>
+              <Form layout='horizontal'>
+                <Text style={{ marginBottom: 8 }}>
+                  Make the following visible:
+                </Text>
                 <Form.Item style={{ marginBottom: -20 }}>
                   <Row>
                     <Col span={8}>
@@ -153,20 +158,23 @@ function Step4(props) {
                 >
                   <Radio.Group
                     defaultValue={props.state.chooseWinner}
-                    size="small"
+                    size='small'
                     style={{ paddingBottom: 18 }}
                     onChange={e => onChange('chooseWinner', e.target.value)}
-                    buttonStyle="solid"
+                    buttonStyle='solid'
                   >
-                    <Radio.Button value="points">Points</Radio.Button>
-                    <Radio.Button value="races"># of Races</Radio.Button>
-                    <Radio.Button value="wpm">WPM</Radio.Button>
-                    <Radio.Button value="accuracy">Accuracy</Radio.Button>
-                    <Radio.Button value="custom">Custom Formula</Radio.Button>
+                    <Radio.Button value='points'>Points</Radio.Button>
+                    <Radio.Button value='races'># of Races</Radio.Button>
+                    <Radio.Button value='wpm'>WPM</Radio.Button>
+                    <Radio.Button value='accuracy'>Accuracy</Radio.Button>
+                    <Radio.Button value='custom'>Custom Formula</Radio.Button>
                   </Radio.Group>
                   {props.state.chooseWinner === 'custom' && (
                     <div style={{ marginTop: -5, paddingLeft: 25 }}>
-                      <Text italic="true" style={{ marginBottom: 5, marginTop: 6 }}>
+                      <Text
+                        italic='true'
+                        style={{ marginBottom: 5, marginTop: 6 }}
+                      >
                         The factors will be multiplied and constants be added
                       </Text>
                       <table>
@@ -175,20 +183,24 @@ function Step4(props) {
                             <td>WPM</td>
                             <td>
                               <Input
-                                style={{maxWidth: 150}}
+                                style={{ maxWidth: 150 }}
                                 bordered={false}
-                                placeholder="factor"
+                                placeholder='factor'
                                 defaultValue={props.state.cus_wpm_fac}
-                                onChange={e =>onChange('cus_wpm_fac', e.target.value)}
+                                onChange={e =>
+                                  onChange('cus_wpm_fac', e.target.value)
+                                }
                               />
                             </td>
                             <td>
                               <Input
-                                style={{maxWidth: 150}}
+                                style={{ maxWidth: 150 }}
                                 bordered={false}
-                                placeholder="constant"
+                                placeholder='constant'
                                 defaultValue={props.state.cus_wpm_const}
-                                onChange={e => onChange('cus_wpm_const', e.target.value)}
+                                onChange={e =>
+                                  onChange('cus_wpm_const', e.target.value)
+                                }
                               />
                             </td>
                           </tr>
@@ -198,18 +210,22 @@ function Step4(props) {
                               <Input
                                 style={{ maxWidth: 150 }}
                                 bordered={false}
-                                placeholder="factor"
+                                placeholder='factor'
                                 defaultValue={props.state.cus_acc_fac}
-                                onChange={e => onChange('cus_acc_fac', e.target.value)}
+                                onChange={e =>
+                                  onChange('cus_acc_fac', e.target.value)
+                                }
                               />
                             </td>
                             <td>
                               <Input
-                                style={{maxWidth: 150}}
+                                style={{ maxWidth: 150 }}
                                 bordered={false}
-                                placeholder="constant"
+                                placeholder='constant'
                                 defaultValue={props.state.cus_acc_const}
-                                onChange={e => onChange('cus_acc_const', e.target.value)}
+                                onChange={e =>
+                                  onChange('cus_acc_const', e.target.value)
+                                }
                               />
                             </td>
                           </tr>
@@ -217,7 +233,7 @@ function Step4(props) {
                       </table>
                       <Divider style={{ marginTop: 11 }} />
                       <div style={{ marginTop: -15, marginBottom: -15 }}>
-                        <Text>e.g., Nitrotype's formula:{' '}</Text>
+                        <Text>e.g., Nitrotype's formula: </Text>
                       </div>
                       <Latex
                         displayMode={true}
@@ -228,7 +244,11 @@ function Step4(props) {
                         </Text>
                       </div>
                       <div
-                        style={{ position: "relative", top: -20, marginBottom: -8 }}
+                        style={{
+                          position: 'relative',
+                          top: -20,
+                          marginBottom: -8,
+                        }}
                       >
                         <Latex displayMode={true}>{`$$
                           \\begin{matrix}
@@ -260,11 +280,13 @@ function Step4(props) {
               <br />
               <Space spacing={3}>
                 <Button
-                  label="Back" onClick={() => props.prevStep()} pagination="none"
+                  label='Back'
+                  onClick={() => props.prevStep()}
+                  pagination='none'
                 >
                   Back
                 </Button>
-                <Button label="Continue" onClick={() => props.nextStep()}>
+                <Button label='Continue' onClick={() => props.nextStep()}>
                   {' '}
                   Continue
                 </Button>
@@ -276,6 +298,5 @@ function Step4(props) {
     </>
   );
 }
-
 
 export default Step4;

@@ -4,14 +4,13 @@ import { Typography } from 'antd';
 
 import moment from 'moment';
 
+import Finish from './components/Finish';
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
 import Step3 from './components/Step3';
 import Step4 from './components/Step4';
-import Finish from './components/Finish';
 
 const { Title } = Typography;
-
 
 function UserForm() {
   const [step, setStep] = React.useState(1);
@@ -22,8 +21,8 @@ function UserForm() {
     description: '',
     date: [moment('00:00:00', 'HH:mm'), moment('11:59:59', 'HH:mm')],
     end_mode: 'time',
-    raceend_date: "",
-    raceend_count: ""
+    raceend_date: '',
+    raceend_count: '',
   });
 
   const [statetwo, setStatetwo] = React.useState({
@@ -34,7 +33,7 @@ function UserForm() {
     req_acc: 0,
     req_races: 0,
     req_age: 0,
-    memberList: []
+    memberList: [],
   });
 
   const [statefour, setStatefour] = React.useState({
@@ -49,19 +48,30 @@ function UserForm() {
     cus_wpm_const: 0,
     cus_acc_fac: 0,
     cus_acc_const: 0,
-    repeat: false, 
+    repeat: false,
     freq: 0,
     freqdate: 'day',
   });
 
   // Go to next step
-  const nextStep = () => {setStep(step + 1);};
-  const prevStep = () => {setStep(step - 1);};
-  const firstStep = () => {setStep(1);};
-  const gotoStep = step => {setStep(step + 1);};
+  const nextStep = () => {
+    setStep(step + 1);
+  };
+  const prevStep = () => {
+    setStep(step - 1);
+  };
+  const firstStep = () => {
+    setStep(1);
+  };
+  const gotoStep = step => {
+    setStep(step + 1);
+  };
 
   switch (step) {
-    default: return <Title level={2}>User Forms not working. Enable Javascript!</Title>;
+    default:
+      return (
+        <Title level={2}>User Forms not working. Enable Javascript!</Title>
+      );
     case 1:
       return (
         <Step1
@@ -84,7 +94,9 @@ function UserForm() {
     case 3:
       return (
         <Step3
-          nextStep={nextStep} prevStep={prevStep} gotoStep={step => gotoStep(step)}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          gotoStep={step => gotoStep(step)}
         />
       );
     case 4:
@@ -108,6 +120,5 @@ function UserForm() {
       );
   }
 }
-
 
 export default UserForm;

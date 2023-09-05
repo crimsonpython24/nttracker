@@ -14,14 +14,14 @@
   width: 100%;
 }
 
-span[class~="site-form-item-icon"] {
-  color: #BFBFBF
+span[class~='site-form-item-icon'] {
+  color: #bfbfbf;
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active  {
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
   box-shadow: 0 0 0 30px white inset !important;
 }

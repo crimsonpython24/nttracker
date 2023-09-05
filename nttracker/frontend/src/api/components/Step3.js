@@ -1,10 +1,9 @@
 import React from 'react';
 
+import { Button, Card, Col, Row, Space, Steps, Typography } from 'antd';
 import 'antd/dist/antd.css';
-import { Steps, Button, Row, Col, Card, Typography, Space } from 'antd';
 
 const { Title } = Typography;
-
 
 const { Step } = Steps;
 const { Text } = Typography;
@@ -18,10 +17,9 @@ for (let i = 0; i < 30; i++) {
     date: 'August 31',
     races: 126000,
     wpm: 100,
-    accuracy: 0.97
+    accuracy: 0.97,
   });
 }
-
 
 function Step3(props) {
   return (
@@ -31,30 +29,32 @@ function Step3(props) {
         <Col xs={22} sm={20} md={18} lg={16} xl={12}>
           <Card>
             <Steps
-              size="small"
+              size='small'
               current={2}
               onChange={current => props.gotoStep(current)}
               style={{ paddingBottom: 20 }}
             >
-              <Step title="Basic Info" />
-              <Step title="Members " />
-              <Step title="Teams" />
-              <Step title="More Settings" />
+              <Step title='Basic Info' />
+              <Step title='Members ' />
+              <Step title='Teams' />
+              <Step title='More Settings' />
             </Steps>
             <Title level={3}>Team Splitter</Title>
             <div style={{ marginTop: -13, marginBottom: 13 }}>
-              <Text italic="true">Choose who will belong to each team.</Text>
+              <Text italic='true'>Choose who will belong to each team.</Text>
             </div>
             Yes, I'll keep this in mind. I'll do this once I get all the
             necessary components done.
             <br style={{ marginBottom: 10 }} />
             <Space spacing={3}>
               <Button
-                label="Back" onClick={() => props.prevStep()} pagination="none"
+                label='Back'
+                onClick={() => props.prevStep()}
+                pagination='none'
               >
                 Back
               </Button>
-              <Button label="Continue" onClick={() => props.nextStep()}>
+              <Button label='Continue' onClick={() => props.nextStep()}>
                 {' '}
                 Continue
               </Button>
@@ -66,6 +66,5 @@ function Step3(props) {
     </>
   );
 }
-
 
 export default Step3;

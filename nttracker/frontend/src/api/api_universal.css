@@ -1,18 +1,18 @@
 .mrg-right-25 {
-    margin-left: 25px;
+  margin-left: 25px;
 }
 
 .display-api-card {
-    max-width: 800px;
+  max-width: 800px;
 }
 
 .viewapi-button {
-    position: relative;
-    top: 8px;
+  position: relative;
+  top: 8px;
 }
 
 .padding-within > div {
-    padding-left: 25px !important;
+  padding-left: 25px !important;
 }
 
 * {

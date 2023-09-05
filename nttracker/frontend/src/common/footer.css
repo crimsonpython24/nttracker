@@ -1,26 +1,26 @@
 .main-footer-1 {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    color: white;
-    text-align: center;
-    background-color: white;
-    outline: 1px solid #EBEDF0 !important;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+  background-color: white;
+  outline: 1px solid #ebedf0 !important;
 }
 
 .main-footer-text {
-    color: black
+  color: black;
 }
 
 .no-margin-below {
-    margin-bottom: 0px !important;
+  margin-bottom: 0px !important;
 }
 
 .little-margin-below {
-    margin-bottom: 7px !important;
+  margin-bottom: 7px !important;
 }
 
 .little-margin-top {
-    margin-top: 7px !important;
+  margin-top: 7px !important;
 }

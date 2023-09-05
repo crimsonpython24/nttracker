@@ -6,13 +6,12 @@ from frontend import views as f_views
 
 
 urlpatterns = [
-    path('ajaxlogin', views.ajax_login, name='ajaxlogin'),
-    path('ajaxprofile', views.ajax_profile, name='ajaxprofile'),
-    path('ajaxlogout', views.ajax_logout, name='ajaxlogout'),
-    path('ajaxdeactivate', views.ajax_deactivate, name='ajaxdeactivate'),
-    path('teststate', views.test_state, name='teststate'),
-    path('initstate', views.init_state, name='initstate'),
-    
-    path('login', f_views.index, name='index'),
-    path('profile', f_views.index, name='index'),
+    path("ajaxlogin", views.ajax_login, name="ajaxlogin"),
+    path("ajaxprofile", views.ajax_profile, name="ajaxprofile"),
+    path("ajaxlogout", views.ajax_logout, name="ajaxlogout"),
+    path("ajaxdeactivate", views.ajax_deactivate, name="ajaxdeactivate"),
+    path("teststate", views.test_state, name="teststate"),
+    path("initstate", views.init_state, name="initstate"),
+    path("login", f_views.index, name="index"),
+    path("profile", f_views.index, name="index"),
 ]

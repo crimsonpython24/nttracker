@@ -1,33 +1,31 @@
-import React from 'react';
-import 'antd/dist/antd.css';
 import {
-  Steps,
   Button,
-  Input,
-  Row,
-  Col,
   Card,
-  Typography,
-  Divider,
   Checkbox,
+  Col,
+  Divider,
   Form,
+  Input,
+  InputNumber,
+  Row,
   Space,
+  Steps,
   Table,
-  InputNumber 
+  Typography,
 } from 'antd';
-
+import 'antd/dist/antd.css';
+import React from 'react';
 
 const { Step } = Steps;
 const { Text, Title } = Typography;
 
-
 const columns = [
-  {title: 'Name', dataIndex: 'name', width: 150},
-  {title: 'Username', dataIndex: 'username', width: 150},
-  {title: 'Join Date', dataIndex: 'date', width: 100},
-  {title: 'Races', dataIndex: 'races', width: 100},
-  {title: 'WPM', dataIndex: 'wpm', width: 80},
-  {title: 'Accuracy', dataIndex: 'accuracy', width: 80}
+  { title: 'Name', dataIndex: 'name', width: 150 },
+  { title: 'Username', dataIndex: 'username', width: 150 },
+  { title: 'Join Date', dataIndex: 'date', width: 100 },
+  { title: 'Races', dataIndex: 'races', width: 100 },
+  { title: 'WPM', dataIndex: 'wpm', width: 80 },
+  { title: 'Accuracy', dataIndex: 'accuracy', width: 80 },
 ];
 
 const data = [];
@@ -39,19 +37,17 @@ for (let i = 0; i < 30; i++) {
     date: 'August 31',
     races: 126000,
     wpm: 100,
-    accuracy: 0.97
+    accuracy: 0.97,
   });
 }
 
-
 const rowSelection = {
-  getCheckboxProps: record => ({memberlist: record.selectedRowKeys})
+  getCheckboxProps: record => ({ memberlist: record.selectedRowKeys }),
 };
-
 
 function Step2(props) {
   const onChange = (key, val) => {
-    props.setState(pre => ({...pre, [key]: val}));
+    props.setState(pre => ({ ...pre, [key]: val }));
   };
   return (
     <>
@@ -60,19 +56,21 @@ function Step2(props) {
         <Col xs={22} sm={20} md={18} lg={16} xl={12}>
           <Card>
             <Steps
-              size="small"
+              size='small'
               current={1}
               onChange={current => props.gotoStep(current)}
               style={{ paddingBottom: 20 }}
             >
-              <Step title="Basic Info" />
-              <Step title="Members" />
-              <Step title="Teams" />
-              <Step title="More Settings" />
+              <Step title='Basic Info' />
+              <Step title='Members' />
+              <Step title='Teams' />
+              <Step title='More Settings' />
             </Steps>
             <Title level={3}>Participants</Title>
             <div style={{ marginTop: -13, marginBottom: 13 }}>
-              <Text italic="true">Choose who to include in the competition.</Text>
+              <Text italic='true'>
+                Choose who to include in the competition.
+              </Text>
             </div>
             <Form>
               <Form.Item style={{ marginBottom: 0 }}>
@@ -102,56 +100,58 @@ function Step2(props) {
               {props.state.entryReq && (
                 <>
                   <Form.Item
-                    label="Minimum WPM"
+                    label='Minimum WPM'
                     style={{ paddingLeft: 49, marginBottom: -5 }}
                   >
-                    <InputNumber 
+                    <InputNumber
                       style={{ maxWidth: 150 }}
                       defaultValue={props.state.req_wpm}
-                      size="small"
+                      size='small'
                       min={0}
                       bordered={false}
-                      placeholder="e.g., 75"
+                      placeholder='e.g., 75'
                       onChange={value => onChange('req_wpm', value)}
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Minimum accuracy" style={{ paddingLeft: 49, marginBottom: -5 }}
+                    label='Minimum accuracy'
+                    style={{ paddingLeft: 49, marginBottom: -5 }}
                   >
-                    <InputNumber 
+                    <InputNumber
                       style={{ maxWidth: 150 }}
                       defaultValue={props.state.req_acc}
-                      size="small"
+                      size='small'
                       min={0}
                       bordered={false}
-                      placeholder="e.g., 0.97"
+                      placeholder='e.g., 0.97'
                       onChange={value => onChange('req_acc', value)}
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Minimum races" style={{ paddingLeft: 49, marginBottom: -5 }}
+                    label='Minimum races'
+                    style={{ paddingLeft: 49, marginBottom: -5 }}
                   >
-                    <InputNumber 
+                    <InputNumber
                       style={{ maxWidth: 150 }}
                       defaultValue={props.state.req_races}
-                      size="small"
+                      size='small'
                       min={0}
                       bordered={false}
-                      placeholder="e.g., 50"
+                      placeholder='e.g., 50'
                       onChange={value => onChange('req_races', value)}
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Minimum days in team"
+                    label='Minimum days in team'
                     style={{ paddingLeft: 49, marginBottom: 0 }}
                   >
-                    <InputNumber 
+                    <InputNumber
                       style={{ maxWidth: 150 }}
                       defaultValue={props.state.req_age}
-                      size="small"
+                      size='small'
                       min={0}
                       bordered={false}
-                      placeholder="e.g., 10"
+                      placeholder='e.g., 10'
                       onChange={value => onChange('req_age', value)}
                     />
                   </Form.Item>
@@ -163,15 +163,20 @@ function Step2(props) {
                 dataSource={data}
                 scroll={{ y: 240 }}
                 rowSelection={{
-                  type: 'checkbox', ...rowSelection, onChange: e => onChange('memberList', e), selectedRowKeys: props.state.memberList
+                  type: 'checkbox',
+                  ...rowSelection,
+                  onChange: e => onChange('memberList', e),
+                  selectedRowKeys: props.state.memberList,
                 }}
                 pagination={{ pageSize: 50, position: ['none', 'none'] }}
               />
             </Form>
             <br />
             <Space spacing={3}>
-              <Button label="Back" onClick={() => props.prevStep()}>Back</Button>
-              <Button label="Continue" onClick={() => props.nextStep()}>
+              <Button label='Back' onClick={() => props.prevStep()}>
+                Back
+              </Button>
+              <Button label='Continue' onClick={() => props.nextStep()}>
                 {' '}
                 Continue
               </Button>
@@ -183,6 +188,5 @@ function Step2(props) {
     </>
   );
 }
-
 
 export default Step2;

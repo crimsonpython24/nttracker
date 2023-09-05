@@ -1,50 +1,78 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from 'react';
 
-import "antd/dist/antd.css";
-import { 
-  message, Form, Input, Button, Divider, Typography, Space, Modal, Card, Row, Col, notification 
-} from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Space,
+  Typography,
+  message,
+  notification,
+} from 'antd';
+import 'antd/dist/antd.css';
 
-import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 
-import { NTTrackerContext } from "../nttracker/context.js";
-import { fetchData } from "../common/utilities.js";
-import "./profile-dom.css";
-
+import { fetchData } from '../common/utilities.js';
+import { NTTrackerContext } from '../nttracker/context.js';
+import './profile-dom.css';
 
 const { Text, Paragraph } = Typography;
 
-
-const CollectionCreateForm = ({ 
-    visible,onCreate, onCancel, onPwdChange, itemProps, formName
-  }) => {
+const CollectionCreateForm = ({
+  visible,
+  onCreate,
+  onCancel,
+  onPwdChange,
+  itemProps,
+  formName,
+}) => {
   const [form] = Form.useForm();
   return (
     <Modal
       visible={visible}
-      title="Confirm deleting account?"
-      className="deletionModal"
-      okText="Proceed"
+      title='Confirm deleting account?'
+      className='deletionModal'
+      okText='Proceed'
       centered
-      cancelText="Cancel"
+      cancelText='Cancel'
       onCancel={onCancel}
       okButtonProps={{ danger: true, outline: toString(true) }}
       onOk={() => {
-        form.validateFields().then((values) => {form.resetFields(); onCreate(values);})
+        form.validateFields().then(values => {
+          form.resetFields();
+          onCreate(values);
+        });
       }}
       forceRender
     >
-      <Form form={formName} layout="vertical" name="form_in_modal" className="password-form">
-        <Space direction="vertical" size={0} className="dialog-space">
+      <Form
+        form={formName}
+        layout='vertical'
+        name='form_in_modal'
+        className='password-form'
+      >
+        <Space direction='vertical' size={0} className='dialog-space'>
           <Text>This action cannot be reverted!</Text>
-          <Text type="secondary">Your data will be lost but your events will remain.</Text>
+          <Text type='secondary'>
+            Your data will be lost but your events will remain.
+          </Text>
         </Space>
-        <Form.Item name="password" className="password-form-input" {...itemProps}>
+        <Form.Item
+          name='password'
+          className='password-form-input'
+          {...itemProps}
+        >
           <Input.Password
-            placeholder="Type your password to continue"
-            name="deactivate_confirmation"
+            placeholder='Type your password to continue'
+            name='deactivate_confirmation'
             onChange={onPwdChange}
           />
         </Form.Item>
@@ -53,27 +81,30 @@ const CollectionCreateForm = ({
   );
 };
 
-
 function Profile() {
   //////////////////////////
   // PART 1: Form Control //
   //////////////////////////
-  const onSubmit = values => {post_profile(values);}
-  const onSubmit1 = values => {post_deactivate(values);}
+  const onSubmit = values => {
+    post_profile(values);
+  };
+  const onSubmit1 = values => {
+    post_deactivate(values);
+  };
   const [state, dispatch] = useContext(NTTrackerContext);
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
   const history = useHistory();
-  const formLayout = "vertical";
+  const formLayout = 'vertical';
   const {
-    register, 
+    register,
     trigger,
     formState: { errors },
     setError,
     handleSubmit,
     clearErrors,
     setValue,
-    getValues
+    getValues,
   } = useForm();
   const {
     register: register2,
@@ -83,69 +114,82 @@ function Profile() {
     handleSubmit: handleSubmit2,
     clearErrors: clearErrors2,
     setValue: setValue2,
-    getValues: getValues2 
+    getValues: getValues2,
   } = useForm();
 
   useEffect(() => {
-    register("current_password", {required: "The current password is required."});
-    register("new_password", {
-      required: "The new password is required.",
-      validate: {
-        passwordEqual: value => (value === getValues().confirm_password) || '',
-      }
+    register('current_password', {
+      required: 'The current password is required.',
     });
-    register("confirm_password", {
-      required: "The confirmation password is required.",
+    register('new_password', {
+      required: 'The new password is required.',
       validate: {
-        passwordEqual: value => (value === getValues().new_password)
-          || 'Passwords do not match!',
-      }
+        passwordEqual: value => value === getValues().confirm_password || '',
+      },
     });
-  }, [register])
+    register('confirm_password', {
+      required: 'The confirmation password is required.',
+      validate: {
+        passwordEqual: value =>
+          value === getValues().new_password || 'Passwords do not match!',
+      },
+    });
+  }, [register]);
 
   useEffect(() => {
-    register2("deactivate_confirmation", {
-      required: "The confirmation password is required.",
+    register2('deactivate_confirmation', {
+      required: 'The confirmation password is required.',
     });
-  }, [register2])
-  
-  const handleCurPwdChange = (e) => {
-    clearErrors(); setValue("current_password", e.target.value);
-  }
-  const handleNewPwdChange = (e) => {
-    clearErrors(); setValue("new_password", e.target.value);
-  }
-  const handleCfmPwdChange = (e) => {
-    clearErrors(); setValue("confirm_password", e.target.value);
-  }
-  const handleDeacConfChange = (e) => {
-    clearErrors2();
-    setValue2("deactivate_confirmation", e.target.value);
-  }
+  }, [register2]);
 
+  const handleCurPwdChange = e => {
+    clearErrors();
+    setValue('current_password', e.target.value);
+  };
+  const handleNewPwdChange = e => {
+    clearErrors();
+    setValue('new_password', e.target.value);
+  };
+  const handleCfmPwdChange = e => {
+    clearErrors();
+    setValue('confirm_password', e.target.value);
+  };
+  const handleDeacConfChange = e => {
+    clearErrors2();
+    setValue2('deactivate_confirmation', e.target.value);
+  };
 
   /////////////////////////
   // PART 2: Input Props //
   /////////////////////////
   const [visible, setVisible] = useState(false);
   const username_text = (
-    <Paragraph editable=
-      {{ editing: false,
-         icon: <QuestionCircleOutlined className="help-icon" />,
-         tooltip: "Changing username is disabled for security reasons. \
-            Please contact the site owner."
-      }} className="label-paragraph">Username
+    <Paragraph
+      editable={{
+        editing: false,
+        icon: <QuestionCircleOutlined className='help-icon' />,
+        tooltip:
+          'Changing username is disabled for security reasons. \
+            Please contact the site owner.',
+      }}
+      className='label-paragraph'
+    >
+      Username
     </Paragraph>
-  )
+  );
 
   const current_password_text = (
-    <Paragraph editable=
-      {{ editing: false,
-         icon: <QuestionCircleOutlined className="help-icon" />,
-         tooltip: "We need to verify your identity before proceeding."
-      }} className="label-paragraph">Current Password
+    <Paragraph
+      editable={{
+        editing: false,
+        icon: <QuestionCircleOutlined className='help-icon' />,
+        tooltip: 'We need to verify your identity before proceeding.',
+      }}
+      className='label-paragraph'
+    >
+      Current Password
     </Paragraph>
-  )
+  );
 
   let curpassref = React.useRef(null);
   let newpassref = React.useRef(null);
@@ -160,48 +204,51 @@ function Profile() {
     cfmpassref.current.blur();
     setloadings(true);
     setDisabledLoading(true);
-    setTimeout(() => {setDisabledLoading(false); setloadings(false);}, 1630);
+    setTimeout(() => {
+      setDisabledLoading(false);
+      setloadings(false);
+    }, 1630);
   }
 
   let curPwdProps = {
     ...(errors.current_password && {
-      validateStatus: "warning",
+      validateStatus: 'warning',
       hasFeedback: true,
       help: errors.current_password.message,
     }),
     ...(errors.inv_credentials && {
-      validateStatus: "error",
+      validateStatus: 'error',
       hasFeedback: true,
-      help: "Invalid credentials provided",
-    })
-  }
+      help: 'Invalid credentials provided',
+    }),
+  };
   let newPwdProps = {
     ...(errors.new_password && {
-      validateStatus: "warning",
+      validateStatus: 'warning',
       hasFeedback: true,
       help: errors.new_password.message,
-    })
-  }
+    }),
+  };
   let cfmPwdProps = {
     ...(errors.confirm_password && {
-      validateStatus: "warning",
+      validateStatus: 'warning',
       hasFeedback: true,
       help: errors.confirm_password.message,
-    })
-  }
+    }),
+  };
   let deacPwdProps = {
     ...(errors2.deactivate_confirmation && {
-      validateStatus: "warning",
+      validateStatus: 'warning',
       hasFeedback: true,
       help: errors2.deactivate_confirmation.message,
     }),
     ...(errors2.inv_del_credentials && {
-      validateStatus: "error",
+      validateStatus: 'error',
       hasFeedback: true,
-      help: "Invalid credentials provided",
-    })
-  }
-  
+      help: 'Invalid credentials provided',
+    }),
+  };
+
   /////////////////////////
   // PART 3: Verify auth //
   /////////////////////////
@@ -211,7 +258,9 @@ function Profile() {
   }
   useEffect(() => {
     if (!state.user.authenticated) {
-      pushhistory("/accounts/login/", function() {profile1_message()});
+      pushhistory('/accounts/login/', function () {
+        profile1_message();
+      });
     }
   }, []);
 
@@ -220,52 +269,65 @@ function Profile() {
   /////////////////////
   function profile1_message() {
     const info = message.error({
-      key: "profile1",
-      content: "Please log in to edit account!",
-      duration: 5.35, onClick: () => {info("profile1");},
-      className: "item-no-select",
+      key: 'profile1',
+      content: 'Please log in to edit account!',
+      duration: 5.35,
+      onClick: () => {
+        info('profile1');
+      },
+      className: 'item-no-select',
     });
-  };
+  }
   function profile2_message() {
     const info = message.info({
-      key: "profile2",
-      content: "Logged out!",
+      key: 'profile2',
+      content: 'Logged out!',
       duration: 3.55,
-      onClick: () => {info("profile2");},
-      className: "item-no-select",
+      onClick: () => {
+        info('profile2');
+      },
+      className: 'item-no-select',
     });
-  };
+  }
   function profile3_message(key) {
     const info = message.success({
       key: key,
-      content: "Account deactivated successfully!",
-      duration: 3.55, onClick: () => {info(key);},
-      className: "item-no-select",
+      content: 'Account deactivated successfully!',
+      duration: 3.55,
+      onClick: () => {
+        info(key);
+      },
+      className: 'item-no-select',
     });
-  };
+  }
   function profile4_message() {
     const info = message.success({
-      key: "profile4",
-      content: "Password changed successfully!",
+      key: 'profile4',
+      content: 'Password changed successfully!',
       duration: 3.55,
-      onClick: () => {info("profile4");},
-      className: "item-no-select",
+      onClick: () => {
+        info('profile4');
+      },
+      className: 'item-no-select',
     });
-  };
-  
-  function handleNotifClick(key) {post_logout(); notification.close(key);}
+  }
+
+  function handleNotifClick(key) {
+    post_logout();
+    notification.close(key);
+  }
   function handleNotifClickRemind(key) {
-    localStorage.setItem(('no_remind_change_pwd' + state.user.id), true);
+    localStorage.setItem('no_remind_change_pwd' + state.user.id, true);
     notification.close(key);
   }
 
   const key = `open${Date.now()}`;
   const btn = (
-    <Space direction="horizontal">
-      <Button outline size="small" onClick={() => handleNotifClick(key)}>
+    <Space direction='horizontal'>
+      <Button outline size='small' onClick={() => handleNotifClick(key)}>
         Log out
       </Button>
-      <Button outline size="small" onClick={() => handleNotifClickRemind(key)}>
+      <Button outline size='small' onClick={() => handleNotifClickRemind(key)}>
         Don't remind again
       </Button>
     </Space>
@@ -283,68 +345,78 @@ function Profile() {
       key,
       duration: 0,
     });
-  };
+  }
 
   ////////////////////////////
   // PART 5: Post Functions //
   ////////////////////////////
   function post_logout() {
-    fetchData("http://127.0.0.1:8000/accounts/ajaxlogout", 'POST', {})
-    .then(() => {
-      dispatch({type: 'LOGGED_OUT'});
-      pushhistory("/", function() {profile2_message()});
-      localStorage.removeItem('ever_logged_in');
-    })
+    fetchData('http://127.0.0.1:8000/accounts/ajaxlogout', 'POST', {}).then(
+      () => {
+        dispatch({ type: 'LOGGED_OUT' });
+        pushhistory('/', function () {
+          profile2_message();
+        });
+        localStorage.removeItem('ever_logged_in');
+      }
+    );
   }
 
   function post_profile(data) {
-    fetchData("http://127.0.0.1:8000/accounts/ajaxprofile", "POST", {
-      "username": state.user.username,
-      "current_password": data.current_password,
-      "new_password": data.new_password,
-      "confirm_password": data.confirm_password
-    })
-    .then((userdata) => {
+    fetchData('http://127.0.0.1:8000/accounts/ajaxprofile', 'POST', {
+      username: state.user.username,
+      current_password: data.current_password,
+      new_password: data.new_password,
+      confirm_password: data.confirm_password,
+    }).then(userdata => {
       if (userdata.errors) {
         Object.keys(userdata.errors).forEach(key => {
-          setError(key, {type: "manual", message: userdata.errors[key],});
-        })
-        trigger("current_password");
-        trigger("new_password");
-        trigger("confirm_password");
+          setError(key, { type: 'manual', message: userdata.errors[key] });
+        });
+        trigger('current_password');
+        trigger('new_password');
+        trigger('confirm_password');
       } else {
         changeloading();
         setTimeout(() => {
           form.resetFields();
-          let change_pwd = localStorage.getItem(('no_remind_change_pwd' + state.user.id));
+          let change_pwd = localStorage.getItem(
+            'no_remind_change_pwd' + state.user.id
+          );
           if (JSON.parse(change_pwd) !== true) openNotification('topRight');
           else profile4_message();
         }, 1630);
       }
-    })
+    });
   }
 
   function post_deactivate(data) {
-    fetchData("http://127.0.0.1:8000/accounts/ajaxdeactivate", "POST", {
-      "username": state.user.username, "password": data.deactivate_confirmation
-    })
-    .then((userdata) => {
+    fetchData('http://127.0.0.1:8000/accounts/ajaxdeactivate', 'POST', {
+      username: state.user.username,
+      password: data.deactivate_confirmation,
+    }).then(userdata => {
       if (userdata.del_error) {
         Object.keys(userdata.del_error).forEach(key => {
-          setError2(key, {type: "manual", message: userdata.del_error[key],});
-        })
-        trigger2("deactivate_confirmation");
+          setError2(key, { type: 'manual', message: userdata.del_error[key] });
+        });
+        trigger2('deactivate_confirmation');
       } else {
-        dispatch({type: 'LOGGED_OUT'});
+        dispatch({ type: 'LOGGED_OUT' });
         setVisible(false);
         const key = 'deactivate_acc';
         message.loading({
-          content: 'Deactivating account...', key, className: "item-no-select",
+          content: 'Deactivating account...',
+          key,
+          className: 'item-no-select',
         });
-        setTimeout(() => {profile3_message(key);}, 1630);
-        setTimeout(() => {history.push("/");}, 2130);
+        setTimeout(() => {
+          profile3_message(key);
+        }, 1630);
+        setTimeout(() => {
+          history.push('/');
+        }, 2130);
       }
-    })
+    });
   }
 
   return (
@@ -352,70 +424,99 @@ function Profile() {
       <Row>
         <Col xs={1} sm={3} md={5} lg={6} xl={7}></Col>
         <Col xs={22} sm={18} md={14} lg={12} xl={10}>
-          <Card className="profile-card-1">
+          <Card className='profile-card-1'>
             <Form layout={formLayout}>
               <Form.Item label={username_text}>
                 <Input
                   placeholder={state.user.username}
                   disabled={true}
-                  className="profile-input-box"
+                  className='profile-input-box'
                 />
               </Form.Item>
             </Form>
-            <Divider/>
-            <Form layout={formLayout} form={form} onFinish={handleSubmit(onSubmit)}>
+            <Divider />
+            <Form
+              layout={formLayout}
+              form={form}
+              onFinish={handleSubmit(onSubmit)}
+            >
               <Form.Item
-                name="Current Password"
+                name='Current Password'
                 label={current_password_text}
                 {...curPwdProps}
               >
                 <Input.Password
                   ref={curpassref}
-                  className="profile-input-box"
-                  name="current_password"
+                  className='profile-input-box'
+                  name='current_password'
                   onChange={handleCurPwdChange}
                   disabled={disabledLoading}
                 />
               </Form.Item>
-              <Form.Item name="New Password" label="New Password" {...newPwdProps}>
+              <Form.Item
+                name='New Password'
+                label='New Password'
+                {...newPwdProps}
+              >
                 <Input.Password
                   ref={newpassref}
-                  className="profile-input-box"
-                  name="new_password"
+                  className='profile-input-box'
+                  name='new_password'
                   onChange={handleNewPwdChange}
                   disabled={disabledLoading}
                 />
               </Form.Item>
-              <Form.Item name="Confirm Password" label="Confirm Password" {...cfmPwdProps}>
+              <Form.Item
+                name='Confirm Password'
+                label='Confirm Password'
+                {...cfmPwdProps}
+              >
                 <Input.Password
                   ref={cfmpassref}
-                  className="profile-input-box"
-                  name="confirm_password"
+                  className='profile-input-box'
+                  name='confirm_password'
                   onChange={handleCfmPwdChange}
                   disabled={disabledLoading}
                 />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" id={form} loading={loadings}>
+                <Button
+                  type='primary'
+                  htmlType='submit'
+                  id={form}
+                  loading={loadings}
+                >
                   Change Password
                 </Button>
               </Form.Item>
             </Form>
-            <Divider/>
+            <Divider />
             <div>
-              <Space direction="vertical" size={0} className="dialog-space">
+              <Space direction='vertical' size={0} className='dialog-space'>
                 <Text>Delete Account</Text>
-                <Text type="secondary">
-                  Permanently removes your account from the database (cannot be undone!)
+                <Text type='secondary'>
+                  Permanently removes your account from the database (cannot be
+                  undone!)
                 </Text>
               </Space>
-              <br/>
-              <Button danger onClick={() => {setVisible(true);}}>Delete Account</Button>
+              <br />
+              <Button
+                danger
+                onClick={() => {
+                  setVisible(true);
+                }}
+              >
+                Delete Account
+              </Button>
               <CollectionCreateForm
                 visible={visible}
                 onCreate={handleSubmit2(onSubmit1)}
                 formName={form2}
-                onCancel={() => {setVisible(false); clearErrors2(); form2.resetFields()}}
+                onCancel={() => {
+                  setVisible(false);
+                  clearErrors2();
+                  form2.resetFields();
+                }}
                 onPwdChange={handleDeacConfChange}
                 itemProps={deacPwdProps}
                 forceRender
@@ -425,8 +526,7 @@ function Profile() {
         </Col>
       </Row>
     </div>
-  )
+  );
 }
-
 
 export default Profile;

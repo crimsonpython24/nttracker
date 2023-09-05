@@ -1,4 +1,4 @@
-import nitrotype   # clone adl212's repo lmao
+import nitrotype  # clone adl212's repo lmao
 import json
 import time
 from datetime import datetime
@@ -13,7 +13,7 @@ def get_racedata(teamname, cron_min):
     team = nitrotype.Team(teamname)
     team_id = team.data["info"]["teamID"]
     timestamp = datetime.now().timestamp()
-    
+
     for members in team.data["members"]:
         racer_id = members["userID"]
         races = members["played"]
@@ -28,7 +28,7 @@ def get_racedata(teamname, cron_min):
             races=races,
             time=time,
             typed=typed,
-            errs=errs
+            errs=errs,
         )
         rcd.save()
 
@@ -39,18 +39,19 @@ def record_racedata(teamname, cron_min):
         get_racedata(teamname, cron_min)
 
     schedule = crontab(minute=cron_min)
-    task_name = 'record_racedata_%s_%s' % (int(time.time()), teamname)
+    task_name = "record_racedata_%s_%s" % (int(time.time()), teamname)
     periodic_task(schedule, name=task_name)(wrapper)
 
-record_racedata('PR2W', '*/5')
-record_racedata('SNAAKE', '*/5')
+
+record_racedata("PR2W", "*/5")
+record_racedata("SNAAKE", "*/5")
 
 
 def get_racerlog(teamname, cron_min):
     team = nitrotype.Team(teamname)
     team_id = team.data["info"]["teamID"]
     timestamp = datetime.now().timestamp()
-    
+
     for members in team.data["members"]:
         racer_id = members["userID"]
         races = members["played"]
@@ -66,7 +67,7 @@ def get_racerlog(teamname, cron_min):
             username=username,
             display_name=display_name,
             total_races=total_races,
-            speed=speed
+            speed=speed,
         )
         rcrl.save()
 
@@ -77,18 +78,19 @@ def record_racerlog(teamname, cron_day):
         get_racerlog(teamname, cron_day)
 
     schedule = crontab(day_of_week=cron_day)
-    task_name = 'record_racerlog_%s_%s' % (int(time.time()), teamname)
+    task_name = "record_racerlog_%s_%s" % (int(time.time()), teamname)
     periodic_task(schedule, name=task_name)(wrapper)
 
-record_racerlog('PR2W', '1')
-record_racerlog('SNAAKE', '1')
+
+record_racerlog("PR2W", "1")
+record_racerlog("SNAAKE", "1")
 
 
 def get_racerdata(teamname, cron_min):
     team = nitrotype.Team(teamname)
     team_id = team.data["info"]["teamID"]
     timestamp = datetime.now().timestamp()
-    
+
     for members in team.data["members"]:
         racer_id = members["userID"]
         role = members["role"]
@@ -114,15 +116,16 @@ def record_racerdata(teamname, cron_min):
         get_racerdata(teamname, cron_min)
 
     schedule = crontab(minute=cron_min)
-    task_name = 'record_racerdata_%s_%s' % (int(time.time()), teamname)
+    task_name = "record_racerdata_%s_%s" % (int(time.time()), teamname)
     periodic_task(schedule, name=task_name)(wrapper)
 
-record_racerdata('PR2W', '*/5')
-record_racerdata('SNAAKE', '*/5')
+
+record_racerdata("PR2W", "*/5")
+record_racerdata("SNAAKE", "*/5")
 
 
 def get_teamdata(teamname, cron_min):
-    team = nitrotype.Team('PR2W')
+    team = nitrotype.Team("PR2W")
     team_id = team.data["info"]["teamID"]
     timestamp = datetime.now().timestamp()
     tag = team.data["info"]["tag"]
@@ -145,8 +148,9 @@ def record_teamdata(teamname, cron_day):
         get_teamdata(teamname, cron_day)
 
     schedule = crontab(day_of_week=cron_day)
-    task_name = 'record_teamdata_%s_%s' % (int(time.time()), teamname)
+    task_name = "record_teamdata_%s_%s" % (int(time.time()), teamname)
     periodic_task(schedule, name=task_name)(wrapper)
 
-record_teamdata('PR2W', '1')
-record_teamdata('SNAAKE', '1')
+
+record_teamdata("PR2W", "1")
+record_teamdata("SNAAKE", "1")

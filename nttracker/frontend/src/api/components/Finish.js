@@ -1,9 +1,8 @@
-import React from 'react';
+import { Button, Steps, Typography } from 'antd';
 import 'antd/dist/antd.css';
-import { Steps, Typography, Button } from 'antd';
+import React from 'react';
 
 const { Title } = Typography;
-
 
 function Finish(props) {
   console.log(props.statefour);
@@ -16,17 +15,17 @@ function Finish(props) {
           <li>Event: {props.stateone.title}</li>
           <li>URL: {props.stateone.url}</li>
           <li>End mode: {props.stateone.end_mode}</li>
-          {props.stateone.end_mode === 'races' &&
+          {props.stateone.end_mode === 'races' && (
             <ul>
               <li>End date: {props.stateone.raceend_date.toString()}</li>
               <li>End count: {props.stateone.raceend_count}</li>
             </ul>
-          }
-          {props.stateone.end_mode === 'count' &&
+          )}
+          {props.stateone.end_mode === 'count' && (
             <ul>
               <li>Date: {props.stateone.date.toString()}</li>
             </ul>
-          }
+          )}
           <li>New Members: {props.statetwo.newMembers.toString()}</li>
           <li>Leaving Members: {props.statetwo.leavingMembers.toString()}</li>
           <li>Entry Requirements: {props.statetwo.entryReq.toString()}</li>
@@ -53,7 +52,7 @@ function Finish(props) {
             <li>Accuracy factor: {props.statefour.cus_acc_fac}</li>
             <li>Accuracy const: {props.statefour.cus_acc_const}</li>
           </ul>
-          <li>Repeating: {props.statefour.repeat.toString()}</li> 
+          <li>Repeating: {props.statefour.repeat.toString()}</li>
           {props.statefour.repeat.toString() === 'true' && (
             <ul>
               <li>{props.statefour.freq}</li>
@@ -61,7 +60,7 @@ function Finish(props) {
             </ul>
           )}
         </ul>
-        <Button label="Continue" onClick={() => props.firstStep()}>
+        <Button label='Continue' onClick={() => props.firstStep()}>
           {' '}
           FIrst step
         </Button>
@@ -69,6 +68,5 @@ function Finish(props) {
     </>
   );
 }
-
 
 export default Finish;

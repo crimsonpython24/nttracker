@@ -1,42 +1,42 @@
 .navbar-1 {
-    outline: 1px solid #EBEDF0 !important;
-    margin-bottom: 25px;
-    position: fixed;
-    top: 0px;
-    width: 100%;
-    z-index: 1;
-    background-color: white;
+  outline: 1px solid #ebedf0 !important;
+  margin-bottom: 25px;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
+  background-color: white;
 }
 
 .link-text-color {
-    color: rgba(0, 0, 0, .85) !important;
+  color: rgba(0, 0, 0, 0.85) !important;
 }
 
 .authenticated-links {
-    position: relative;
-    top: 5px;
+  position: relative;
+  top: 5px;
 }
 
 .link-post-logout {
-    margin-left: 0px;
-    color: rgba(0, 0, 0, 0.85) !important
+  margin-left: 0px;
+  color: rgba(0, 0, 0, 0.85) !important;
 }
 
 .info-no-login {
-    font-size: 17px;
-    vertical-align: middle;
-    margin-right: 15px;
+  font-size: 17px;
+  vertical-align: middle;
+  margin-right: 15px;
 }
 
 .no-left-margin-navbar {
-    margin-left: 0px !important;
+  margin-left: 0px !important;
 }
 
 .main-navbar {
-    height: 50px !important;
+  height: 50px !important;
 }
 
 .main-navbar > * {
-    position: relative;
-    top: -5px;
+  position: relative;
+  top: -5px;
 }
